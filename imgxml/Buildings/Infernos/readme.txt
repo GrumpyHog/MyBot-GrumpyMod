@@ -1,0 +1,1 @@
+Infernos are animated on the stem and the head.  The stem glows, the head have flames and are different depending if set to single or multi.  The section to crop for use as templates is the ring between the stem and the head.
