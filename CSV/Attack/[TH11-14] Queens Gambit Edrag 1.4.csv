@@ -65,7 +65,7 @@ MAKE  |O          |LEFT-FRONT |10         |0          |EXT-INT    |10         |1
 MAKE  |P          |RIGHT-FRONT|10         |0          |EXT-INT    |10         |10         |           |           |           | Remain
 
 MAKE  |U          |BACK-LEFT  |1          |0          |IGNORE     |           |           |AIRDEFENSE |           |           |
-MAKE  |V          |BACK-RIGHT |1          |0          |IGNORE     |           |           |AIRDEFENSE |           |           |
+MAKE  |V          |BACK-RIGHT |2          |0          |IGNORE     |           |           |AIRDEFENSE |           |           |
 
 MAKE  |H          |LEFT-BACK  |1          |0          |IGNORE     |0          |0          |INFERNO    |           |           |
 MAKE  |T          |LEFT-BACK  |2          |0          |IGNORE     |0          |0          |INFERNO    |           |           |
