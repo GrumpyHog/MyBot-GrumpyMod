@@ -31,7 +31,15 @@ Func GetTownHallLevel($bFirstTime = False)
 	If $g_bDebugImageSave Then SaveDebugImage("GetTHLevelView")
 
 	$g_iTownHallLevel = 0 ; Reset Townhall level
-	$aTHInfo = BuildingInfo(242, 490 + $g_iBottomOffsetY)
+
+	$aTHInfo = BuildingInfo()
+
+	;If $g_ChinaVersion Then
+	;	$aTHInfo = BuildingInfo(242, 495 + $g_iBottomOffsetY)
+	;Else
+	;	$aTHInfo = BuildingInfo(242, 490 + $g_iBottomOffsetY)
+	;EndIf
+
 	If $g_bDebugSetlog Then SetDebugLog("$aTHInfo[0]=" & $aTHInfo[0] & ", $aTHInfo[1]=" & $aTHInfo[1] & ", $aTHInfo[2]=" & $aTHInfo[2], $COLOR_DEBUG)
 	If $aTHInfo[0] > 1 Then
 		If StringInStr($aTHInfo[1], "Town") = 0 Then

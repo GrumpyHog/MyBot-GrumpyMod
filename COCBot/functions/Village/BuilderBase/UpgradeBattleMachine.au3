@@ -51,11 +51,13 @@ Func BattleMachineUpgrade($test = False)
 #ce
 
 	;Get Battle Machine info and Level
-	Local $sInfo = _BuildingInfo(242, 490 + $g_iBottomOffsetY)
+	Local $sInfo = BuildingInfo()
+	
 	If @error Then SetError(0, 0, 0)
 	Local $CountGetInfo = 0
 	While IsArray($sInfo) = False
-		$sInfo = _BuildingInfo(242, 490 + $g_iBottomOffsetY)
+		$sInfo = BuildingInfo()
+		
 		If @error Then SetError(0, 0, 0)
 		Sleep(100)
 		$CountGetInfo += 1
@@ -109,7 +111,12 @@ Func BattleMachineUpgrade($test = False)
 		ClickP($aUpgradeButton)
 		If _Sleep($DELAYUPGRADEHERO3) Then Return ; Wait for window to open
 		
-		If IsBattleMachineUpgradePage() Then ; Check if the Hero Upgrade window is open
+		
+		Local $sImgBattleMachineUpgradeWindow =  @ScriptDir & "\imgxml\Windows\BattleMachineUpgradeWindow*"
+		Local $sSearchArea = "120,175,405,485"
+
+		; check for storage full window
+		If IsWindowOpen($sImgBattleMachineUpgradeWindow, 0, 0, GetDiamondFromRect($sSearchArea)) Then
 			Local $aWhiteZeros = decodeSingleCoord(findImage("UpgradeWhiteZero" ,$g_sImgUpgradeWhiteZero, GetDiamondFromRect("408,519,747,606"), 1, True, Default))
 			If IsArray($aWhiteZeros) And UBound($aWhiteZeros, 1) = 2 Then
 				ClickP($aWhiteZeros, 1, 0) ; Click upgrade buttton
@@ -182,7 +189,8 @@ Func LocateBattleMachine()
 		BuildingClickP($g_aiBattleMachinePos, "#0197")
 		If _Sleep($DELAYLABORATORY1) Then Return ; Wait for description to popup
 
-		Local $aResult = BuildingInfo(245, 490 + $g_iBottomOffsetY) ; Get building name and level with OCR
+		Local $aResult = BuildingInfo() ; Get building name and level with OCR
+		
 		If $aResult[0] = 2 Then ; We found a valid building name
 			If StringInStr($aResult[1], "Machine") = True Then ; we found the Battle Machine
 				SetLog("Battle Machine located.", $COLOR_INFO)
@@ -263,7 +271,8 @@ Func LocateBattleMachine()
 		BuildingClickP($g_aiBattleMachinePos, "#0197")
 		If _Sleep($DELAYLABORATORY1) Then Return ; Wait for description to popup
 
-		Local $aResult = BuildingInfo(245, 490 + $g_iBottomOffsetY) ; Get building name and level with OCR
+		Local $aResult = BuildingInfo() ; Get building name and level with OCR
+		
 		If $aResult[0] = 2 Then ; We found a valid building name
 			If StringInStr($aResult[1], "Machine") = True Then ; we found the Battle Machine
 				SetLog("Battle Machine located.", $COLOR_INFO)
@@ -293,62 +302,3 @@ Func LocateBattleMachine()
 	SetLog("Can not find Battle Machine.", $COLOR_ERROR)
 	Return False
 EndFunc   ;==>LocateBattleMachine()
-
-
-; OCR is putting a space between the 2 numbers, may need new training data for night base
-; quick fix is to join the numbers
-Func _BuildingInfo($iXstart, $iYstart)
-
-	Local $sBldgText, $sBldgLevel, $aString
-	Local $aResult[3] = ["", "", ""]
-
-	$sBldgText = getNameBuilding($iXstart, $iYstart) ; Get Unit name and level with OCR
-	If $sBldgText = "" Then ; try a 2nd time after a short delay if slow PC
-		If _Sleep($DELAYBUILDINGINFO1) Then Return $aResult
-		$sBldgText = getNameBuilding($iXstart, $iYstart) ; Get Unit name and level with OCR
-	EndIf
-	
-	SetLog("Building Text: " & $sBldgText, $COLOR_DEBUG)
-	
-	$aString = StringSplit($sBldgText, "(") ; Spilt the name and building level
-
-	If $aString[0] = 2 Then ; If we have name and level then use it
-		If $g_bDebugSetlog Then SetDebugLog("1st $aString = " & $aString[0] & ", " & $aString[1] & ", " & $aString[2], $COLOR_DEBUG) ;debug
-
-		If $aString[1] <> "" Then $aResult[1] = StringStripWS($aString[1], 7) ; check for bad read and store name in result[]
-
-		If $aString[2] <> "" Then ; check for bad read of level
-
-			$sBldgLevel = $aString[2] ; store level text
-
-			$aString = StringSplit($sBldgLevel, ")") ;split off the closing parenthesis
-
-			If $aString[0] = 2 Then ; Check If we have "level XX" cleaned up
-				
-				If $g_bDebugSetlog Then SetDebugLog("2nd $aString = " & $aString[0] & ", " & $aString[1] & ", " & $aString[2], $COLOR_DEBUG) ;debug
-				If $aString[1] <> "" Then $sBldgLevel = $aString[1] ; store "level XX"
-			EndIf
-
-			$aString = StringSplit($sBldgLevel, " ") ;split off the level number
-
-			If $aString[0] = 2 Then ; If we have level number then use it
-				If $g_bDebugSetlog Then SetDebugLog("3rd $aString = " & $aString[0] & ", " & $aString[1] & ", " & $aString[2], $COLOR_DEBUG) ;debug
-				If $aString[2] <> "" Then $aResult[2] = Number($aString[2]) ; store bldg level
-			ElseIf $aString[0] = 3 Then ; quick fix  
-				If $aString[2] <> "" Then $aResult[2] = Number($aString[2] & $aString[3]) ; store bldg level
-			EndIf
-		EndIf
-	EndIf
-	If $aResult[1] <> "" Then $aResult[0] = 1
-	If $aResult[2] <> "" Then $aResult[0] += 1
-	If $aResult[2] > 90 Then
-		If $aResult[2] = 200 Then
-			$aResult[2] = "Broken" ; Broken Clan Castle (not rebuild yet): report 'Broken' as Level
-		Else
-			$aResult[2] = ""
-		EndIf
-	EndIf
-
-	Return $aResult
-
-EndFunc   ;==>BuildingInfo

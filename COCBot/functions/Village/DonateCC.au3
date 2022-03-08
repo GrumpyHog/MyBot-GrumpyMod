@@ -1074,13 +1074,24 @@ Func DonateWindowCap(ByRef $g_bSkipDonTroops, ByRef $g_bSkipDonSpells)
 	If $g_bDebugSetlog Then SetDebugLog("DonateCapWindow Start", $COLOR_DEBUG)
 	;read troops capacity
 	If Not $g_bSkipDonTroops Then
-		Local $sReadCCTroopsCap = getCastleDonateCap(427, $g_iDonationWindowY + 12) ; use OCR to get donated/total capacity
+	
+		If $g_ChinaVersion Then
+			Local $sReadCCTroopsCap = getCastleDonateCap(402, $g_iDonationWindowY + 12) ; use OCR to get donated/total capacity
+		Else
+			Local $sReadCCTroopsCap = getCastleDonateCap(427, $g_iDonationWindowY + 12) ; use OCR to get donated/total capacity
+		EndIf
+		
 		If $g_bDebugSetlog Then SetDebugLog("$sReadCCTroopsCap: " & $sReadCCTroopsCap, $COLOR_DEBUG)
+		SetLog("$sReadCCTroopsCap: " & $sReadCCTroopsCap, $COLOR_DEBUG)
 
 		Local $aTempReadCCTroopsCap = StringSplit($sReadCCTroopsCap, "#")
+		
+		SetLog("$aTempReadCCTroopsCap: " & $aTempReadCCTroopsCap[0], $COLOR_DEBUG)
+		
 		If $aTempReadCCTroopsCap[0] >= 2 Then
 			;  Note - stringsplit always returns an array even if no values split!
 			If $g_bDebugSetlog Then SetDebugLog("$aTempReadCCTroopsCap splitted :" & $aTempReadCCTroopsCap[1] & "/" & $aTempReadCCTroopsCap[2], $COLOR_DEBUG)
+			SetLog("$aTempReadCCTroopsCap splitted :" & $aTempReadCCTroopsCap[1] & "/" & $aTempReadCCTroopsCap[2], $COLOR_DEBUG)
 			If $aTempReadCCTroopsCap[2] > 0 Then
 				$g_iDonTroopsAv = $aTempReadCCTroopsCap[1]
 				$g_iDonTroopsLimit = $aTempReadCCTroopsCap[2]
@@ -1094,7 +1105,13 @@ Func DonateWindowCap(ByRef $g_bSkipDonTroops, ByRef $g_bSkipDonSpells)
 	EndIf
 
 	If Not $g_bSkipDonSpells Then
-		Local $sReadCCSpellsCap = getCastleDonateCap(420, $g_iDonationWindowY + 218) ; use OCR to get donated/total capacity
+	
+		If $g_ChinaVersion Then
+			Local $sReadCCSpellsCap = getCastleDonateCap(402, $g_iDonationWindowY + 218) ; use OCR to get donated/total capacity
+		Else
+			Local $sReadCCSpellsCap = getCastleDonateCap(420, $g_iDonationWindowY + 218) ; use OCR to get donated/total capacity
+		EndIf
+		
 		If $g_bDebugSetlog Then SetDebugLog("$sReadCCSpellsCap: " & $sReadCCSpellsCap, $COLOR_DEBUG)
 		Local $aTempReadCCSpellsCap = StringSplit($sReadCCSpellsCap, "#")
 		If $aTempReadCCSpellsCap[0] >= 2 Then
@@ -1110,6 +1127,13 @@ Func DonateWindowCap(ByRef $g_bSkipDonTroops, ByRef $g_bSkipDonSpells)
 			$iDonSpellsLimit = 0
 		EndIf
 	EndIf
+
+	SetLog("$g_iDonTroopsAv = " & $g_iDonTroopsAv)
+	SetLog("$g_iDonTroopsLimit = " & $g_iDonTroopsLimit)
+	
+	SetLog("$g_iDonSpellsAv = " & $g_iDonSpellsAv)
+	SetLog("$iDonSpellsLimit = " & $iDonSpellsLimit)
+	
 
 	If $g_iDonTroopsAv = $g_iDonTroopsLimit Then
 		$g_bSkipDonTroops = True

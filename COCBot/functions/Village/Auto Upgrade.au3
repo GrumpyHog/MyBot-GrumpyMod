@@ -82,49 +82,53 @@ Func _AutoUpgrade()
 		EndIf
 
 		; get the name and actual level of upgrade selected, if strings are empty, will exit Auto Upgrade, an error happens
-		$g_aUpgradeNameLevel = BuildingInfo(242, 490 + $g_iBottomOffsetY)
-		If $g_aUpgradeNameLevel[0] = "" Then
-			SetLog("Error when trying to get upgrade name and level, looking next...", $COLOR_ERROR)
-			$g_iNextLineOffset = $g_iCurrentLineOffset
-			ContinueLoop
-		EndIf
+		$g_aUpgradeNameLevel = BuildingInfo()
+
+		;If $g_aUpgradeNameLevel[0] = "" Then
+		;	SetLog("Error when trying to get upgrade name and level, looking next...", $COLOR_ERROR)
+		;	$g_iNextLineOffset = $g_iCurrentLineOffset
+		;	ContinueLoop
+		;EndIf
 
 		Local $bMustIgnoreUpgrade = False
-		; matchmaking between building name and the ignore list
-		Switch $g_aUpgradeNameLevel[1]
-			Case "Town Hall"
-				$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[0] = 1) ? True : False
-			Case "Barbarian King"
-				$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[1] = 1 Or $g_bUpgradeKingEnable = True) ? True : False ; if upgrade king is selected, will ignore it
-			Case "Archer Queen"
-				$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[2] = 1 Or $g_bUpgradeQueenEnable = True) ? True : False ; if upgrade queen is selected, will ignore it
-			Case "Grand Warden"
-				$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[3] = 1 Or $g_bUpgradeWardenEnable = True) ? True : False ; if upgrade warden is selected, will ignore it
-			Case "Royal Champion"
-				$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[14] = 1 Or $g_bUpgradeChampionEnable = True) ? True : False ; if upgrade champion is selected, will ignore it
-			Case "Clan Castle"
-				$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[4] = 1) ? True : False
-			Case "Laboratory"
-				$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[5] = 1) ? True : False
-			Case "Wall"
-				$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[6] = 1 Or $g_bAutoUpgradeWallsEnable = True) ? True : False ; if wall upgrade enabled, will ignore it
-			Case "Barracks"
-				$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[7] = 1) ? True : False
-			Case "Dark Barracks"
-				$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[8] = 1) ? True : False
-			Case "Spell Factory"
-				$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[9] = 1) ? True : False
-			Case "Dark Spell Factory"
-				$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[10] = 1) ? True : False
-			Case "Gold Mine"
-				$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[11] = 1) ? True : False
-			Case "Elixir Collector"
-				$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[12] = 1) ? True : False
-			Case "Dark Elixir Drill"
-				$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[13] = 1) ? True : False
-			Case Else
-				$bMustIgnoreUpgrade = False
-		EndSwitch
+
+		If $g_aUpgradeNameLevel[0] <> "" Then
+			; matchmaking between building name and the ignore list
+			Switch $g_aUpgradeNameLevel[1]
+				Case "Town Hall"
+					$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[0] = 1) ? True : False
+				Case "Barbarian King"
+					$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[1] = 1 Or $g_bUpgradeKingEnable = True) ? True : False ; if upgrade king is selected, will ignore it
+				Case "Archer Queen"
+					$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[2] = 1 Or $g_bUpgradeQueenEnable = True) ? True : False ; if upgrade queen is selected, will ignore it
+				Case "Grand Warden"
+					$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[3] = 1 Or $g_bUpgradeWardenEnable = True) ? True : False ; if upgrade warden is selected, will ignore it
+				Case "Royal Champion"
+					$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[14] = 1 Or $g_bUpgradeChampionEnable = True) ? True : False ; if upgrade champion is selected, will ignore it
+				Case "Clan Castle"
+					$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[4] = 1) ? True : False
+				Case "Laboratory"
+					$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[5] = 1) ? True : False
+				Case "Wall"
+					$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[6] = 1 Or $g_bAutoUpgradeWallsEnable = True) ? True : False ; if wall upgrade enabled, will ignore it
+				Case "Barracks"
+					$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[7] = 1) ? True : False
+				Case "Dark Barracks"
+					$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[8] = 1) ? True : False
+				Case "Spell Factory"
+					$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[9] = 1) ? True : False
+				Case "Dark Spell Factory"
+					$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[10] = 1) ? True : False
+				Case "Gold Mine"
+					$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[11] = 1) ? True : False
+				Case "Elixir Collector"
+					$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[12] = 1) ? True : False
+				Case "Dark Elixir Drill"
+					$bMustIgnoreUpgrade = ($g_iChkUpgradesToIgnore[13] = 1) ? True : False
+				Case Else
+					$bMustIgnoreUpgrade = False
+			EndSwitch
+		EndIf
 
 		; check if the upgrade name is on the list of upgrades that must be ignored
 		If $bMustIgnoreUpgrade = True Then

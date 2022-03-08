@@ -542,7 +542,7 @@ Func cmbWalls()
 	  GUICtrlSetState($g_ahWallsCurrentCount[$i], $GUI_SHOW)
 	  GUICtrlSetState($g_ahPicWallsLevel[$i], $GUI_SHOW)
    Next
-   For $i = $g_iCmbUpgradeWallsLevel+6 To 14
+   For $i = $g_iCmbUpgradeWallsLevel+6 To 15
 	  GUICtrlSetState($g_ahWallsCurrentCount[$i], $GUI_HIDE)
 	  GUICtrlSetState($g_ahPicWallsLevel[$i], $GUI_HIDE)
    Next

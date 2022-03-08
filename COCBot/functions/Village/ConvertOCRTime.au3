@@ -17,22 +17,31 @@ Func ConvertOCRTime($sCaller, $sConvertTo, $bSetLog = True)
 	Local $iRemainTimer = 0, $avResult, $iDay = 0, $iHour = 0, $iMinute = 0, $iSecond = 0
 
 	If $sConvertTo <> "" Then
+	
+		If $g_ChinaVersion Then
+			$sConvertTo = StringStripWS($sConvertTo, $STR_STRIPALL) ; remove spaces
+			$sConvertTo = StringLower($sConvertTo) ; convert to lowercase
+		EndIf
+	
 		If StringInStr($sConvertTo, "d") > 1 Then
 			$avResult = StringSplit($sConvertTo, "d", $STR_NOCOUNT)
 			; $avResult[0] will be the Day and the $avResult[1] will be the rest
 			$iDay = Number($avResult[0])
 			$sConvertTo = $avResult[1]
 		EndIf
+
 		If StringInStr($sConvertTo, "h") > 1 Then
 			$avResult = StringSplit($sConvertTo, "h", $STR_NOCOUNT)
 			$iHour = Number($avResult[0])
 			$sConvertTo = $avResult[1]
 		EndIf
+
 		If StringInStr($sConvertTo, "m") > 1 Then
 			$avResult = StringSplit($sConvertTo, "m", $STR_NOCOUNT)
 			$iMinute = Number($avResult[0])
 			$sConvertTo = $avResult[1]
 		EndIf
+
 		If StringInStr($sConvertTo, "s") > 1 Then
 			$avResult = StringSplit($sConvertTo, "s", $STR_NOCOUNT)
 			$iSecond = Number($avResult[0])

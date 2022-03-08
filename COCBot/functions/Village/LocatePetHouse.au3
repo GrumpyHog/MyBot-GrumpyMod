@@ -80,7 +80,7 @@ Func _LocatePetHouse()
 			ClickAway()
 			Return
 		EndIf
-		Local $sPetHouseInfo = BuildingInfo(242, 490 + $g_iBottomOffsetY); 860x780
+		Local $sPetHouseInfo = BuildingInfo(); 860x780
 		If $sPetHouseInfo[0] > 1 Or $sPetHouseInfo[0] = "" Then
 			If StringInStr($sPetHouseInfo[1], "House") = 0 Then
 				Local $sLocMsg = ($sPetHouseInfo[0] = "" ? "Nothing" : $sPetHouseInfo[1])
@@ -165,7 +165,7 @@ Func LocatePetHouse()
 		BuildingClickP($g_aiPetHousePos, "#0197")
 		If _Sleep($DELAYLABORATORY1) Then Return ; Wait for description to popup
 
-		Local $aResult = BuildingInfo(245, 490 + $g_iBottomOffsetY) ; Get building name and level with OCR
+		Local $aResult = BuildingInfo() ; Get building name and level with OCR
 		If $aResult[0] = 2 Then ; We found a valid building name
 			If StringInStr($aResult[1], "Pet") = True Then ; we found the Pet House
 				SetLog("Pet House located.", $COLOR_INFO)
@@ -257,7 +257,7 @@ Func LocatePetHouse()
 		BuildingClickP($g_aiPetHousePos, "#0197")
 		If _Sleep($DELAYLABORATORY1) Then Return ; Wait for description to popup
 
-		Local $aResult = BuildingInfo(245, 490 + $g_iBottomOffsetY) ; Get building name and level with OCR
+		Local $aResult = BuildingInfo() ; Get building name and level with OCR
 		If $aResult[0] = 2 Then ; We found a valid building name
 			If StringInStr($aResult[1], "Pet") = True Then ; we found the Pet House
 				SetLog("Pet House located.", $COLOR_INFO)

@@ -306,7 +306,7 @@ Func IsBattleMachineUpgradePage($bSetLog = True, $iLoop = 30)
 	Local $aIsBattleMachineUpgradePage[4] = [295, 295, 0x609ACA, 20] ; Master Builder blue hat
 
 	If IsPageLoop($aIsBattleMachineUpgradePage, $iLoop) Then
-		If ($g_bDebugSetlog Or $g_bDebugClick) And $bSetLog Then SetLog("**Pet House Window OK**", $COLOR_ACTION)
+		If ($g_bDebugSetlog Or $g_bDebugClick) And $bSetLog Then SetLog("**Battle Machine Upgrade Window OK**", $COLOR_ACTION)
 		SetLog("**Battle Machine Upgrade Window OK**", $COLOR_ACTION)
 		Return True
 	EndIf

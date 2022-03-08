@@ -86,7 +86,7 @@ Func _LocateClanCastle($bCollect = True)
 			ClickAway()
 			Return
 		EndIf
-		$sInfo = BuildingInfo(242, 495 + $g_iBottomOffsetY) ; 860x780
+		$sInfo = BuildingInfo() ; 860x780
 		If IsArray($sInfo) and ($sInfo[0] > 1 Or $sInfo[0] = "") Then
 			If StringInStr($sInfo[1], "clan") = 0 Then
 				Local $sLocMsg = ($sInfo[0] = "" ? "Nothing" : $sInfo[1])
@@ -140,7 +140,7 @@ Func LocateClanCastle()
 		BuildingClickP($g_aiClanCastlePos, "#0197")
 		If _Sleep($DELAYLABORATORY1) Then Return ; Wait for description to popup
 
-		Local $aResult = BuildingInfo(245, 495 + $g_iBottomOffsetY) ; Get building name and level with OCR
+		Local $aResult = BuildingInfo() ; Get building name and level with OCR
 		If $aResult[0] = 2 Then ; We found a valid building name
 			If StringInStr($aResult[1], "clan") = True Then ; we found the Clan Castle
 				SetLog("Clan Castle located.", $COLOR_INFO)
@@ -243,7 +243,7 @@ Func LocateClanCastle()
 		BuildingClickP($g_aiClanCastlePos, "#0197")
 		If _Sleep($DELAYLABORATORY1) Then Return ; Wait for description to popup
 
-		Local $aResult = BuildingInfo(245, 495 + $g_iBottomOffsetY) ; Get building name and level with OCR
+		Local $aResult = BuildingInfo() ; Get building name and level with OCR
 		If $aResult[0] = 2 Then ; We found a valid building name
 			If StringInStr($aResult[1], "clan") = True Then ; we found the Clan Castle
 				SetLog("Clan Castle located.", $COLOR_INFO)

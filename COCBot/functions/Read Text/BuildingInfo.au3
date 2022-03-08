@@ -13,24 +13,31 @@
 ; Link ..........: https://github.com/MyBotRun/MyBot/wiki
 ; Example .......: No
 ; ===============================================================================================================================
-Func BuildingInfo($iXstart, $iYstart)
+Func BuildingInfo($iXstart = -1, $iYstart = -1)
 
 	Local $sBldgText, $sBldgLevel, $aString
 	Local $aResult[3] = ["", "", ""]
 
+	; Home Village Parameters
+	If $iXstart = -1 And $iYstart = -1 Then
+		$iXstart = 242
+		$iYstart = 490 + $g_iBottomOffsetY
+
+		If $g_ChinaVersion Then
+			$iYstart += 5
+		EndIf
+
+	EndIf
+
 	$sBldgText = getNameBuilding($iXstart, $iYstart) ; Get Unit name and level with OCR
+
 	If $sBldgText = "" Then ; try a 2nd time after a short delay if slow PC
 		If _Sleep($DELAYBUILDINGINFO1) Then Return $aResult
 		$sBldgText = getNameBuilding($iXstart, $iYstart) ; Get Unit name and level with OCR
 	EndIf
-	
-	SetLog($sBldgText)
-	
-	$aString = StringSplit($sBldgText, " ") ; Spilt the name and building level
-	$aResult[0] = $aString[0]
-	$aResult[1] = StringStripWS($aString[1], $STR_STRIPALL)
-	
-	Return $aResult
+
+	; translate text
+	If $g_ChinaVersion Then $sBldgText = TranslateBuildingText($sBldgText)
 	
 	If $g_bDebugSetlog Then SetDebugLog("Read building Name String = " & $sBldgText, $COLOR_DEBUG) ;debug
 	If StringInStr($sBldgText, "Cart") Then $sBldgText &= " (FakeLevel 100)"
@@ -72,3 +79,28 @@ Func BuildingInfo($iXstart, $iYstart)
 	Return $aResult
 
 EndFunc   ;==>BuildingInfo
+
+Func TranslateBuildingText($sBldgText)
+	Local $aString, $sNewBldgText = ""
+	
+	SetLog("Building Text : " & $sBldgText)
+	
+	$aString = StringSplit($sBldgText, " ") ; Spilt the name and building level
+
+	SetLog("Number of Strings :" & $aString[0])
+
+		
+	If StringInStr($sBldgText, "lab") Then $sNewBldgText = "Laboratory (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
+	
+	If StringInStr($sBldgText, "castle") Then $sNewBldgText = "Clan Castle (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
+	
+	If StringInStr($sBldgText, "town") Then $sNewBldgText = "Town Hall (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
+	
+	If StringInStr($sBldgText, "mach") Then $sNewBldgText = "Battle Machine (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
+	
+	If StringInStr($sBldgText, "wall") Then $sNewBldgText = "Wall (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
+	
+	SetLog("New Building Text : " & $sNewBldgText)
+
+	Return $sNewBldgText
+EndFunc

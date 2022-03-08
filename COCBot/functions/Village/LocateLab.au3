@@ -79,7 +79,7 @@ Func _LocateLab($bCollect = True)
 			ClickAway()
 			Return
 		EndIf
-		Local $sLabInfo = BuildingInfo(242, 495 + $g_iBottomOffsetY); 860x780
+		Local $sLabInfo = BuildingInfo(); 860x780
 		If $sLabInfo[0] > 1 Or $sLabInfo[0] = "" Then
 			If StringInStr($sLabInfo[1], "Lab") = 0 Then
 				Local $sLocMsg = ($sLabInfo[0] = "" ? "Nothing" : $sLabInfo[1])
@@ -164,7 +164,7 @@ Func LocateLaboratory()
 		BuildingClickP($g_aiLaboratoryPos, "#0197")
 		If _Sleep($DELAYLABORATORY1) Then Return ; Wait for description to popup
 
-		Local $aResult = BuildingInfo(245, 495 + $g_iBottomOffsetY) ; Get building name and level with OCR
+		Local $aResult = BuildingInfo() ; Get building name and level with OCR
 		If $aResult[0] = 2 Then ; We found a valid building name
 			If StringInStr($aResult[1], "Lab") = True Then ; we found the Laboratory
 				SetLog("Laboratory located.", $COLOR_INFO)
@@ -256,7 +256,7 @@ Func LocateLaboratory()
 		BuildingClickP($g_aiLaboratoryPos, "#0197")
 		If _Sleep($DELAYLABORATORY1) Then Return ; Wait for description to popup
 
-		Local $aResult = BuildingInfo(245, 495 + $g_iBottomOffsetY) ; Get building name and level with OCR
+		Local $aResult = BuildingInfo() ; Get building name and level with OCR
 		If $aResult[0] = 2 Then ; We found a valid building name
 			If StringInStr($aResult[1], "Lab") = True Then ; we found the Laboratory
 				SetLog("Laboratory located.", $COLOR_INFO)

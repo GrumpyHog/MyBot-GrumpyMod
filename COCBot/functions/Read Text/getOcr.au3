@@ -127,11 +127,11 @@ Func getTroopsSpellsLevel($x_start, $y_start) ;  -> Gets spell level on Attack S
 EndFunc   ;==>getTroopsSpellsLevel
 
 Func getPetLevel($x_start, $y_start) ;  -> Gets spell level on Attack Screen for selected spell kind (could be used for troops too)
-	Return getOcrAndCapture("coc-petlevel", $x_start, $y_start, 20, 18, True)
+	Return getOcrAndCapture("coc-spellslevel", $x_start, $y_start, 20, 18, True)
 EndFunc   ;==>getTroopsSpellsLevel
 
 Func getSiegeLevel($x_start, $y_start) ;  -> Gets Siege level on Attack Screen
-	Return getOcrAndCapture("coc-siegelevel", $x_start, $y_start, 20, 14, True)
+	Return getOcrAndCapture("coc-spellslevel", $x_start, $y_start, 20, 14, True)
 EndFunc   ;==>getTroopsSpellsLevel
 
 Func getArmyCampCap($x_start, $y_start, $bNeedCapture = True) ;  -> Gets army camp capacity --> train.au3, and used to read CC request time remaining
