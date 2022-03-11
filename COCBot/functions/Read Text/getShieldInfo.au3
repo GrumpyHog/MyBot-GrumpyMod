@@ -64,6 +64,15 @@ Func getShieldInfo()
 
 	If _Sleep($DELAYPERSONALSHIELD3) Then Return $aPBReturnResult ; improve pause/stop button response
 
+	If $g_SimplifiedChinese Then
+			SetLog("Simplified Chinese UI")
+			SetLog("$sTimeResult 1 : " & $sTimeResult)
+			$sTimeResult = StringStripWS($sTimeResult, $STR_STRIPSPACES) ; remove spaces
+			SetLog("$sTimeResult 2 : " & $sTimeResult)
+			$sTimeResult = StringLower($sTimeResult) ; convert to lowercase
+			SetLog("$sTimeResult 3 : " & $sTimeResult)
+	EndIf
+
 	$aString = StringSplit($sTimeResult, " ") ; split hours/minutes or minutes/seconds
 	Switch $aString[0]
 		Case 1

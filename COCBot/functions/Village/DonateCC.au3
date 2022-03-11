@@ -1075,7 +1075,7 @@ Func DonateWindowCap(ByRef $g_bSkipDonTroops, ByRef $g_bSkipDonSpells)
 	;read troops capacity
 	If Not $g_bSkipDonTroops Then
 	
-		If $g_ChinaVersion Then
+		If $g_SimplifiedChinese Then
 			Local $sReadCCTroopsCap = getCastleDonateCap(402, $g_iDonationWindowY + 12) ; use OCR to get donated/total capacity
 		Else
 			Local $sReadCCTroopsCap = getCastleDonateCap(427, $g_iDonationWindowY + 12) ; use OCR to get donated/total capacity
@@ -1106,7 +1106,7 @@ Func DonateWindowCap(ByRef $g_bSkipDonTroops, ByRef $g_bSkipDonSpells)
 
 	If Not $g_bSkipDonSpells Then
 	
-		If $g_ChinaVersion Then
+		If $g_SimplifiedChinese Then
 			Local $sReadCCSpellsCap = getCastleDonateCap(402, $g_iDonationWindowY + 218) ; use OCR to get donated/total capacity
 		Else
 			Local $sReadCCSpellsCap = getCastleDonateCap(420, $g_iDonationWindowY + 218) ; use OCR to get donated/total capacity

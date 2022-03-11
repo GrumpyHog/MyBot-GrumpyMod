@@ -34,7 +34,7 @@ Func GetTownHallLevel($bFirstTime = False)
 
 	$aTHInfo = BuildingInfo()
 
-	;If $g_ChinaVersion Then
+	;If $g_SimplifiedChinese Then
 	;	$aTHInfo = BuildingInfo(242, 495 + $g_iBottomOffsetY)
 	;Else
 	;	$aTHInfo = BuildingInfo(242, 490 + $g_iBottomOffsetY)

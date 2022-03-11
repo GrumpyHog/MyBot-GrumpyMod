@@ -2005,4 +2005,4 @@ Global $g_iMinimumLabUpgDarkElixir = 0
 
 Global $g_iEventTime = -1
 
-Global $g_ChinaVersion = True
+Global $g_SimplifiedChinese = False

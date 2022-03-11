@@ -11,7 +11,20 @@
 ; Link ..........: https://github.com/MyBotRun/MyBot/wiki
 ; Example .......: No
 ; ===============================================================================================================================
-Func _StarBonus()
+
+Func StarBonus()
+	Local $bResult
+
+	If $g_SimplifiedChinese Then
+		$bResult = StarBonusChinese()
+	Else
+		$bResult = StarBonusEnglish()
+	EndIf
+
+	Return $bResult
+EndFunc
+
+Func StarBonusEnglish()
 
 	If $g_bDebugSetlog Then SetDebugLog("Begin Star Bonus window check", $COLOR_DEBUG1)
 
@@ -45,7 +58,7 @@ Func _StarBonus()
 
 EndFunc   ;==>StarBonus
 
-Func StarBonus()
+Func StarBonusChinese()
 	If $g_bDebugSetlog Then SetDebugLog("Begin Star Bonus window check", $COLOR_DEBUG1)
 
 	Local $aIsStarBonusWindow = decodeSingleCoord(findImage("StarBonus", $g_sImgIsStarBonus, GetDiamondFromRect("370,175,490,225"), 1, True))

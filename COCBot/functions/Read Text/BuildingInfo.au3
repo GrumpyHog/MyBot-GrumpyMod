@@ -23,7 +23,7 @@ Func BuildingInfo($iXstart = -1, $iYstart = -1)
 		$iXstart = 242
 		$iYstart = 490 + $g_iBottomOffsetY
 
-		If $g_ChinaVersion Then
+		If $g_SimplifiedChinese Then
 			$iYstart += 5
 		EndIf
 
@@ -37,7 +37,7 @@ Func BuildingInfo($iXstart = -1, $iYstart = -1)
 	EndIf
 
 	; translate text
-	If $g_ChinaVersion Then $sBldgText = TranslateBuildingText($sBldgText)
+	If $g_SimplifiedChinese Then $sBldgText = TranslateBuildingText($sBldgText)
 	
 	If $g_bDebugSetlog Then SetDebugLog("Read building Name String = " & $sBldgText, $COLOR_DEBUG) ;debug
 	If StringInStr($sBldgText, "Cart") Then $sBldgText &= " (FakeLevel 100)"
@@ -90,11 +90,13 @@ Func TranslateBuildingText($sBldgText)
 	SetLog("Number of Strings :" & $aString[0])
 
 		
+	If StringInStr($sBldgText, "wang") Then $sNewBldgText = "Barbarian King (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
+		
 	If StringInStr($sBldgText, "lab") Then $sNewBldgText = "Laboratory (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
 	
 	If StringInStr($sBldgText, "castle") Then $sNewBldgText = "Clan Castle (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
 	
-	If StringInStr($sBldgText, "town") Then $sNewBldgText = "Town Hall (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
+	If StringInStr($sBldgText, "dabenying") Then $sNewBldgText = "Town Hall (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
 	
 	If StringInStr($sBldgText, "mach") Then $sNewBldgText = "Battle Machine (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
 	

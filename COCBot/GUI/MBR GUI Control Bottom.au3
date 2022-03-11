@@ -86,7 +86,7 @@ Func Initiate()
 			BotDetectFirstTime()
 			If Not $g_bRunState Then Return
 
-;			If $g_bCheckGameLanguage Then TestLanguage()
+			If $g_bCheckGameLanguage Then TestLanguage()
 			If Not $g_bRunState Then Return
 
 			runBot()

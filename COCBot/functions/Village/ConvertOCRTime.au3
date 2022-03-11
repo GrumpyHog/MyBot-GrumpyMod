@@ -18,7 +18,7 @@ Func ConvertOCRTime($sCaller, $sConvertTo, $bSetLog = True)
 
 	If $sConvertTo <> "" Then
 	
-		If $g_ChinaVersion Then
+		If $g_SimplifiedChinese Then
 			$sConvertTo = StringStripWS($sConvertTo, $STR_STRIPALL) ; remove spaces
 			$sConvertTo = StringLower($sConvertTo) ; convert to lowercase
 		EndIf

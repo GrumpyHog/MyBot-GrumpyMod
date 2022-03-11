@@ -16,6 +16,34 @@
 
 Func TestLanguage()
 	If Not $g_bRunState Then Return
+
+	Local $sImgSimplifiedChinese =  @ScriptDir & "\imgxml\Language\SimplifiedChinese*"
+	Local $sSearchArea = "15,685,110,715"
+	Local $aSimplifiedChinese = decodeSingleCoord(findImage("TestLanguage", $sImgSimplifiedChinese, GetDiamondFromRect($sSearchArea), 1, True, Default))
+
+	If IsArray($aSimplifiedChinese) And UBound($aSimplifiedChinese, 1) = 2 Then
+		SetLog("Clash Language UI = Simplified Chinese", $COLOR_INFO)
+		$g_SimplifiedChinese = True
+
+		$aArmyCampSize[0] = 76
+		$aArmyCampSize[1] = 136 + $g_iMidOffsetY ; Training Window, Overview screen, Current Size/Total Size
+
+		$aSiegeMachineSize[0] = 682
+		$aSiegeMachineSize[1] = 136 + $g_iMidOffsetY ; Training Window, Overview screen, Current Number/Total Number
+
+		$aArmySpellSize[0] = 77
+		$aArmySpellSize[1] = 284 + $g_iMidOffsetY ; Training Window Overviewscreen, current number/total capacity
+
+		;$g_aArmyCCSpellSize[0] = 473
+		;$g_aArmyCCSpellSize[1] = 438 + $g_iMidOffsetY ; Training Window, Overview Screen, Current CC Spell number/total cc spell capacity
+		
+		;$aIsAttackPage[0] = 56
+		;$aIsAttackPage[1] = 548	+ $g_iBottomOffsetY
+		;$aIsAttackPage[2] = 0xD11010
+		;$aIsAttackPage[3] = 20 ; red button "end battle" 860x780 ; CHINA VERSION
+		Return True
+	EndIf
+
 	; test the word "Attack!" on the Attack Button in the lower left corner
 	If getOcrLanguage($aDetectLang[0], $aDetectLang[1]) = "english" Then
 		SetLog("Language setting is English: Correct.", $COLOR_INFO)
