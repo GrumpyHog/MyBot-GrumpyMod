@@ -148,12 +148,12 @@ Func GetAttackBar($bRemaining = False, $pMatchMode = $DB, $bDebug = False)
 			If StringRegExp($aAttackBar[$i][0], "(King)|(Queen)|(Warden)|(Champion)|(Castle)|(WallW)|(BattleB)|(StoneS)|(SiegeB)|(LogL)|(FlameF)", 0) Then
 				If Not $bRemoved Then $aAttackBar[$i][4] = 1
 				If ($pMatchMode = $DB Or $pMatchMode = $LB) And StringRegExp($aAttackBar[$i][0], "(WallW)|(BattleB)|(StoneS)|(SiegeB)|(LogL)|(FlameF)", 0) And $g_abAttackDropCC[$pMatchMode] And $g_aiAttackUseSiege[$pMatchMode] > 0 And $g_aiAttackUseSiege[$pMatchMode] <= 7 Then
-					;$g_iSiegeLevel = Number(getTroopsSpellsLevel(Number($aAttackBar[$i][5]) - 30, 704))
-					$g_iSiegeLevel = Number(getSiegeLevel(Number($aAttackBar[$i][5]) - 30, 704))
+					$g_iSiegeLevel = Number(getTroopsSpellsLevel(Number($aAttackBar[$i][5]) - 30, 704))
+					;$g_iSiegeLevel = Number(getSiegeLevel(Number($aAttackBar[$i][5]) - 30, 704))
 					If $g_iSiegeLevel = "" Then $g_iSiegeLevel = 1
 					SetDebugLog($aAttackBar[$i][0] & " level: " & $g_iSiegeLevel)
-					SetLog("AttackBar Siege")
-					SetLog($aAttackBar[$i][0] & " level: " & $g_iSiegeLevel)
+					;SetLog("AttackBar Siege")
+					;SetLog($aAttackBar[$i][0] & " level: " & $g_iSiegeLevel)
 				EndIf
 			Else
 				If Not $bRemoved Then
@@ -172,14 +172,14 @@ Func GetAttackBar($bRemaining = False, $pMatchMode = $DB, $bDebug = False)
 		EndIf
 	Next
 	
-	DebugAB($aFinalAttackBar, "Initial")
+	;DebugAB($aFinalAttackBar, "Initial")
 
 	; Drag left & checking extended troops from Slot11+ ONLY if not a smart attack
 	If ($pMatchMode <= $LB And $bCheckSlot12 And Not $bDoubleRow And UBound($aAttackBar) > 1 And $g_aiAttackAlgorithm[$pMatchMode] <> 2) Or ($bDebug And $bCheckSlot12) Then
 		DragAttackBar()
 		Local $aExtendedArray = ExtendedAttackBarCheck($aAttackBar, $bRemaining, $sSearchDiamond)
 		
-		DebugAB($aExtendedArray, "Extended Return")
+		;DebugAB($aExtendedArray, "Extended Return")
 		
 		_ArrayAdd($aFinalAttackBar, $aExtendedArray)
 		If Not $bRemaining Then
@@ -190,7 +190,7 @@ Func GetAttackBar($bRemaining = False, $pMatchMode = $DB, $bDebug = False)
 
 	_ArraySort($aFinalAttackBar, 0, 0, 0, 1) ; Sort Final Array by Slot Number
 	
-	DebugAB($aFinalAttackBar, "Final")
+	;DebugAB($aFinalAttackBar, "Final")
 	
 	Return $aFinalAttackBar
 	
@@ -198,7 +198,7 @@ Func GetAttackBar($bRemaining = False, $pMatchMode = $DB, $bDebug = False)
 EndFunc   ;==>GetBarCheck
 
 Func ExtendedAttackBarCheck($aAttackBarFirstSearch, $bRemaining, $sSearchDiamond)
-	DebugAB($aAttackBarFirstSearch, "ExtendedAttackBarCheck")
+	;DebugAB($aAttackBarFirstSearch, "ExtendedAttackBarCheck")
 
 	Local Static $aAttackBar[0][8]
 	Local $iLastSlotNumber = _ArrayMax($aAttackBarFirstSearch, 0, -1, -1, 3)
@@ -208,9 +208,9 @@ Func ExtendedAttackBarCheck($aAttackBarFirstSearch, $bRemaining, $sSearchDiamond
 	Local $aiOCRLocation[2] = [-1, -1]
 	Local $aSlotAmountX[0][3]
 
-	SetLog("$iLastTroop : " & $iLastTroop & " Ubound: " & Ubound($aAttackBarFirstSearch, 1))
+	;SetLog("$iLastTroop : " & $iLastTroop & " Ubound: " & Ubound($aAttackBarFirstSearch, 1))
 	;SetLog("Last Slot No: " & $iLastSlotNumber & " Troop: " & GetTroopName($sLastTroopName))
-	SetLog("Last Slot No: " & $iLastSlotNumber & " Troop: " & $sLastTroopName)
+	;SetLog("Last Slot No: " & $iLastSlotNumber & " Troop: " & $sLastTroopName)
 
 	;Reset All Static Variables if the AttackBarCheck is not for Remaining
 	If Not $bRemaining Then
@@ -288,7 +288,7 @@ Func ExtendedAttackBarCheck($aAttackBarFirstSearch, $bRemaining, $sSearchDiamond
 		
 		;_ArrayDisplay($iSlot)
 		
-		SetLog("number of unique troops: " & $iSlot[0])
+		;SetLog("number of unique troops: " & $iSlot[0])
 		
 		If $iSlot[0] < 11 Then 
 			Local $iLastTroopIndex = _ArraySearch($aAttackBar, $sLastTroopName, 0, 0, 0, 0, 0, 0) + 1 ; works with 3 troops 4 heroes 2 spells (1 is rage) cc rage and 1 more 

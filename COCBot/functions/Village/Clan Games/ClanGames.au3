@@ -593,8 +593,11 @@ Func GetTimesAndScores()
 	Local $iRestScore = -1, $sYourGameScore = "", $aiScoreLimit, $sTimeRemain
 
 	;Ocr for game time remaining
-	$sTimeRemain = StringReplace(getOcrTimeGameTime(45, 480), " ", "") ; read Clan Games waiting time
-
+	If $g_SimplifiedChinese Then
+		$sTimeRemain = StringReplace(getOcrTimeGameTime(45, 480), " ", "") ; read Clan Games waiting time
+	Else
+		$sTimeRemain = StringReplace(getOcrTimeGameTime(55, 470), " ", "") ; read Clan Games waiting time
+	EndIf
 	;Check if OCR returned a valid timer format
 	If Not StringRegExp($sTimeRemain, "([0-2]?[0-9]?[DdHhSs]+)", $STR_REGEXPMATCH, 1) Then
 		SetLog("getOcrTimeGameTime(): no valid return value (" & $sTimeRemain & ")", $COLOR_ERROR)
@@ -1910,7 +1913,7 @@ Func SearchColumn($aiColumn)
 	Local $sSearchArea
 	Local $avRewards
 	; normal templates should cover the area of the animation 
-	Local $aRewardsList[16][2] = [ _
+	Local $aRewardsList[22][2] = [ _
 		["Gems",					1], _
 		["Boost",					5], _
 		["Builder",					4], _
@@ -1926,7 +1929,13 @@ Func SearchColumn($aiColumn)
 		["BuildingFull",			4], _
 		["BuilderFull",				9], _
 		["ResearchFull",			9], _
-		["PowerFull",				9]]
+		["PowerFull",				9], _
+		["BuilderGoldRune",			3], _
+		["BuilderGoldRuneFull",		4], _
+		["DarkElixirRune",			3], _
+		["DarkElixirRuneFull",		4], _
+		["SpellBook",				2], _
+		["SpellBookFull",			4]]
 
 	$sSearchArea = GetDiamondFromArray($aiColumn)
 

@@ -61,7 +61,7 @@ Func CollectFreeMagicItems($bTest = False)
 		; 0D997C ; >Xmas
 		If $aResults[$i] <> "" Then
 			If Not $bTest Then
-				If $aResults[$i] = "FREE" Then
+				If $aResults[$i] = "FREE" Or $aResults[$i] = "mianfei" Then
 					Click($aOcrPositions[$i][0], $aOcrPositions[$i][1], 2, 500)
 					SetLog("Free Magic Item detected", $COLOR_INFO)
 					CloseWindow("CloseDD")

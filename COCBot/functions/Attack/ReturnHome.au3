@@ -87,6 +87,7 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True) ;Return main screen
 	If Not (IsReturnHomeBattlePage(True, False)) Then ; check if battle is already over
 		For $i = 0 To 5 ; dynamic wait loop for surrender button to appear (if end battle or surrender button are not found in 5*(200)ms + 10*(200)ms or 3 seconds, then give up.)
 			If $g_bDebugSetlog Then SetDebugLog("Wait for surrender button to appear #" & $i)
+			SetLog("Wait for surrender button to appear #" & $i)
 			$aiSurrenderButton = findButton("EndBattle", Default, 1, True)
 			If IsArray($aiSurrenderButton) And UBound($aiSurrenderButton, 1) = 2 Then
 				If IsAttackPage() Then ; verify still on attack page, and battle has not ended magically before clicking
@@ -94,6 +95,7 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True) ;Return main screen
 					$j = 0
 					While 1 ; dynamic wait for Okay button
 						If $g_bDebugSetlog Then SetDebugLog("Wait for OK button to appear #" & $j)
+						SetLog("Wait for OK button to appear #" & $j)
 						If IsEndBattlePage(False) Then
 							ClickOkay("SurrenderOkay") ; Click Okay to Confirm surrender
 							ExitLoop 2
@@ -107,6 +109,7 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True) ;Return main screen
 				EndIf
 			Else
 				SetDebugLog("Cannot Find Surrender Button", $COLOR_ERROR)
+				SetLog("Cannot Find Surrender Button", $COLOR_ERROR)
 			EndIf
 			If ReturnHomeMainPage() Then Return
 			If _Sleep($DELAYRETURNHOME5) Then Return
@@ -125,6 +128,7 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True) ;Return main screen
 			$counter = 0
 			While _ColorCheck(_GetPixelColor($aRtnHomeCheck1[0], $aRtnHomeCheck1[1], True), Hex($aRtnHomeCheck1[2], 6), $aRtnHomeCheck1[3]) = False And _ColorCheck(_GetPixelColor($aRtnHomeCheck2[0], $aRtnHomeCheck2[1], True), Hex($aRtnHomeCheck2[2], 6), $aRtnHomeCheck2[3]) = False ; test for Return Home Button
 				If $g_bDebugSetlog Then SetDebugLog("Wait for Return Home Button to appear #" & $counter)
+				SetLog("Wait for Return Home Button to appear #" & $counter)
 				If _Sleep($DELAYRETURNHOME2) Then ExitLoop
 				$counter += 1
 				If $counter > 40 Then ExitLoop
@@ -158,6 +162,7 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True) ;Return main screen
 	Local $iExitLoop = -1
 	While 1
 		If $g_bDebugSetlog Then SetDebugLog("Wait for End Fight Scene to appear #" & $i)
+		SetLog("Wait for End Fight Scene to appear #" & $i)
 		If _CheckPixel($aEndFightSceneAvl, $g_bCapturePixel) Then ; check for the gold ribbon in the end of battle data screen
 			If IsReturnHomeBattlePage(True) Then
 				ClickP($aReturnHomeButton, 1, 0, "#0101") ;Click Return Home Button
@@ -174,6 +179,7 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True) ;Return main screen
 	$counter = 0
 	While 1
 		If $g_bDebugSetlog Then SetDebugLog("Wait for Star Bonus window to appear #" & $counter)
+		SetLog("Wait for Star Bonus window to appear #" & $counter)
 		If _Sleep($DELAYRETURNHOME4) Then Return
 		If StarBonus() Then SetLog("Star Bonus window closed chief!", $COLOR_INFO) ; Check for Star Bonus window to fill treasury (2016-01) update
 		$g_bFullArmy = False ; forcing check the army
@@ -208,6 +214,7 @@ Func ReturnfromDropTrophies()
 			Local $j = 0
 			While 1 ; dynamic wait for Okay button
 				If $g_bDebugSetlog Then SetDebugLog("Wait for OK button to appear #" & $j)
+				SetLog("Wait for OK button to appear #" & $j)
 				If IsEndBattlePage(True) Then
 					ClickOkay("SurrenderOkay") ; Click Okay to Confirm surrender
 					ExitLoop 2
@@ -220,6 +227,7 @@ Func ReturnfromDropTrophies()
 			If _Sleep(100) Then Return
 		Else
 			SetDebugLog("Cannot Find Surrender Button", $COLOR_ERROR)
+			SetLog("Cannot Find Surrender Button", $COLOR_ERROR)
 		EndIf
 	Next
 
@@ -227,6 +235,7 @@ Func ReturnfromDropTrophies()
 	Local $iExitLoop = -1
 	While 1
 		If $g_bDebugSetlog Then SetDebugLog("Wait for End Fight Scene to appear #" & $i)
+		SetLog("Wait for End Fight Scene to appear #" & $i)
 		If _CheckPixel($aEndFightSceneAvl, $g_bCapturePixel) Then ; check for the gold ribbon in the end of battle data screen
 			If IsReturnHomeBattlePage(True) Then
 				ClickP($aReturnHomeButton, 1, 0, "#0101") ;Click Return Home Button

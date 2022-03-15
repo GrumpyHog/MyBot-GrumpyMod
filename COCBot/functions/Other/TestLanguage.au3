@@ -16,6 +16,15 @@
 
 Func TestLanguage()
 	If Not $g_bRunState Then Return
+	SetLog("Checking for UI Language", $COLOR_INFO)
+	
+	;Local $sTest = "大本營"
+	
+	;If $sTest = "大本營" Then 
+	;	SetLog("大本營")
+	;Else
+	;	SetLog("Hmmm.....")
+	;EndIf
 
 	Local $sImgSimplifiedChinese =  @ScriptDir & "\imgxml\Language\SimplifiedChinese*"
 	Local $sSearchArea = "15,685,110,715"

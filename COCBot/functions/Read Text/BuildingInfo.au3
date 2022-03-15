@@ -80,6 +80,8 @@ Func BuildingInfo($iXstart = -1, $iYstart = -1)
 
 EndFunc   ;==>BuildingInfo
 
+; The AutoIt compiler does not support multi-byte characters
+; A workaround to make the Bot work with the Simplified Chinese UI is to use pinyin
 Func TranslateBuildingText($sBldgText)
 	Local $aString, $sNewBldgText = ""
 	
@@ -96,7 +98,7 @@ Func TranslateBuildingText($sBldgText)
 	
 	If StringInStr($sBldgText, "castle") Then $sNewBldgText = "Clan Castle (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
 	
-	If StringInStr($sBldgText, "dabenying") Then $sNewBldgText = "Town Hall (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
+	If StringInStr($sBldgText, "benying") Then $sNewBldgText = "Town Hall (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
 	
 	If StringInStr($sBldgText, "mach") Then $sNewBldgText = "Battle Machine (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
 	

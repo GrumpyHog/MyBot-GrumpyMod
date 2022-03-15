@@ -64,7 +64,12 @@ Func AttackReport()
 	EndIf
 
 	If $g_iStatsLastAttack[$eLootTrophy] >= 0 Then
-		$iBonusLast = Number(getResourcesBonusPerc(570, 309 + $g_iMidOffsetY))
+		If $g_SimplifiedChinese Then
+			$iBonusLast = Number(getResourcesBonusPerc(589, 311 + $g_iMidOffsetY))
+		Else
+			$iBonusLast = Number(getResourcesBonusPerc(570, 309 + $g_iMidOffsetY))
+		EndIf
+		
 		If $iBonusLast > 0 Then
 			SetLog("Bonus Percentage: " & $iBonusLast & "%")
 			Local $iCalcMaxBonus = 0, $iCalcMaxBonusDark = 0

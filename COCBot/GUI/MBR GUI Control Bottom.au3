@@ -82,11 +82,12 @@ Func Initiate()
 		ZoomOut()
 		If Not $g_bRunState Then Return
 
-		If Not $g_bSearchMode Then
-			BotDetectFirstTime()
-			If Not $g_bRunState Then Return
+		If $g_bCheckGameLanguage Then TestLanguage()
+		If Not $g_bRunState Then Return
 
-			If $g_bCheckGameLanguage Then TestLanguage()
+		If Not $g_bSearchMode Then
+				
+			BotDetectFirstTime()
 			If Not $g_bRunState Then Return
 
 			runBot()

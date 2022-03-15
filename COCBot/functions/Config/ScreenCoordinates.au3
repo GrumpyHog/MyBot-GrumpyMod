@@ -55,6 +55,8 @@ Global $aArmyCampSize[2] = [110, 136 + $g_iMidOffsetY] ; Training Window, Overvi
 Global $aSiegeMachineSize[2] = [755, 136 + $g_iMidOffsetY] ; Training Window, Overview screen, Current Number/Total Number
 Global $aArmySpellSize[2] = [99, 284 + $g_iMidOffsetY] ; Training Window Overviewscreen, current number/total capacity
 Global $g_aArmyCCSpellSize[2] = [473, 438 + $g_iMidOffsetY] ; Training Window, Overview Screen, Current CC Spell number/total cc spell capacity
+;Global $g_aArmyCCSpellSize[2] = [126, 438 + $g_iMidOffsetY] ; Training Window, Overview Screen, Current CC Spell number/total cc spell capacity
+
 Global $aArmyCCRemainTime[2] = [782, 552 + $g_iMidOffsetY] ; Training Window Overviewscreen, Minutes & Seconds remaining till can request again
 Global $aIsCampFull[4] = [128, 151 + $g_iMidOffsetY, 0xFFFFFF, 10] ; Training Window, Overview screen White pixel in check mark with camp IS full (can not test for Green, as it has trees under it!)
 Global $aBuildersDigits[2] = [324, 21] ; Main Screen, Free/Total Builders
