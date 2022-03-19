@@ -238,7 +238,12 @@ EndFunc
 
 ; get the time for the selected upgrade
 Func SetLabUpgradeTime($sTrooopName)
-	Local $Result = getLabUpgradeTime(581, 495) ; Try to read white text showing time for upgrade
+	If $g_SimplifiedChinese Then
+		Local $Result = getLabUpgradeTime(578, 495) ; Try to read white text showing time for upgrade
+	Else
+		Local $Result = getLabUpgradeTime(581, 495) ; Try to read white text showing time for upgrade
+	EndIf
+	
 	Local $iLabFinishTime = ConvertOCRTime("Lab Time", $Result, False)
 	SetLog($sTrooopName & " Upgrade OCR Time = " & $Result & ", $iLabFinishTime = " & $iLabFinishTime & " m", $COLOR_INFO)
 	Local $StartTime = _NowCalc() ; what is date:time now

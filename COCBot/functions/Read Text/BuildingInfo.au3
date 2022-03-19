@@ -80,30 +80,35 @@ Func BuildingInfo($iXstart = -1, $iYstart = -1)
 
 EndFunc   ;==>BuildingInfo
 
-; The AutoIt compiler does not support multi-byte characters
-; A workaround to make the Bot work with the Simplified Chinese UI is to use pinyin
 Func TranslateBuildingText($sBldgText)
-	Local $aString, $sNewBldgText = ""
+	Local $aString, $aNumber, $sNewBldgText = ""
 	
 	SetLog("Building Text : " & $sBldgText)
-	
-	$aString = StringSplit($sBldgText, " ") ; Spilt the name and building level
 
-	SetLog("Number of Strings :" & $aString[0])
+	$aString = StringRegExpReplace($sBldgText, "[^a-z]", "") ; extract lower case letters - name
+	$aNumber = StringRegExpReplace($sBldgText, "[^0-9]", "") ; extract numbers - level
+	
+	SetLog("String : " & $aString)
+	SetLog("Number : " & $aNumber)
 
+	If $aString <> "" Then
 		
-	If StringInStr($sBldgText, "wang") Then $sNewBldgText = "Barbarian King (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
+		If $aString = "wang" Then $sNewBldgText = "Barbarian King (Level " & $aNumber & ")"
+		If $aString = "nuhuang" Then $sNewBldgText = "Archer Queen (Level " & $aNumber & ")"
+		If $aString = "huzhe" Then $sNewBldgText = "Grand Warden (Level " & $aNumber & ")"
+		If $aString = "zhanshen" Then $sNewBldgText = "Royal Champion (Level " & $aNumber & ")"
+
+		If $aString = "dabenying" Then $sNewBldgText = "Town Hall (Level " & $aNumber & ")"
+		If $aString = "yanshi" Then $sNewBldgText = "Laboratory (Level " & $aNumber & ")"
+		If $aString = "bao" Then $sNewBldgText = "Clan Castle (Level " & $aNumber & ")"	
+		If $aString = "zhanchongxiaowu" Then $sNewBldgText = "Pet House (Level " & $aNumber & ")"
+
+		If $aString = "qiang" Then $sNewBldgText = "Wall (Level " & $aNumber & ")"
+
+		If $aString = "zhanqi" Then $sNewBldgText = "Battle Machine (Level " & $aNumber & ")"
 		
-	If StringInStr($sBldgText, "lab") Then $sNewBldgText = "Laboratory (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
-	
-	If StringInStr($sBldgText, "castle") Then $sNewBldgText = "Clan Castle (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
-	
-	If StringInStr($sBldgText, "benying") Then $sNewBldgText = "Town Hall (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
-	
-	If StringInStr($sBldgText, "mach") Then $sNewBldgText = "Battle Machine (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
-	
-	If StringInStr($sBldgText, "wall") Then $sNewBldgText = "Wall (Level " & StringStripWS($aString[2], $STR_STRIPALL) & ")"
-	
+	EndIf
+
 	SetLog("New Building Text : " & $sNewBldgText)
 
 	Return $sNewBldgText
