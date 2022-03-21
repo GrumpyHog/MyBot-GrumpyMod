@@ -107,6 +107,11 @@ Func TranslateBuildingText($sBldgText)
 
 		If $aString = "zhanqi" Then $sNewBldgText = "Battle Machine (Level " & $aNumber & ")"
 		
+		
+		
+		If $aString = "shugan" Then $sNewBldgText = "Trunk"
+		If $aString = "baoxiang" Then $sNewBldgText = "Gem"
+		
 	EndIf
 
 	SetLog("New Building Text : " & $sNewBldgText)
