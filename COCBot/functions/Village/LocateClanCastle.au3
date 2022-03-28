@@ -181,7 +181,7 @@ Func LocateClanCastle()
 		
 	SetLog("Looking for Clan Castle...", $COLOR_ACTION)
 
-	Local $sCocDiamond = "FV"
+	Local $sCocDiamond = "DCD"
 	Local $sRedLines = $sCocDiamond
 	Local $iMinLevel = 0
 	Local $iMaxLevel = 1000

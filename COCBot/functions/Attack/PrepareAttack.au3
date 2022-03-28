@@ -163,10 +163,14 @@ Func SelectCastleOrSiege(ByRef $iTroopIndex, $iX, $iCmbSiege)
 	Local $bNeedSwitch = False, $bAnySiege = False
 
 	Local $sLog = GetTroopName($iTroopIndex)
+	
+	Local $iMaxSiegeLevel = 4
+	
+	If $g_iTownHallLevel < 11 Then $iMaxSiegeLevel = 3
 
 	Switch $ToUse
 		Case $iTroopIndex ; the same as current castle/siege
-			If $iTroopIndex <> $eCastle And $g_iSiegeLevel < 4 Then
+			If $iTroopIndex <> $eCastle And $g_iSiegeLevel < $iMaxSiegeLevel Then
 				$bNeedSwitch = True
 				SetLog(GetTroopName($iTroopIndex) & " level " & $g_iSiegeLevel & " detected. Try looking for higher level.")
 			EndIf
@@ -176,7 +180,7 @@ Func SelectCastleOrSiege(ByRef $iTroopIndex, $iX, $iCmbSiege)
 			SetLog(GetTroopName($iTroopIndex) & ($ToUse <> $eCastle ? " level " & $g_iSiegeLevel & " detected. Try looking for " : " detected. Switching to ") & GetTroopName($ToUse))
 
 		Case "Any" ; use any siege
-			If $iTroopIndex = $eCastle Or ($iTroopIndex <> $eCastle And $g_iSiegeLevel < 4) Then ; found Castle or a low level Siege
+			If $iTroopIndex = $eCastle Or ($iTroopIndex <> $eCastle And $g_iSiegeLevel < $iMaxSiegeLevel) Then ; found Castle or a low level Siege
 				$bNeedSwitch = True
 				$bAnySiege = True
 				SetLog(GetTroopName($iTroopIndex) & ($iTroopIndex = $eCastle ? " detected. Try looking for any siege machine" : " level " & $g_iSiegeLevel & " detected. Try looking for any higher siege machine"))
@@ -229,8 +233,8 @@ Func SelectCastleOrSiege(ByRef $iTroopIndex, $iX, $iCmbSiege)
 					If $iSiegeIndex >= $eWallW And $iSiegeIndex <= $eFlameF And ($bAnySiege Or $iSiegeIndex = $ToUse) Then
 						For $j = 0 To UBound($aAllCoords) - 1
 							Local $aCoords = $aAllCoords[$j]
-							;Local $SiegeLevel = getTroopsSpellsLevel(Number($aCoords[0]) - 30, 587)
-							Local $SiegeLevel = getSiegeLevel(Number($aCoords[0]) - 30, 587)
+							Local $SiegeLevel = getTroopsSpellsLevel(Number($aCoords[0]) - 30, 587)
+							;Local $SiegeLevel = getSiegeLevel(Number($aCoords[0]) - 30, 587)
 							; Just in case of Level 1
 							If $SiegeLevel = "" Then $SiegeLevel = 1
 							If $iFinalLevel < Number($SiegeLevel) Then
@@ -240,7 +244,7 @@ Func SelectCastleOrSiege(ByRef $iTroopIndex, $iX, $iCmbSiege)
 							EndIf
 							SetDebugLog($i & "." & $j & ". Name: " & $aAvailable[0] & ", Level: " & $SiegeLevel & ", Coords: " & _ArrayToString($aCoords))
 							SetLog($i & "." & $j & ". Name: " & $aAvailable[0] & ", Level: " & $SiegeLevel & ", Coords: " & _ArrayToString($aCoords))
-							If $iFinalLevel = 3 Then ExitLoop 2
+							If $iFinalLevel = $iMaxSiegeLevel Then ExitLoop 2 ; $iFinalLevel = 3?
 						Next
 					EndIf
 				Next
