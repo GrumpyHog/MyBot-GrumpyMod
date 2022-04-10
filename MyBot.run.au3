@@ -699,15 +699,13 @@ Func runBot() ;Bot that runs everything in order
 		SwitchCoCAcc($g_iNextAccount)
 	EndIf
 
-	
-
 	; MOD
    $g_bFirstTroopsRequest = True
    $g_bClanGamesCompleted = False
    
-	For $i = 0 to 7
-		SetLog("$g_bLaunchAttack :" & $g_bLaunchAttack[$i])
-	Next
+;	For $i = 0 to 7
+;		SetLog("$g_bLaunchAttack :" & $g_bLaunchAttack[$i])
+;	Next
    
 	FirstCheck()
 
@@ -1302,7 +1300,15 @@ Func FirstCheck()
 	If $g_iCommandStop <> 0 And $g_iCommandStop <> 3 Then
 		; VERIFY THE TROOPS AND ATTACK IF IS FULL
 		SetDebugLog("-- FirstCheck on Train --")
-		TrainSystem()
+		SetLog("-- FirstCheck on Train --")
+
+		If $g_bQuickTrainEnable Then
+			CheckIfArmyIsReady()
+			CloseWindow("CloseTrain")
+		Else
+			TrainSystem()
+		EndIf
+				
 		If Not $g_bRunState Then Return
 		SetDebugLog("Are you ready? " & String($g_bIsFullArmywithHeroesAndSpells))
 		If $g_bIsFullArmywithHeroesAndSpells Then

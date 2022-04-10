@@ -48,10 +48,15 @@ Func getArmySiegeMachines($bOpenArmyWindow = False, $bCloseArmyWindow = False, $
 	Local $aTempSiegeArray, $aSiegeCoords
 	Local $sSiegeName = ""
 	Local $iSiegeIndex = -1
-	Local $aCurrentTroopsEmpty[$eSiegeMachineCount] = [0, 0, 0, 0, 0] ; Local Copy to reset Siege Machine Array
+	Local $aCurrentTroopsEmpty[$eSiegeMachineCount] = [0, 0, 0, 0, 0, 0] ; Local Copy to reset Siege Machine Array
 
 	; Get Siege Capacities
-	Local $sSiegeInfo = getArmyCampCap(758, 164, $bNeedCapture) ; OCR read Siege built and total
+	If $g_SimplifiedChinese Then
+		Local $sSiegeInfo = getArmyCampCap(680, 164, $bNeedCapture) ; OCR read Siege built and total
+	Else
+		Local $sSiegeInfo = getArmyCampCap(758, 164, $bNeedCapture) ; OCR read Siege built and total
+	EndIf
+
 	If $g_bDebugSetlogTrain Then SetLog("OCR $sSiegeInfo = " & $sSiegeInfo, $COLOR_DEBUG)
 	Local $aGetSiegeCap = StringSplit($sSiegeInfo, "#", $STR_NOCOUNT) ; split the built Siege number from the total Siege number
 	If Ubound($aGetSiegeCap) = 2 Then
@@ -88,3 +93,11 @@ Func getArmySiegeMachines($bOpenArmyWindow = False, $bCloseArmyWindow = False, $
 		If _Sleep($DELAYCHECKARMYCAMP4) Then Return
 	EndIf
 EndFunc   ;==>getArmySiegeMachines
+
+Func DebugSieges()
+
+	For $iSiegeIndex = $eSiegeWallWrecker To $eSiegeMachineCount - 1
+		SetLog("Current siege :" & $g_asSiegeMachineNames[$iSiegeIndex] & " - " & $g_aiCurrentSiegeMachines[$iSiegeIndex])
+	Next
+
+EndFunc

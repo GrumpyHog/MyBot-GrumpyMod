@@ -26,6 +26,8 @@ Func TestLanguage()
 	;	SetLog("Hmmm.....")
 	;EndIf
 
+	$g_SimplifiedChinese = False
+
 	Local $sImgSimplifiedChinese =  @ScriptDir & "\imgxml\Language\SimplifiedChinese*"
 	Local $sSearchArea = "15,685,110,715"
 	Local $aSimplifiedChinese = decodeSingleCoord(findImage("TestLanguage", $sImgSimplifiedChinese, GetDiamondFromRect($sSearchArea), 1, True, Default))

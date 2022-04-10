@@ -264,7 +264,16 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 		$aResult[8] = $tree[1]
 		$aResult[9] = $tree[5]
 
-		$g_aVillageSize = $aResult
+		$g_aVillageSize[0] = $aResult[0]
+		$g_aVillageSize[1] = $aResult[1]
+		$g_aVillageSize[2] = $aResult[2]
+		$g_aVillageSize[3] = $aResult[3]
+		$g_aVillageSize[4] = $aResult[4]
+		$g_aVillageSize[5] = $aResult[5]
+		$g_aVillageSize[6] = $aResult[6]
+		$g_aVillageSize[7] = $aResult[7]
+		$g_aVillageSize[8] = $aResult[8]
+		$g_aVillageSize[9] = $aResult[9]
 		
 		Return FuncReturn($aResult)
 
@@ -296,7 +305,16 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 		$aResult[8] = $tree[1]
 		$aResult[9] = $tree[5]
 		
-		$g_aVillageSize = $aResult
+		$g_aVillageSize[0] = $aResult[0]
+		$g_aVillageSize[1] = $aResult[1]
+		$g_aVillageSize[2] = $aResult[2]
+		$g_aVillageSize[3] = $aResult[3]
+		$g_aVillageSize[4] = $aResult[4]
+		$g_aVillageSize[5] = $aResult[5]
+		$g_aVillageSize[6] = $aResult[6]
+		$g_aVillageSize[7] = $aResult[7]
+		$g_aVillageSize[8] = $aResult[8]
+		$g_aVillageSize[9] = $aResult[9]
 		
 		Return FuncReturn($aResult)
 
@@ -365,7 +383,7 @@ Func DetectScenery($stone = "None")
 	ElseIf StringInStr($stone, "HM", $STR_CASESENSE) Then
 		$sScenery = "Hog Mountain"
 	Else
-		$sScenery = "Failed scenery detection"
+		$sScenery = "Unknown Scenery"
 	EndIf
 
 	Return $sScenery

@@ -139,7 +139,7 @@ Func getArmyCampCap($x_start, $y_start, $bNeedCapture = True) ;  -> Gets army ca
 EndFunc   ;==>getArmyCampCap
 
 Func getCastleDonateCap($x_start, $y_start) ;  -> Gets clan castle capacity,  --> donatecc.au3
-	Return getOcrAndCapture("coc-army", $x_start, $y_start, 30, 14, True)
+	Return getOcrAndCapture("coc-army", $x_start, $y_start, 30, 16, True)
 EndFunc   ;==>getCastleDonateCap
 
 Func getAttackDisable($x_start, $y_start) ;  -> 346, 182 - Gets red text disabled for early warning of Personal Break
@@ -163,7 +163,7 @@ Func getOcrGuardShield($x_start, $y_start) ;  -> Get the guard/shield time left,
 EndFunc   ;==>getOcrGuardShield
 
 Func getOcrPBTtime($x_start, $y_start) ;  -> Get the Time until PBT starts from PBT info window
-	Return getOcrAndCapture("coc-pbttime", $x_start, $y_start, 59, 15)
+	Return getOcrAndCapture("coc-pbttime", $x_start, $y_start, 95, 16)
 EndFunc   ;==>getOcrPBTtime
 
 Func getOcrReloadMessage($x_start, $y_start, $sLogText = Default, $LogTextColor = Default, $bSilentSetLog = Default)
@@ -184,7 +184,7 @@ EndFunc   ;==>getOcrReloadMessage
 
 Func getOcrMaintenanceTime($x_start, $y_start, $sLogText = Default, $LogTextColor = Default, $bSilentSetLog = Default)
 	;  -> Get the Text with time till maintenance is over from reload msg(171, 375)
-	Local $result = getOcrAndCapture("coc-maintenance", $x_start, $y_start, 430, 625, True)
+	Local $result = getOcrAndCapture("coc-maintenance", $x_start, $y_start, 100, 20, True)
 	Local $String = ""
 	If $sLogText = Default Then
 		$String = "getOcrMaintenanceTime: " & $result
@@ -198,6 +198,11 @@ Func getOcrMaintenanceTime($x_start, $y_start, $sLogText = Default, $LogTextColo
 	EndIf
 	Return $result
 EndFunc   ;==>getOcrMaintenanceTime
+
+; Maintenance Time in Simplified Chinese
+Func getOcrChineseMaintenanceTime($x_start, $y_start)
+	Return getOcrAndCapture("coc-maintenance", $x_start, $y_start, 100, 20, True) 
+EndFunc   ;==>getOcrCMaintenanceTime
 
 Func getOcrTimeGameTime($x_start, $y_start) ;  -> Get the guard/shield time left, middle top of the screen
 	Return getOcrAndCapture("coc-clangames", $x_start, $y_start, 116, 31, True)

@@ -15,8 +15,8 @@
 #include-once
 
 Func TrainSiege($bTrainFullSiege = False)
-
-	Local $iX, $iY
+	Local $iPage = 0;
+	Local $sImgSieges = @ScriptDir & "\imgxml\Train\Siege_Train\"
 	; Check if is necessary run the routine
 
 	If Not $g_bRunState Then Return
@@ -28,13 +28,7 @@ Func TrainSiege($bTrainFullSiege = False)
 
 	Local $aCheckIsOccupied[4] = [822, 206, 0xE00D0D, 10]
 	Local $aCheckIsFilled[4] = [802, 186, 0xD7AFA9, 10]
-	Local $aCheckIsAvailableSiege[4] = [58, 556, 0x47717E, 10]
-	Local $aCheckIsAvailableSiege1[4] = [229, 556, 0x47717E, 10]
-	Local $aCheckIsAvailableSiege2[4] = [400, 556, 0x47717E, 10]
-	Local $aCheckIsAvailableSiege3[4] = [576, 556, 0x47717E, 10]
-	Local $aCheckIsAvailableSiege4[4] = [751, 556, 0x47717E, 10]
-
-	Local $aiQueueSiegeMachine[$eSiegeMachineCount] = [0, 0, 0, 0, 0]
+	Local $aiQueueSiegeMachine[$eSiegeMachineCount] = [0, 0, 0, 0, 0, 0]
 	Local $aiTotalSiegeMachine = $g_aiCurrentSiegeMachines
 
 	; check queueing siege
@@ -63,21 +57,22 @@ Func TrainSiege($bTrainFullSiege = False)
 	; Refill
 	For $iSiegeIndex = $eSiegeWallWrecker To $eSiegeMachineCount - 1
 		Local $HowMany = $g_aiArmyCompSiegeMachines[$iSiegeIndex] - $g_aiCurrentSiegeMachines[$iSiegeIndex] - $aiQueueSiegeMachine[$iSiegeIndex]
-		Local $checkPixel
-		If $iSiegeIndex = $eSiegeWallWrecker Then $checkPixel = $aCheckIsAvailableSiege
-		If $iSiegeIndex = $eSiegeBattleBlimp Then $checkPixel = $aCheckIsAvailableSiege1
-		If $iSiegeIndex = $eSiegeStoneSlammer Then $checkPixel = $aCheckIsAvailableSiege2
-		If $iSiegeIndex = $eSiegeBarracks Then $checkPixel = $aCheckIsAvailableSiege3
-		If $iSiegeIndex = $eSiegeLogLauncher Then $checkPixel = $aCheckIsAvailableSiege4
 
-		If $HowMany > 0 And _CheckPixel($checkPixel, True, Default, $g_asSiegeMachineNames[$iSiegeIndex]) Then
-			$iX = random(20,80,1)
-			$iY = random(65,140,1)
-			PureClick($checkPixel[0] + $iX, $checkPixel[1] - $iY, $HowMany, $g_iTrainClickDelay)
-			Local $sSiegeName = $HowMany >= 2 ? $g_asSiegeMachineNames[$iSiegeIndex] & "s" : $g_asSiegeMachineNames[$iSiegeIndex] & ""
-			Setlog("Build " & $HowMany & " " & $sSiegeName, $COLOR_SUCCESS)
-			$aiTotalSiegeMachine[$iSiegeIndex] += $HowMany
-			If _Sleep(250) Then Return
+		If $HowMany > 0 Then
+			DragSiegeIfNeeded($iSiegeIndex, $iPage)
+			
+			Local $sFilename = $sImgSieges & $g_asSiegeMachineShortNames[$iSiegeIndex] & "*"
+			Local $aiSiegeCoord = decodeSingleCoord(findImage("TrainSiege", $sFilename, GetDiamondFromRect("25,410,840,515"), 1, True))
+
+			If IsArray($aiSiegeCoord) And UBound($aiSiegeCoord, 1) = 2 Then
+				PureClick($aiSiegeCoord[0], $aiSiegeCoord[1], $HowMany, $g_iTrainClickDelay)
+				Local $sSiegeName = $HowMany >= 2 ? $g_asSiegeMachineNames[$iSiegeIndex] & "s" : $g_asSiegeMachineNames[$iSiegeIndex] & ""
+				Setlog("Build " & $HowMany & " " & $sSiegeName, $COLOR_SUCCESS)
+				$aiTotalSiegeMachine[$iSiegeIndex] += $HowMany
+				If _Sleep(250) Then Return
+			Else
+				SetLog("Can't train siege :" & $g_asSiegeMachineNames[$iSiegeIndex], $COLOR_ERROR)
+			EndIf
 		EndIf
 
 		If Not $g_bRunState Then Return
@@ -87,20 +82,21 @@ Func TrainSiege($bTrainFullSiege = False)
 	If ($g_bDoubleTrain Or $bTrainFullSiege) And $g_iTotalTrainSpaceSiege <= 3 Then
 		For $iSiegeIndex = $eSiegeWallWrecker To $eSiegeMachineCount - 1
 			Local $HowMany = $g_aiArmyCompSiegeMachines[$iSiegeIndex] * 2 - $aiTotalSiegeMachine[$iSiegeIndex]
-			Local $checkPixel
-			If $iSiegeIndex = $eSiegeWallWrecker Then $checkPixel = $aCheckIsAvailableSiege
-			If $iSiegeIndex = $eSiegeBattleBlimp Then $checkPixel = $aCheckIsAvailableSiege1
-			If $iSiegeIndex = $eSiegeStoneSlammer Then $checkPixel = $aCheckIsAvailableSiege2
-			If $iSiegeIndex = $eSiegeBarracks Then $checkPixel = $aCheckIsAvailableSiege3
-			If $iSiegeIndex = $eSiegeLogLauncher Then $checkPixel = $aCheckIsAvailableSiege4
 
-			If $HowMany > 0 And _CheckPixel($checkPixel, True, Default, $g_asSiegeMachineNames[$iSiegeIndex]) Then
-				$iX = random(20,80,1)
-				$iY = random(65,140,1)				
-				PureClick($checkPixel[0] + $iX, $checkPixel[1] - $iY, $HowMany, $g_iTrainClickDelay)
-				Local $sSiegeName = $HowMany >= 2 ? $g_asSiegeMachineNames[$iSiegeIndex] & "s" : $g_asSiegeMachineNames[$iSiegeIndex] & ""
-				Setlog("Build " & $HowMany & " " & $sSiegeName, $COLOR_SUCCESS)
-				If _Sleep(250) Then Return
+			If $HowMany > 0 Then
+				DragSiegeIfNeeded($iSiegeIndex, $iPage)
+
+				Local $sFilename = $sImgSieges & $g_asSiegeMachineShortNames[$iSiegeIndex] & "*"
+				Local $aiSiegeCoord = decodeSingleCoord(findImage("TrainSiege", $sFilename, GetDiamondFromRect("25,410,840,515"), 1, True))
+
+				If IsArray($aiSiegeCoord) And UBound($aiSiegeCoord, 1) = 2 Then
+					PureClick($aiSiegeCoord[0], $aiSiegeCoord[1], $HowMany, $g_iTrainClickDelay)
+					Local $sSiegeName = $HowMany >= 2 ? $g_asSiegeMachineNames[$iSiegeIndex] & "s" : $g_asSiegeMachineNames[$iSiegeIndex] & ""
+					Setlog("Build " & $HowMany & " " & $sSiegeName, $COLOR_SUCCESS)
+					If _Sleep(250) Then Return
+				Else
+					SetLog("Can't train siege :" & $g_asSiegeMachineNames[$iSiegeIndex], $COLOR_ERROR)
+				EndIf
 			EndIf
 
 			If Not $g_bRunState Then Return
@@ -158,3 +154,37 @@ Func CheckQueueSieges($bGetQuantity = True, $bSetLog = True, $x = 839, $bQtyWSlo
 	_ArrayReverse($aResult)
 	Return $aResult
 EndFunc   ;==>CheckQueueTroops
+
+Func DragSiegeIfNeeded($iSiegeIndex, ByRef $iPage)
+
+	SetLog("---- DragSiegeIfNeeded ----")
+	SetLog("Current Page : " & $iPage)
+	SetLog("Siege Needed: " & $g_asSiegeMachineNames[$iSiegeIndex])
+
+	Local $iY1 = Random(430,470,1)
+	Local $iY2 = Random(430,470,1)
+
+	If $iPage = 0 Then
+		If $iSiegeIndex >= $eSiegeWallWrecker And $iSiegeIndex <= $eSiegeLogLauncher Then 
+			Return True
+		Else
+			; Drag right to left
+			ClickDrag(725, $iY1, 490, $iY2, 250, "SLOW") ; to expose Flame Flinger 
+			$iPage += 1
+			Return True
+		EndIf
+	EndIf
+	
+	If $iPage = 1 Then
+		If $iSiegeIndex >= $eSiegeBattleBlimp And $iSiegeIndex <= $eSiegeFlameFlinger Then
+			Return True
+		Else
+			; Drag left to right
+			ClickDrag(312, $iY1, 547, $iY2, 250, "SLOW") ; to expose Wall Wrecker
+			$iPage -= 1
+			Return True
+		EndIf
+	EndIf
+
+	Return False
+EndFunc

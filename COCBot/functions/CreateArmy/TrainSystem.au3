@@ -29,7 +29,7 @@ Func TrainSystem()
 
 	CheckIfArmyIsReady()
 
-	SetLog("Dark Elixir : " & $g_aiCurrentLoot[$eLootDarkElixir])
+	;SetLog("Dark Elixir : " & $g_aiCurrentLoot[$eLootDarkElixir])
 
 	If $g_bQuickTrainEnable Then
 		QuickTrain()

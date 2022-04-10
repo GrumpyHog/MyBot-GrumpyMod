@@ -406,6 +406,9 @@ Func DonateCC($bCheckForNewMsg = False)
 				If $g_bDebugSetlog Then SetDebugLog("This CC cannot accept spells, skip spell donation", $COLOR_DEBUG)
 				$g_bSkipDonSpells = True
 			EndIf
+
+			DebugSieges()
+
 			If Not $bDonateSiege And Not $bDonateAllSiege Then
 				SetLog("Siege donation is not enabled, skip siege donation", $COLOR_ACTION)
 				$g_bSkipDonSiege = True
@@ -1404,17 +1407,24 @@ Func DetectSlotSiege(Const $iSiegeIndex)
 		$FullTemp = SearchImgloc($g_sImgDonateSiege, $x, $y, $x1, $y1)
 		If $g_bDebugSetlog Then SetDebugLog("Siege Slot: " & $Slot & " SearchImgloc returned:" & $FullTemp[0] & ".", $COLOR_DEBUG)
 
+		SetLog("Siege Slot: " & $Slot & " SearchImgloc returned:" & $FullTemp[0] & ".", $COLOR_DEBUG)
+
 		If StringInStr($FullTemp[0] & " ", "empty") > 0 Then ExitLoop
 
 		If $FullTemp[0] <> "" Then
 			For $i = $eSiegeWallWrecker To $eSiegeMachineCount - 1
 				If $FullTemp[0] = $g_asSiegeMachineShortNames[$i] Then
 					If $g_bDebugSetlog Then SetDebugLog("Detected " & $g_asSiegeMachineNames[$i], $COLOR_DEBUG)
+					
+					SetLog("Detected " & $g_asSiegeMachineNames[$i], $COLOR_DEBUG)
+					
 					If $iSiegeIndex = $i Then Return $Slot
 					ExitLoop
 				EndIf
 				If $i = $eSiegeMachineCount - 1 Then ; detection failed
 					If $g_bDebugSetlog Then SetDebugLog("Slot: " & $Slot & "Troop Detection Failed", $COLOR_DEBUG)
+					
+					SetLog("Slot: " & $Slot & "Troop Detection Failed", $COLOR_DEBUG)
 				EndIf
 			Next
 		EndIf
@@ -1429,17 +1439,23 @@ Func DetectSlotSiege(Const $iSiegeIndex)
 		$FullTemp = SearchImgloc($g_sImgDonateSiege, $x, $y, $x1, $y1)
 		If $g_bDebugSetlog Then SetDebugLog("Siege Slot: " & $Slot & " SearchImgloc returned:" & $FullTemp[0] & ".", $COLOR_DEBUG)
 
+		SetLog("Siege Slot: " & $Slot & " SearchImgloc returned:" & $FullTemp[0] & ".", $COLOR_DEBUG)
+
 		If StringInStr($FullTemp[0] & " ", "empty") > 0 Then ExitLoop
 
 		If $FullTemp[0] <> "" Then
 			For $i = $eSiegeWallWrecker To $eSiegeMachineCount - 1
 				If $FullTemp[0] = $g_asSiegeMachineShortNames[$i] Then
 					If $g_bDebugSetlog Then SetDebugLog("Detected " & $g_asSiegeMachineNames[$i], $COLOR_DEBUG)
+					
+					SetLog("Detected " & $g_asSiegeMachineNames[$i], $COLOR_DEBUG)
 					If $iSiegeIndex = $i Then Return $Slot
 					ExitLoop
 				EndIf
 				If $i = $eSiegeMachineCount - 1 Then ; detection failed
 					If $g_bDebugSetlog Then SetDebugLog("Slot: " & $Slot & "Troop Detection Failed", $COLOR_DEBUG)
+					
+					SetLog("Slot: " & $Slot & "Troop Detection Failed", $COLOR_DEBUG)
 				EndIf
 			Next
 		EndIf

@@ -191,8 +191,8 @@ Func LocateClanCastle()
 
 	; DETECTION IMGLOC
 	Local $aResult 
-	For $j = 0 to 30
-		SetLog("ImgLoc CC loop :" & $j)
+	For $j = 0 to 10
+		SetLog("ImgLoc CC loop :" & $j & " zoom factor :" & $g_aVillageSize[1])
 		$aResult = findMultiple($sImgDir, $sCocDiamond, $sRedLines, $iMinLevel, $iMaxLevel, $iMaxReturnPoints, $sReturnProps, $bForceCapture)
 		If IsArray($aResult) And UBound($aResult) > 0 Then ; we have an array with data of images found
 			For $i = 0 To UBound($aResult) - 1

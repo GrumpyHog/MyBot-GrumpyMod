@@ -433,17 +433,19 @@ Func SearchZoomOut($CenterVillageBoolOrScrollPos = $aCenterHomeVillageClickDrag,
 
 	Local $village
 	Local $bOnBuilderBase = isOnBuilderBase(True)
-	If $g_aiSearchZoomOutCounter[0] = 10 Then SetLog("Try secondary village measuring...", $COLOR_INFO)
-	If $g_aiSearchZoomOutCounter[0] < 10 Then
-		$village = GetVillageSize($DebugLog, "stone", "tree", Default, $bOnBuilderBase)
-	Else
-		; try secondary images
-		$village = GetVillageSize($DebugLog, "2stone", "2tree", Default, $bOnBuilderBase)
-	EndIf
+	If $g_aiSearchZoomOutCounter[0] = 5 Then SetLog("Try secondary village measuring...", $COLOR_INFO)
+	;If $g_aiSearchZoomOutCounter[0] < 5 Then
+	;	$village = GetVillageSize($DebugLog, "stone", "tree", Default, $bOnBuilderBase)
+	;Else
+	;	; try secondary images
+	;	$village = GetVillageSize($DebugLog, "2stone", "2tree", Default, $bOnBuilderBase)
+	;EndIf
 
 	; compare other stone measures
 	;GetVillageSize(True, "stoneBlueStacks2A")
 	;GetVillageSize(True, "stoneiTools")
+
+	$village = GetVillageSize($DebugLog, "stone", "tree", Default, $bOnBuilderBase)
 
 	Static $iCallCount = 0
 	If $g_aiSearchZoomOutCounter[0] > 0 Then
@@ -502,7 +504,7 @@ Func SearchZoomOut($CenterVillageBoolOrScrollPos = $aCenterHomeVillageClickDrag,
 
 	If $bCenterVillage And Not $g_bZoomoutFailureNotRestartingAnything And Not $g_bAndroidZoomoutModeFallback Then
 		If $aResult[0] = "" Or ($bUpdateSharedPrefs And $villageSize > 300 And $villageSize < 400) Then
-			If $g_aiSearchZoomOutCounter[0] > 20 Or ($bUpdateSharedPrefs And $g_aiSearchZoomOutCounter[0] > 3) Then
+			If $g_aiSearchZoomOutCounter[0] > 5 Or ($bUpdateSharedPrefs And $g_aiSearchZoomOutCounter[0] > 3) Then ; counter = 20
 				$g_aiSearchZoomOutCounter[0] = 0
 				$iCallCount += 1
 				If $iCallCount <= 1 Then
@@ -515,6 +517,9 @@ Func SearchZoomOut($CenterVillageBoolOrScrollPos = $aCenterHomeVillageClickDrag,
 					EndIf
 					CloseCoC() ; ensure CoC is gone
 					OpenCoC()
+
+					waitMainScreen()
+
 					Return FuncReturn(SearchZoomOut($CenterVillageBoolOrScrollPos, $UpdateMyVillage, "SearchZoomOut(2):" & $sSource, True, $DebugLog))
 				Else
 					SetLog("Restart Android to reset zoom" & $sSource & "...", $COLOR_INFO)
@@ -524,6 +529,9 @@ Func SearchZoomOut($CenterVillageBoolOrScrollPos = $aCenterHomeVillageClickDrag,
 						$iCallCount = 0
 						Return FuncReturn($aResult)
 					EndIf
+					
+					waitMainScreen()
+					
 					$aResult = SearchZoomOut($CenterVillageBoolOrScrollPos, $UpdateMyVillage, "SearchZoomOut(2):" & $sSource, True, $DebugLog)
 					If $bUpdateSharedPrefs And StringInStr($aResult[0], "zoomou") = 0 Then
 						; disable this CoC/Android restart
