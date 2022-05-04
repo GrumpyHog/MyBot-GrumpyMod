@@ -746,6 +746,27 @@ Func Algorithm_AttackCSV($testattack = False, $captureredarea = True)
 		SetDebugLog("> " & $g_sBldgNames[$eBldgAirDefense] & " detection not needed, skipping", $COLOR_DEBUG)
 	EndIf
 
+	; 12.1 - Clan Castle ------------------------------------------------------------------------
+
+	$g_aiCSVClanCastlePos = "" ; reset location array?
+
+	If $g_bCSVLocateClanCastle Then
+		If Not _ObjSearch($g_oBldgAttackInfo, $eBldgClanCastle & "_LOCATION") Then
+			$aResult = GetLocationBuilding($eBldgClanCastle, $g_iSearchTH, False)
+			If $aResult = -1 Then SetLog("Monkey ate bad banana: " & "GetLocationBuilding " & $g_sBldgNames[$eBldgClanCastle], $COLOR_ERROR)
+		EndIf
+		$aResult = _ObjGetValue($g_oBldgAttackInfo, $eBldgClanCastle & "_LOCATION")
+		If @error Then
+			_ObjErrMsg("_ObjGetValue " & $g_sBldgNames[$eBldgClanCastle] & " _LOCATION", @error) ; Log errors
+			SetLog("> " & $g_sBldgNames[$eBldgClanCastle] & " location not in dictionary", $COLOR_WARNING)
+		Else
+			If IsArray($aResult) Then $g_aiCSVClanCastlePos = $aResult
+		EndIf
+	Else
+		SetDebugLog("> " & $g_sBldgNames[$eBldgClanCastle] & " detection not needed, skipping", $COLOR_DEBUG)
+	EndIf
+
+
 	; Calculate main attack side
 	ParseAttackCSV_MainSide()
 
@@ -941,6 +962,8 @@ Func _MakeTargetDropPoints($side, $target, $addtiles, $building)
 			$BuildingEnum = $eInternalWall
 		Case "SCATTER"
 			$BuildingEnum = $eBldgScatter
+		Case "CLANCASTLE"
+			$BuildingEnum = $eBldgClanCastle
 		Case Else
 			SetLog("Defense name not understood", $COLOR_ERROR) ; impossible error as value is checked earlier
 			SetError(1, 0, "")

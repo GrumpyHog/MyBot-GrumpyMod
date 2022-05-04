@@ -816,7 +816,7 @@ Func DonateTroopType(Const $iTroopIndex, $Quant = 0, Const $bDonateQueueOnly = F
 			SaveDebugImage("LiveDonateCC-r" & $donaterow & "-c" & $donateposinrow & "-" & $g_asTroopNames[$iTroopIndex] & "_")
 		EndIf
 		; Use slow click when the Train system is Quicktrain
-		If $g_bQuickTrainEnable Then
+		;If $g_bQuickTrainEnable Then
 			Local $icount = 0
 			For $x = 0 To $Quant
 				If _ColorCheck(_GetPixelColor(350 + ($Slot * 68), $g_iDonationWindowY + 105 + $YComp, True), Hex(0x306ca8, 6), 20) Or _
@@ -828,25 +828,27 @@ Func DonateTroopType(Const $iTroopIndex, $Quant = 0, Const $bDonateQueueOnly = F
 						$g_iCommandStop = 0
 						$g_bFullArmy = False
 					EndIf
-					If _Sleep(1000) Then Return
+
+					Local $iSleep = Random(450,500,1)
+					If _Sleep($iSleep) Then Return
 					$icount += 1
 				EndIf
 			Next
 			$Quant = $icount ; Count Troops Donated Clicks
 			$g_aiDonateStatsTroops[$iTroopIndex][0] += $Quant
-		Else
-			If _ColorCheck(_GetPixelColor(350 + ($Slot * 68), $g_iDonationWindowY + 105 + $YComp, True), Hex(0x306ca8, 6), 20) Or _
-					_ColorCheck(_GetPixelColor(355 + ($Slot * 68), $g_iDonationWindowY + 106 + $YComp, True), Hex(0x306ca8, 6), 20) Or _
-					_ColorCheck(_GetPixelColor(360 + ($Slot * 68), $g_iDonationWindowY + 107 + $YComp, True), Hex(0x306ca8, 6), 20) Then ; check for 'blue'
+		;Else
+			;If _ColorCheck(_GetPixelColor(350 + ($Slot * 68), $g_iDonationWindowY + 105 + $YComp, True), Hex(0x306ca8, 6), 20) Or _
+			;		_ColorCheck(_GetPixelColor(355 + ($Slot * 68), $g_iDonationWindowY + 106 + $YComp, True), Hex(0x306ca8, 6), 20) Or _
+			;		_ColorCheck(_GetPixelColor(360 + ($Slot * 68), $g_iDonationWindowY + 107 + $YComp, True), Hex(0x306ca8, 6), 20) Then ; check for 'blue'
 
-				Click(365 + ($Slot * 68), $g_iDonationWindowY + 100 + $YComp, $Quant, $DELAYDONATECC3, "#0175")
-				$g_aiDonateStatsTroops[$iTroopIndex][0] += $Quant
-				If $g_iCommandStop = 3 Then
-					$g_iCommandStop = 0
-					$g_bFullArmy = False
-				EndIf
-			EndIf
-		EndIf
+			;	Click(365 + ($Slot * 68), $g_iDonationWindowY + 100 + $YComp, $Quant, $DELAYDONATECC3, "#0175")
+			;	$g_aiDonateStatsTroops[$iTroopIndex][0] += $Quant
+			;	If $g_iCommandStop = 3 Then
+			;		$g_iCommandStop = 0
+			;		$g_bFullArmy = False
+			;	EndIf
+			;EndIf
+		;EndIf
 
 		; Adjust Values for donated troops to prevent a Double ghost donate to stats and train
 		If $iTroopIndex >= $eTroopBarbarian And $iTroopIndex <= $eTroopHeadhunter Then

@@ -42,8 +42,8 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 	Local $stone = [0, 0, 0, 0, 0, ""], $tree = [0, 0, 0, 0, 0, ""], $fixed = [0, 0, 0, 0, 0, ""]
 	Local $x0, $y0, $d0, $x, $y, $x1, $y1, $right, $bottom, $a
 
-	Local $iAdditionalY = 75
-	Local $iAdditionalX = 100
+	Local $iAdditionalY = 125 ;75
+	Local $iAdditionalX = 200 ;100
 
 	If $bOnBuilderBase = Default Then
 		$bOnBuilderBase = isOnBuilderBase(True)
@@ -134,6 +134,7 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 			$sArea = Int($x1) & "," & Int($y1) & "|" & Int($right) & "," & Int($y1) & "|" & Int($right) & "," & Int($bottom) & "|" & Int($x1) & "," & Int($bottom)
 			SetDebugLog("GetVillageSize check for image " & $findImage)
 			$a = decodeSingleCoord(findImage($findImage, $sDirectory & $findImage, $sArea, 1, True))
+			If $DebugLog Then SaveDebugRectImage("GetVillageSize", $x1 & "," & $y1 & "," & $right & "," & $bottom) 
 			If UBound($a) = 2 Then
 				$x = Int($a[0])
 				$y = Int($a[1])
@@ -204,7 +205,8 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 		;SetLog("Found Trees (in " & Round(TimerDiff($hTimer) / 1000, 2) & " seconds)", $COLOR_INFO)
 		;$hTimer = TimerInit()
 
-		If $g_bUpdateSharedPrefs And Not $bOnBuilderBase And $tree[0] = 0 And $fixed[0] = 0 Then
+		;If $g_bUpdateSharedPrefs And Not $bOnBuilderBase And $tree[0] = 0 And $fixed[0] = 0 Then
+		If Not $bOnBuilderBase And $tree[0] = 0 And $fixed[0] = 0 Then
 			; On main village use stone as fixed point
 			$fixed = $stone
 		EndIf

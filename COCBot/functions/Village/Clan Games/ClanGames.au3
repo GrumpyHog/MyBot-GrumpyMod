@@ -61,7 +61,7 @@ Func _ClanGames($test = False)
 		$g_bClanGamesCompleted = True
 		$g_sActiveEventName = ""
 
-		CollectClanGamesRewards()
+		If Not CollectClanGamesRewards() Then ClickAway()
 
 		Return
 	EndIf
@@ -513,6 +513,12 @@ Func _ClanGames($test = False)
 			If ClickOnEvent($YourAccScore, $aiScoreLimit, $sEventName, $getCapture) Then
 			   $g_sActiveEventName = $aSelectChallenges[0][5]
 			   SetLog("$g_sActiveEventName : " & $g_sActiveEventName)
+			   
+			   If _Sleep(500) Then Return
+			   
+			   saveconfig()
+			   
+			   If _Sleep(500) Then Return
 			   Return
 			EndIf
 
@@ -1328,7 +1334,7 @@ Func _BBClanGames($bNewEvent = False)
 		$g_bClanGamesCompleted = True
 		$g_sActiveEventName = ""
 
-		CollectClanGamesRewards()
+		If Not CollectClanGamesRewards() Then ClickAway()
 	
 		Return
 	EndIf
@@ -1624,6 +1630,15 @@ Func _BBClanGames($bNewEvent = False)
 		If ClickOnEvent($YourAccScore, $aiScoreLimit, $sEventName, $getCapture) Then
 		   $g_sActiveEventName = $aSelectChallenges[0][5]
 		   SetLog("$g_sActiveEventName : " & $g_sActiveEventName)
+
+			If _Sleep(500) Then Return
+
+		   saveConfig()
+		   
+		   SetLog("saved Event to Config")
+
+			If _Sleep(500) Then Return
+
 		   Return True
 		EndIf
 
@@ -1913,29 +1928,31 @@ Func SearchColumn($aiColumn)
 	Local $sSearchArea
 	Local $avRewards
 	; normal templates should cover the area of the animation 
-	Local $aRewardsList[22][2] = [ _
-		["Gems",					1], _
-		["Boost",					5], _
-		["Builder",					4], _
-		["Clock",					5], _
-		["ElixirRune",				3], _
-		["Shovel",					3], _
-		["Research",				5], _
-		["Power",					5], _
-		["RingWall",				4], _
-		["BuildingBook",			2], _
-		["BuilderElixirRune",		3], _
-		["BuilderElixirRuneFull",	4], _
-		["BuildingFull",			4], _
-		["BuilderFull",				9], _
-		["ResearchFull",			9], _
-		["PowerFull",				9], _
-		["BuilderGoldRune",			3], _
-		["BuilderGoldRuneFull",		4], _
-		["DarkElixirRune",			3], _
-		["DarkElixirRuneFull",		4], _
-		["SpellBook",				2], _
-		["SpellBookFull",			4]]
+	Local $aRewardsList[24][2] = [ _  ; books-1, gems-2, runes-3, shovel-4, Research\Builder Pots-5, 50gems-6, wall rings-7, all other Pots - 8, 10gems - 9  
+		["Gems",					2], _
+		["BoostPot",				8], _
+		["BuilderPot",				5], _
+		["BuilderPotFull",			9], _ ; 10 gems
+		["ClockPot",				9], _
+		["Shovel",					4], _
+		["ShovelFull",				6], _ ; 50 gems
+		["ResearchPot",				5], _
+		["ResearchPotFull",			9], _ ; 10 gems
+		["PowerPot",				8], _
+		["PowerPotFull",			9], _ ; 10 gems
+		["WallRing",				7], _
+		["WallRingFull",			7], _ ; 5 gems / ring
+		["BookOfBuilding",			1], _
+		["BookOfBuildingFull",		6], _ ; 50 gems
+		["BookOfSpell",				1], _
+		["BookOfSpellFull",			6], _ ; 50 gems
+		["RuneOfBuilderElixir",		3], _
+		["RuneOfBuilderElixirFull",	6], _ ; 50 gems
+		["RuneOfBuilderGold",		3], _
+		["RuneOfBuilderGoldRune",	6], _
+		["RuneOfElixir",			3], _
+		["RuneOfDarkElixir",		3], _
+		["RuneOfDarkElixirFull",	6]]
 
 	$sSearchArea = GetDiamondFromArray($aiColumn)
 

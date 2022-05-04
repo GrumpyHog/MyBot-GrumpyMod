@@ -19,9 +19,9 @@ Func AttackBB($iNumberOfAttacks = 0)
 	If Not $g_bChkEnableBBAttack And $iNumberOfAttacks = 0 Then Return False
 
 	; active CG skip regular attacks
-	If Not $g_bClanGamesCompleted And $g_IsClanGamesActive And $iNumberOfAttacks = 0 Then 
+	If Not $g_bClanGamesCompleted And $g_IsClanGamesActive And $iNumberOfAttacks = 0 Then
 		SetLog("Clan Games Active pausing regular BB Attacks")
-		Return False 
+		Return False
 	Else
 		SetLog("Proceeding with regular BB Attacks")
 	EndIf
@@ -30,12 +30,12 @@ Func AttackBB($iNumberOfAttacks = 0)
 	SetLog("$g_bChkBBTrophyRange: " & $g_bChkBBTrophyRange)
 	SetLog("$g_bChkBBAttIfLootAvail: " & $g_bChkBBAttIfLootAvail)
 	SetLog("$g_bChkBBWaitForMachine: " & $g_bChkBBWaitForMachine)
-	
+
 	local $iSide, $aBMPos
 	local $bAttack = True
 	Local $iAttack = 1
 	Local $bClanGames = True
-	
+
 	If Not ClickAttack() Then
 	  SetLog("Can't find attack button")
 	  Return False
@@ -92,15 +92,15 @@ Func AttackBB($iNumberOfAttacks = 0)
 		SetLog("Searching for Opponent.", $COLOR_BLUE)
 		local $timer = __TimerInit()
 		local $iPrevTime = 0
-		
+
 		While Not CheckBattleStarted()
 			local $iTime = Int(__TimerDiff($timer)/ 60000)
-		
+
 			If $iTime > $iPrevTime Then ; if we have increased by a minute
 				SetLog("Clouds: " & $iTime & "-Minute(s)")
 				$iPrevTime = $iTime
 			EndIf
-		
+
 			If _Sleep($DELAYRESPOND) Then
 				$g_iAndroidSuspendModeFlags = $iAndroidSuspendModeFlagsLast
 				If $g_bDebugSetlog = True Then SetDebugLog("Android Suspend Mode Enabled")
@@ -239,7 +239,7 @@ Func AttackBB($iNumberOfAttacks = 0)
 
 	$iAttack += 1
 
-	If $bClanGames Then 
+	If $bClanGames Then
 		If $iAttack > $iNumberOfAttacks Then ExitLoop
 	EndIf
 
@@ -293,6 +293,13 @@ Func Okay()
 			Return True
 		EndIf
 
+		; check for advert
+		If $g_sAndroidGameDistributor = "Magic" Then ClashOfMagicAdvert()
+
+		;If IsProblemAffect() Then Return False ; let checkObstacles in main loop sort problem
+
+		 If ConnectionLost(False) Then Return False
+
 		If __TimerDiff($timer) >= 180000 Then
 			SetLog("Could not find button 'Okay'", $COLOR_ERROR)
 			If $g_bDebugImageSave Then SaveDebugImage("BBFindOkay")
@@ -302,7 +309,6 @@ Func Okay()
 		If Mod(__TimerDiff($timer), 3000) Then
 			If _Sleep($DELAYRESPOND) Then Return
 		EndIf
-
 	WEnd
 
 	Return True

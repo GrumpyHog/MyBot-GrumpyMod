@@ -23,6 +23,7 @@ Func TrainSystem()
 	EndIf
 
 	$g_sTimeBeforeTrain = _NowCalc()
+	
 	StartGainCost()
 
 	If $g_bQuickTrainEnable Then CheckQuickTrainTroop() ; update values of $g_aiArmyComTroops, $g_aiArmyComSpells
@@ -1478,7 +1479,7 @@ Func ValidateSearchArmyResult($aSearchResult, $iIndex = 0)
 	Return False
 EndFunc   ;==>ValidateSearchArmyResult
 
-Func CheckValuesCost($Troop = "Arch", $troopQuantity = 1, $DebugLogs = 0)
+Func CheckValuesCost($Troop = "Arch", $troopQuantity = 1, $DebugLogs = 1)
 	; Local Variables
 	Local $TempColorToCheck = ""
 	Local $nElixirCurrent = 0, $nDarkCurrent = 0, $bLocalDebugOCR = 0
@@ -1590,7 +1591,7 @@ EndFunc
 
 ; Train Tab
 ; Search for SuperTroop Icon
-Func IsActiveSuperTroop($sSuperTroopShortName)
+Func _IsActiveSuperTroop($sSuperTroopShortName)
 
 	SetLog("IsActiveSuperTroop :" & $sSuperTroopShortName)
 	Local $sImageToUse = _FileListToArray($g_sImgTrainTroops, $sSuperTroopShortName & '*', $FLTA_FILES, True)
@@ -1626,9 +1627,9 @@ Func IsActiveSuperTroop($sSuperTroopShortName)
 						Local $iTolerance = 40
 						Local $aTrainPos[4] = [$iButtonX, $iButtonY, $sColorToCheck, $iTolerance]
 
-						If $g_bDebugSetlogTrain Then SetLog("Found: [" & $iButtonX & "," & $iButtonY & "]", $COLOR_SUCCESS)
-						If $g_bDebugSetlogTrain Then SetLog("$sColorToCheck: " & $sColorToCheck, $COLOR_SUCCESS)
-						If $g_bDebugSetlogTrain Then SetLog("$iTolerance: " & $iTolerance, $COLOR_SUCCESS)
+						;If $g_bDebugSetlogTrain Then SetLog("Found: [" & $iButtonX & "," & $iButtonY & "]", $COLOR_SUCCESS)
+						;If $g_bDebugSetlogTrain Then SetLog("$sColorToCheck: " & $sColorToCheck, $COLOR_SUCCESS)
+						;If $g_bDebugSetlogTrain Then SetLog("$iTolerance: " & $iTolerance, $COLOR_SUCCESS)
 
 						;Return $aTrainPos
 						Return True
@@ -1646,4 +1647,22 @@ Func IsActiveSuperTroop($sSuperTroopShortName)
 	;Return $aTrainPos
 	Return False
 
+EndFunc
+
+Func IsActiveSuperTroop($sSuperTroopShortName)
+	SetLog("Image Search for " & $sSuperTroopShortName)
+	; Initial Timer
+	Local $hTimer = TimerInit()
+	Local $aiSearchArea[4] = [25,375,840,548]
+	Local $sImageToUse = $g_sImgTrainTroops & $sSuperTroopShortName & '_*'
+	Local $aiCoord = decodeSingleCoord(findImage("IsActiveSuperTroop", $sImageToUse, GetDiamondFromArray($aiSearchArea), 1, True))
+
+	If IsArray($aiCoord) And UBound($aiCoord, 1) = 2 Then 
+		SetLog("Found in " & Round(TimerDiff($hTimer) / 1000, 2) & " seconds", $COLOR_INFO)
+		Return True
+	EndIf
+	
+	SetLog("Failed to locate in " & Round(TimerDiff($hTimer) / 1000, 2) & " seconds", $COLOR_INFO)
+	
+	Return False
 EndFunc

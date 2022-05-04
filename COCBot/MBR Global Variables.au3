@@ -1634,6 +1634,7 @@ Global $g_aiCSVWizTowerPos
 Global $g_aiCSVMortarPos
 Global $g_aiCSVAirDefensePos
 Global $g_aiCSVScatterPos
+Global $g_aiCSVClanCastlePos
 Global $g_bCSVLocateMine = False
 Global $g_bCSVLocateElixir = False
 Global $g_bCSVLocateDrill = False
@@ -1649,6 +1650,7 @@ Global $g_bCSVLocateWizTower = False
 Global $g_bCSVLocateMortar = False
 Global $g_bCSVLocateAirDefense = False
 Global $g_bCSVLocateWall = False
+Global $g_bCSVLocateClanCastle = False
 Global $g_iCSVLastTroopPositionDropTroopFromINI = -1
 ; Assigned/Evaluated Attack vector variables
 Global $ATTACKVECTOR_A, $ATTACKVECTOR_B, $ATTACKVECTOR_C, $ATTACKVECTOR_D, $ATTACKVECTOR_E, $ATTACKVECTOR_F
@@ -1741,8 +1743,8 @@ Global Enum $eWeakEagle = 1, $eWeakInferno, $eWeakXBow, $eWeakWizard, $eWeakMort
 Global $g_aWeakDefenseNames = ["None", "Eagle Artillery", "Inferno Tower", "XBow", "Wizard Tower", "Mortar", "Air Defense", "Scatter Shot"]
 
 ; Building variables used by CSV attacks
-Global Enum $eBldgRedLine, $eBldgTownHall, $eBldgGoldM, $eBldgElixirC, $eBldgDrill, $eBldgGoldS, $eBldgElixirS, $eBldgDarkS, $eBldgEagle, $eBldgInferno, $eBldgXBow, $eBldgWizTower, $eBldgMortar, $eBldgAirDefense, $eBldgScatter, $eExternalWall, $eInternalWall
-Global $g_sBldgNames = ["Red Line", "Town Hall", "Gold Mine", "Elixir Collector", "Dark Elixir Drill", "Gold Storage", "Elixir Storage", "Dark Elixir Storage", "Eagle Artillery", "Inferno Tower", "XBow", "Wizard Tower", "Mortar", "Air Defense", "Scatter Shot", "External Wall", "Internal Wall"]
+Global Enum $eBldgRedLine, $eBldgTownHall, $eBldgGoldM, $eBldgElixirC, $eBldgDrill, $eBldgGoldS, $eBldgElixirS, $eBldgDarkS, $eBldgEagle, $eBldgInferno, $eBldgXBow, $eBldgWizTower, $eBldgMortar, $eBldgAirDefense, $eBldgScatter, $eExternalWall, $eInternalWall, $eBldgClanCastle
+Global $g_sBldgNames = ["Red Line", "Town Hall", "Gold Mine", "Elixir Collector", "Dark Elixir Drill", "Gold Storage", "Elixir Storage", "Dark Elixir Storage", "Eagle Artillery", "Inferno Tower", "XBow", "Wizard Tower", "Mortar", "Air Defense", "Scatter Shot", "External Wall", "Internal Wall", "Clan Castle"]
 Global Const $g_iMaxCapTroopTH[15] = [0, 20, 30, 70, 80, 135, 150, 200, 200, 220, 240, 260, 280, 300, 300] ; element 0 is a dummy
 Global Const $g_iMaxCapSpellTH[15] = [0, 0, 0, 0, 0, 2, 4, 6, 7, 9, 11, 11, 11, 11, 13] ; element 0 is a dummy
 Global $g_oBldgAttackInfo = ObjCreate("Scripting.Dictionary") ; stores building information of base being attacked
@@ -1800,6 +1802,9 @@ Func _FilloBldgLevels()
 	$g_oBldgLevels.add($eBldgAirDefense, $aBldgAirDefense)
 	Local const $aBldgScatterShot[$g_iMaxTHLevel] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3]
 	$g_oBldgLevels.add($eBldgScatter, $aBldgScatterShot)
+	Local const $aBldgClanCastle[$g_iMaxTHLevel] = [0, 0, 2, 2, 3, 3, 4, 4, 5, 6, 7, 8, 9, 10]
+	$g_oBldgLevels.add($eBldgClanCastle, $aBldgClanCastle)
+
 EndFunc   ;==>_FilloBldgLevels
 _FilloBldgLevels()
 
@@ -1832,6 +1837,8 @@ Func _FilloBldgMaxQty()
 	$g_oBldgMaxQty.add($eBldgAirDefense, $aBldgAirDefense)
 	Local const $aBldgScatterShot[$g_iMaxTHLevel] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2]
 	$g_oBldgMaxQty.add($eBldgScatter, $aBldgScatterShot)
+	Local const $aBldgClanCastle[$g_iMaxTHLevel] = [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+	$g_oBldgMaxQty.add($eBldgClanCastle, $aBldgClanCastle)
 EndFunc   ;==>_FilloBldgMaxQty
 _FilloBldgMaxQty()
 
@@ -1854,6 +1861,7 @@ $g_oBldgImages.add($eBldgWizTower & "_" & "1", @ScriptDir & "\imgxml\Buildings\W
 $g_oBldgImages.add($eBldgMortar & "_" & "0", @ScriptDir & "\imgxml\Buildings\Mortars")
 $g_oBldgImages.add($eBldgAirDefense & "_" & "0", @ScriptDir & "\imgxml\Buildings\ADefense")
 $g_oBldgImages.add($eBldgScatter & "_" & "0", @ScriptDir & "\imgxml\Buildings\ScatterShot")
+$g_oBldgImages.add($eBldgClanCastle & "_" & "0", @ScriptDir & "\imgxml\Buildings\ClanCastle")
 ; EOF
 
 ; Clan Games v3

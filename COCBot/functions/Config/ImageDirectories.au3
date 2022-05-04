@@ -156,6 +156,7 @@ Global $g_sImgWeakBaseBuildingsWizTowerSnowDir = @ScriptDir & "\imgxml\Buildings
 Global $g_sImgWeakBaseBuildingsWizTowerDir = @ScriptDir & "\imgxml\Buildings\WTower"
 Global $g_sImgWeakBaseBuildingsMortarsDir = @ScriptDir & "\imgxml\Buildings\Mortars"
 Global $g_sImgWeakBaseBuildingsAirDefenseDir = @ScriptDir & "\imgxml\Buildings\ADefense"
+Global $g_sImgWeakBaseBuildingsClanCastleDir = @ScriptDir & "\imgxml\Buildings\ClanCastle"
 Global $g_sImgSearchDrill = @ScriptDir & "\imgxml\Storages\Drills"
 Global $g_sImgSearchDrillLevel = @ScriptDir & "\imgxml\Storages\Drills\Level"
 Global $g_sImgEasyBuildings = @ScriptDir & "\imgxml\easybuildings"

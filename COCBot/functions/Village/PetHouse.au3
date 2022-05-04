@@ -85,8 +85,14 @@ Func PetHouse($test = False)
 			If _Sleep($DELAYLABORATORY2) Then Return
 
 			; Level gets detected as 0 - OCR problem?
-			If $iPetLevel > 0 And $iPetLevel < $g_ePetLevels Then  
+			If $iPetLevel > 0 Then  
 
+				; pet level is Max, disable upgrade
+				If $iPetLevel = $g_ePetLevels Then
+					$g_bUpgradePetsEnable[$i] = False
+					ContinueLoop
+				EndIf
+					
 				; get DE requirement to upgrade Pet
 				Local $iDarkElixirReq = 1000 * number($g_aiPetUpgradeCostPerLevel[$i][$iPetLevel])
 
@@ -395,7 +401,13 @@ Func GetMinDark4PetUpgrade()
 			Local $iPetLevel = getPetLevel($iPetLevelxCoord[$i], 528)
 			SetLog($g_asPetNames[$i] & " is at level " & $iPetLevel)
 			
-			If $iPetLevel > 0 And $iPetLevel < $g_ePetLevels Then
+			If $iPetLevel > 0 Then
+
+				; pet level is Max, disable upgrade
+				If $iPetLevel = $g_ePetLevels Then
+					$g_bUpgradePetsEnable[$i] = False
+					ContinueLoop
+				EndIf
 
 				If _Sleep($DELAYLABORATORY2) Then Return
 

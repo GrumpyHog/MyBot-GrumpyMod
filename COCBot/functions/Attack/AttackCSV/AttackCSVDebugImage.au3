@@ -331,6 +331,14 @@ Func AttackCSVDEBUGIMAGE()
 			_GDIPlus_GraphicsDrawRect($hGraphic, $pixel[0] - 12, $pixel[1] - 10, 25, 25, $hPenPaleBlue)
 		Next
 	EndIf
+	
+		; - DRAW Clan Castle -------------------------------------------------------------------
+	If $g_bCSVLocateClanCastle = True And IsArray($g_aiCSVClanCastlePos) Then
+		For $i = 0 To UBound($g_aiCSVClanCastlePos) - 1
+			$pixel = $g_aiCSVClanCastlePos[$i]
+			_GDIPlus_GraphicsDrawRect($hGraphic, $pixel[0] - 12, $pixel[1] - 10, 25, 25, $hPenPaleBlue)
+		Next
+	EndIf
 
 	; 99 -  DRAW SLICE NUMBERS
 	_GDIPlus_GraphicsDrawString($hGraphic, "1", 580, 580, "Arial", 20)

@@ -212,6 +212,8 @@ Func MakeTargetDropPoints($side, $pointsQty, $addtiles, $building)
 			$BuildingEnum = $eInternalWall
 		Case "SCATTER"
 			$BuildingEnum = $eBldgScatter
+		Case "CLANCASTLE"
+			$BuildingEnum = $eBldgClanCastle
 		Case Else
 			SetLog("Defense name not understood", $COLOR_ERROR) ; impossible error as value is checked earlier
 			SetError(1, 0, "")

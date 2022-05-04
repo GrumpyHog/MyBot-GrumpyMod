@@ -29,6 +29,7 @@ Func ParseAttackCSV_Read_SIDE_variables()
 	$g_bCSVLocateMortar = False
 	$g_bCSVLocateAirDefense = False
 	$g_bCSVLocateWall = False
+	$g_bCSVLocateClanCastle = False
 	; $g_bCSVLocateGemBox = False
 
 	If $g_iMatchMode = $DB Then
@@ -90,6 +91,7 @@ Func ParseAttackCSV_Read_SIDE_variables()
 							If Int($value5) > 0 Then $g_bCSVLocateMortar = True
 							If Int($value6) > 0 Then $g_bCSVLocateAirDefense = True
 							If Int($value7) > 0 Then $g_bCSVLocateScatter = True
+							;If Int($value8) > 0 Then $g_bCSVLocateClanCastle = True
 							; If Int($value8) > 0 Then $g_bCSVLocateGemBox = True IE unused
 						EndIf
 					Case "MAKE" ; check if targeted building vectors are used im MAKE commands >> starting in V7.2+
@@ -115,6 +117,8 @@ Func ParseAttackCSV_Read_SIDE_variables()
 									$g_bCSVLocateWall = True
 								Case "IN-WALL"
 									$g_bCSVLocateWall = True
+								Case "CLANCASTLE"
+									$g_bCSVLocateClanCastle = True	
 								Case Else
 									SetDebugLog("Invalid MAKE building target name: " & $value8, $COLOR_WARNING)
 									debugAttackCSV("Invalid MAKE building target name: " & $value8)

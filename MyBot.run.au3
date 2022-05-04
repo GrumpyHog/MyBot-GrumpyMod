@@ -902,6 +902,7 @@ Func _Idle() ;Sequence that runs until Full Army
 
 	Local $TimeIdle = 0 ;In Seconds
 	If $g_bDebugSetlog Then SetDebugLog("Func Idle ", $COLOR_DEBUG)
+	SetLog("Func Idle ", $COLOR_DEBUG)
 
 	While $g_bIsFullArmywithHeroesAndSpells = False
 

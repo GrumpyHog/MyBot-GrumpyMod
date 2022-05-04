@@ -28,7 +28,7 @@ Func CollectFreeMagicItems($bTest = False)
 
 	; Check Trader Icon on Main Village
 
-	Local $sSearchArea = GetDiamondFromRect("120,160,210,215")
+	Local $sSearchArea = GetDiamondFromRect("75,110,185,185")
 	Local $avTraderIcon = findMultiple($g_sImgTrader, $sSearchArea, $sSearchArea, 0, 1000, 1, "objectpoints", True)
 
 	If IsArray($avTraderIcon) And UBound($avTraderIcon) > 0 Then
@@ -42,17 +42,27 @@ Func CollectFreeMagicItems($bTest = False)
 		Return
 	EndIf
 
-	Local $aiDailyDiscount = decodeSingleCoord(findImage("DailyDiscount", $g_sImgDailyDiscountWindow, GetDiamondFromRect("310,175,375,210"), 1, True, Default))
+	Local $aiDailyDiscount = decodeSingleCoord(findImage("DailyDiscount", $g_sImgDailyDiscountWindow, GetDiamondFromRect("370,145,480,175"), 1, True, Default))
 	If Not IsArray($aiDailyDiscount) Or UBound($aiDailyDiscount, 1) < 1 Then
 		CloseWindow("CloseDD")
 		Return
 	EndIf
 
 	If Not $g_bRunState Then Return
-	Local $aOcrPositions[3][2] = [[200, 439], [390, 439], [580, 439]]
+	Local $aOcrPositions[3][2] = [[280, 350], [475, 350], [650, 350]]
 	Local $aResults[3] = ["", "", ""]
 
-	$iLastTimeChecked[$g_iCurAccount] = @MDAY
+	If Not $bTest Then $iLastTimeChecked[$g_iCurAccount] = @MDAY
+
+	Local $aFreeItem[4] = [255, 265, 0xA0A0A0, 10]
+	
+	If _CheckPixel($aFreeItem, True, Default, "CollectFreeMagicItems") Then
+		SetLog("Free Item not available!", $COLOR_INFO)
+		If _Sleep(100) Then Return
+		Click(755, 160) ; Click Close Window Button
+		If _Sleep(100) Then Return
+		Return
+	EndIf
 
 	For $i = 0 To 2
 		$aResults[$i] = getOcrAndCapture("coc-freemagicitems", $aOcrPositions[$i][0], $aOcrPositions[$i][1], 80, 25, True)
@@ -64,7 +74,10 @@ Func CollectFreeMagicItems($bTest = False)
 				If $aResults[$i] = "FREE" Or $aResults[$i] = "mianfei" Then
 					Click($aOcrPositions[$i][0], $aOcrPositions[$i][1], 2, 500)
 					SetLog("Free Magic Item detected", $COLOR_INFO)
-					CloseWindow("CloseDD")
+					;CloseWindow("CloseDD")
+					If _Sleep(100) Then Return
+					Click(755, 160) ; Click Close Window Button
+					If _Sleep(100) Then Return
 					Return
 				Else
 					If _ColorCheck(_GetPixelColor($aOcrPositions[$i][0], $aOcrPositions[$i][1] + 5, True), Hex(0x5D79C5, 6), 5) Then
@@ -84,7 +97,10 @@ Func CollectFreeMagicItems($bTest = False)
 	SetLog("Daily Discounts: " & $aResults[0] & " | " & $aResults[1] & " | " & $aResults[2])
 	SetLog("Nothing free to collect!", $COLOR_INFO)
 
-	CloseWindow("CloseDD")
+	;CloseWindow("CloseDD")
+	If _Sleep(100) Then Return
+	Click(755, 160) ; Click Close Window Button
+	If _Sleep(100) Then Return
 EndFunc   ;==>CollectFreeMagicItems
 
 

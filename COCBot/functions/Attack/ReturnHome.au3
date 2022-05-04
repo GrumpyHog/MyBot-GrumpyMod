@@ -180,13 +180,21 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True) ;Return main screen
 	While 1
 		If $g_bDebugSetlog Then SetDebugLog("Wait for Star Bonus window to appear #" & $counter)
 		SetLog("Wait for Star Bonus window to appear #" & $counter)
+		
 		If _Sleep($DELAYRETURNHOME4) Then Return
+		
+		If $g_sAndroidGameDistributor = "Magic" Then 
+			ClashOfMagicAdvert()
+			If _Sleep($DELAYRETURNHOME4) Then Return
+		EndIf
+		
 		If StarBonus() Then SetLog("Star Bonus window closed chief!", $COLOR_INFO) ; Check for Star Bonus window to fill treasury (2016-01) update
 		$g_bFullArmy = False ; forcing check the army
 		$g_bIsFullArmywithHeroesAndSpells = False ; forcing check the army
+		
 		If ReturnHomeMainPage() Then Return
 		$counter += 1
-		If $counter >= 50 Or isProblemAffect(True) Then
+		If $counter >= 30 Or isProblemAffect(True) Then ; add detect for Adverts?
 			SetLog("Cannot return home.", $COLOR_ERROR)
 			checkMainScreen()
 			Return

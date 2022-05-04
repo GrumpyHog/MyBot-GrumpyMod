@@ -555,6 +555,7 @@ Func btnTestClickDrag()
 EndFunc   ;==>btnTestClickDrag
 
 Func btnTestImage()
+	_GUICtrlTab_ClickTab($g_hTabMain, 0)
 
 	Local $sImageFile = BeginImageTest() ; get image for testing
 	If $sImageFile = False Then $sImageFile = "Live Screenshot"

@@ -906,8 +906,6 @@ EndFunc
 
 ; will only boost 2 super troops
 Func ChkPresetQTST()
-	Return
-
 	Local $sBoostTroop1 = ""
 	Local $sBoostTroop2 = ""
 

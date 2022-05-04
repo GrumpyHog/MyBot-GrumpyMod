@@ -2908,6 +2908,7 @@ Func _AndroidScreencap($iLeft, $iTop, $iWidth, $iHeight, $iRetryCount = 0)
 EndFunc   ;==>_AndroidScreencap
 
 Func AndroidZoomOut($loopCount = 0, $timeout = Default, $bMinitouch = Default, $wasRunState = Default)
+	SetLog("Running minitouch ZoomOut script", $COLOR_INFO)
 	Return AndroidAdbScript("ZoomOut", Default, $timeout, $bMinitouch, $wasRunState)
 EndFunc   ;==>AndroidZoomOut
 
@@ -2932,7 +2933,7 @@ EndFunc   ;==>AndroidZoomOut
 
 
 Func AndroidTestZoomOut($loopCount = 0, $timeout = Default, $bMinitouch = Default, $wasRunState = Default)
-	Return AndroidAdbScript("Test", Default, $timeout, $bMinitouch, $wasRunState)
+	Return AndroidAdbScript("ZoomOut1", Default, $timeout, $bMinitouch, $wasRunState)
 EndFunc   ;==>AndroidZoomOut
 
 Func AndroidAdbScript($scriptTag, $variablesArray = Default, $timeout = Default, $bMinitouch = Default, $wasRunState = Default)

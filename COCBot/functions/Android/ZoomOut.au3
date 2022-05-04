@@ -434,18 +434,18 @@ Func SearchZoomOut($CenterVillageBoolOrScrollPos = $aCenterHomeVillageClickDrag,
 	Local $village
 	Local $bOnBuilderBase = isOnBuilderBase(True)
 	If $g_aiSearchZoomOutCounter[0] = 5 Then SetLog("Try secondary village measuring...", $COLOR_INFO)
-	;If $g_aiSearchZoomOutCounter[0] < 5 Then
-	;	$village = GetVillageSize($DebugLog, "stone", "tree", Default, $bOnBuilderBase)
-	;Else
-	;	; try secondary images
-	;	$village = GetVillageSize($DebugLog, "2stone", "2tree", Default, $bOnBuilderBase)
-	;EndIf
+	If $g_aiSearchZoomOutCounter[0] < 5 Then
+		$village = GetVillageSize($DebugLog, "stone", "tree", Default, $bOnBuilderBase)
+	Else
+		; try secondary images
+		$village = GetVillageSize($DebugLog, "2stone", "2tree", Default, $bOnBuilderBase)
+	EndIf
 
 	; compare other stone measures
 	;GetVillageSize(True, "stoneBlueStacks2A")
 	;GetVillageSize(True, "stoneiTools")
 
-	$village = GetVillageSize($DebugLog, "stone", "tree", Default, $bOnBuilderBase)
+	;$village = GetVillageSize($DebugLog, "stone", "tree", Default, $bOnBuilderBase)
 
 	Static $iCallCount = 0
 	If $g_aiSearchZoomOutCounter[0] > 0 Then
@@ -457,7 +457,7 @@ Func SearchZoomOut($CenterVillageBoolOrScrollPos = $aCenterHomeVillageClickDrag,
 
 	If IsArray($village) = 1 Then
 		$villageSize = $village[0]
-		If $villageSize < 500 Or $g_bDebugDisableZoomout Then
+		If $villageSize < 525 Or $g_bDebugDisableZoomout Then
 			$z = $village[1]
 			$x = $village[2]
 			$y = $village[3]

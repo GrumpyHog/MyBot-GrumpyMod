@@ -99,6 +99,8 @@ Func CheckCsvValues($instruction, $variablenumber, $variable)
 							Return True
 						Case "SCATTER"
 							Return True
+						Case "CLANCASTLE"
+							Return True
 						Case Else
 							Return False
 					EndSwitch
