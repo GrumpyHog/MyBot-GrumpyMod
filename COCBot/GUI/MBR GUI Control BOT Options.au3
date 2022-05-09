@@ -599,6 +599,9 @@ Func btnTestImage()
 EndFunc   ;==>btnTestImage
 
 Func btnTestVillageSize()
+	SetLog("Test Village Size")
+	
+	_GUICtrlTab_ClickTab($g_hTabMain, 0)
 
 	BeginImageTest()
 	Local $currentRunState = $g_bRunState
@@ -624,6 +627,23 @@ Func btnTestVillageSize()
 			SetLog("Village offset y: " & $village[3])
 			SetLog("Village stone " & $village[6] & ": " & $village[4] & ", " & $village[5])
 			SetLog("Village tree " & $village[9] & ": " & $village[7] & ", " & $village[8])
+			
+			If $village[4] > 0 And $village[5] > 0 And $village[7] > 0 And $village[8] > 0 And $i < 1 Then
+				; reset village measures
+				setVillageOffset(0, 0, 1)
+				ConvertInternalExternArea()
+				;SearchZoomOut($aCenterEnemyVillageClickDrag, True, "btnTestAttackCSV")
+				If CheckZoomOut("btnTestAttackCSV", True, False) = False Then
+					SetLog("CheckZoomOut failed", $COLOR_INFO)
+				EndIf
+
+				ConvertInternalExternArea()
+
+				SaveVillageDebugImage()
+			EndIf
+			
+			
+			
 		EndIf
 	Next
 	EndImageTest()
@@ -686,7 +706,7 @@ Func btnTestDeadBaseFolder()
 EndFunc   ;==>btnTestDeadBaseFolder
 
 Func btnTestAttackCSV()
-
+	_GUICtrlTab_ClickTab($g_hTabMain, 0)
 	;Local $directory = FileOpenDialog("Select folder of CoC village screenshot to test for dead base", $g_sProfileTempPath, "Image (*.png)", $FD_PATHMUSTEXIST, "", $g_hFrmBot)
 	Local $directory = FileSelectFolder("Select folder of CoC village screenshot to test CSV attack", "", $FSF_NEWDIALOG, @ScriptDir, $g_hFrmBot)
 	If @error <> 0 Then
@@ -696,7 +716,8 @@ Func btnTestAttackCSV()
 	;checkDeadBaseFolder($directory, "checkDeadBaseNew()", "checkDeadBaseSuperNew()")
 	;Local $oldFill = 'checkDeadBaseSuperNew(False, "' & @ScriptDir & "\imgxml\deadbase\elix\fill\old\" & '")'
 	;Local $newFill = 'checkDeadBaseSuperNew(False, "' & @ScriptDir & "\imgxml\deadbase\elix\fill\new\" & '")'
-	TestCSVAttackFolder($directory)
+	;TestCSVAttackFolder($directory)
+	TestBoarderFolder($directory)
 
 EndFunc   ;==>btnTestAttackCSV
 
@@ -1229,7 +1250,7 @@ Func DummyAttack($iNumberOfSearch = 5)
 	Local $currentiMatchMode = $g_iMatchMode
 	;Local $currentdebugsetlog = $g_bDebugSetlog
 	Local $currentDebugBuildingPos = $g_bDebugBuildingPos
-	
+
 	Local $aVillageSize[10] = ["", "", "", "", "", "", "", "", "", ""]
 
    Local $iSearchCount = 0
@@ -1348,3 +1369,147 @@ Func DummyAttack($iNumberOfSearch = 5)
 	FuncReturn()
 EndFunc
 
+Func TestBoarderFolder($directory)
+	Local $aFiles = _FileListToArray($directory, "*.png", $FLTA_FILES)
+
+	If IsArray($aFiles) = 0 Then Return False
+	If $aFiles[0] = 0 Then Return False
+
+	Local $currentRunState = $g_bRunState
+	Local $currentDebugAttackCSV = $g_bDebugAttackCSV
+	Local $currentMakeIMGCSV = $g_bDebugMakeIMGCSV
+	Local $currentiMatchMode = $g_iMatchMode
+	Local $currentdebugsetlog = $g_bDebugSetlog
+	Local $currentDebugBuildingPos = $g_bDebugBuildingPos
+
+	$g_bRunState = True
+	$g_bDebugAttackCSV = True
+	$g_bDebugMakeIMGCSV = True
+	$g_bDebugSetlog = True
+	$g_bDebugBuildingPos = True
+
+	$g_iMatchMode = $DB ; define which script to use
+
+	For $i = 1 To $aFiles[0]
+
+		Local $sFile = $aFiles[$i]
+		Local $srcFile = $directory & "\" & $sFile
+
+		; local image
+		Local $hBMP = _GDIPlus_BitmapCreateFromFile($directory & "\" & $sFile)
+		Local $hHBMP = _GDIPlus_BitmapCreateDIBFromBitmap($hBMP)
+		_GDIPlus_BitmapDispose($hBMP)
+		TestCapture($hHBMP)
+
+		; reset village measures
+		setVillageOffset(0, 0, 1)
+		ConvertInternalExternArea()
+		;SearchZoomOut($aCenterEnemyVillageClickDrag, True, "btnTestAttackCSV")
+		If CheckZoomOut("btnTestAttackCSV", True, False) = False Then
+			SetLog("CheckZoomOut failed", $COLOR_INFO)
+		EndIf
+
+		ConvertInternalExternArea()
+
+		SaveVillageDebugImage()
+
+		_WinAPI_DeleteObject($hHBMP)
+		TestCapture(0)
+
+	Next
+
+	$g_bRunState = $currentRunState
+	$g_bDebugAttackCSV = $currentDebugAttackCSV
+	$g_bDebugMakeIMGCSV = $currentMakeIMGCSV
+	$g_iMatchMode = $currentiMatchMode
+	$g_bDebugSetlog = $currentdebugsetlog
+	$g_bDebugBuildingPos = $currentDebugBuildingPos
+
+
+
+EndFunc
+
+
+Func SaveVillageDebugImage()
+
+	Local $EditedImage = _GDIPlus_BitmapCreateFromHBITMAP($g_hHBitmap2)
+	Local $testx
+	Local $hGraphic = _GDIPlus_ImageGetGraphicsContext($EditedImage)
+	Local $hBrush = _GDIPlus_BrushCreateSolid(0xFFFFFFFF)
+	Local $pixel
+
+	; Open box of crayons :-)
+	Local $hPenLtGreen = _GDIPlus_PenCreate(0xFF00DC00, 2)
+	Local $hPenDkGreen = _GDIPlus_PenCreate(0xFF006E00, 2)
+	Local $hPenMdGreen = _GDIPlus_PenCreate(0xFF4CFF00, 2)
+	Local $hPenRed = _GDIPlus_PenCreate(0xFFFF0000, 2)
+	Local $hPenDkRed = _GDIPlus_PenCreate(0xFF6A0000, 2)
+	Local $hPenNavyBlue = _GDIPlus_PenCreate(0xFF000066, 2)
+	Local $hPenBlue = _GDIPlus_PenCreate(0xFF0000CC, 2)
+	Local $hPenSteelBlue = _GDIPlus_PenCreate(0xFF0066CC, 2)
+	Local $hPenLtBlue = _GDIPlus_PenCreate(0xFF0080FF, 2)
+	Local $hPenPaleBlue = _GDIPlus_PenCreate(0xFF66B2FF, 2)
+	Local $hPenCyan = _GDIPlus_PenCreate(0xFF00FFFF, 2)
+	Local $hPenYellow = _GDIPlus_PenCreate(0xFFFFD800, 2)
+	Local $hPenLtGrey = _GDIPlus_PenCreate(0xFFCCCCCC, 2)
+	Local $hPenWhite = _GDIPlus_PenCreate(0xFFFFFFFF, 2)
+	Local $hPenMagenta = _GDIPlus_PenCreate(0xFFFF00F6, 2)
+
+
+	;-- DRAW EXTERNAL PERIMETER LINES
+	_GDIPlus_GraphicsDrawLine($hGraphic, $ExternalArea[0][0], $ExternalArea[0][1], $ExternalArea[2][0], $ExternalArea[2][1], $hPenLtGreen)
+	_GDIPlus_GraphicsDrawLine($hGraphic, $ExternalArea[0][0], $ExternalArea[0][1], $ExternalArea[3][0], $ExternalArea[3][1], $hPenLtGreen)
+	_GDIPlus_GraphicsDrawLine($hGraphic, $ExternalArea[1][0], $ExternalArea[1][1], $ExternalArea[2][0], $ExternalArea[2][1], $hPenLtGreen)
+	_GDIPlus_GraphicsDrawLine($hGraphic, $ExternalArea[1][0], $ExternalArea[1][1], $ExternalArea[3][0], $ExternalArea[3][1], $hPenLtGreen)
+
+	SetLog($ExternalArea[0][0] &  $ExternalArea[0][1] & $ExternalArea[2][0] & $ExternalArea[2][1])
+
+	;-- DRAW EXTERNAL PERIMETER LINES
+	_GDIPlus_GraphicsDrawLine($hGraphic, $InternalArea[0][0], $InternalArea[0][1], $InternalArea[2][0], $InternalArea[2][1], $hPenDkGreen)
+	_GDIPlus_GraphicsDrawLine($hGraphic, $InternalArea[0][0], $InternalArea[0][1], $InternalArea[3][0], $InternalArea[3][1], $hPenDkGreen)
+	_GDIPlus_GraphicsDrawLine($hGraphic, $InternalArea[1][0], $InternalArea[1][1], $InternalArea[2][0], $InternalArea[2][1], $hPenDkGreen)
+	_GDIPlus_GraphicsDrawLine($hGraphic, $InternalArea[1][0], $InternalArea[1][1], $InternalArea[3][0], $InternalArea[3][1], $hPenDkGreen)
+
+	;-- DRAW VERTICAL AND ORIZONTAL LINES
+	_GDIPlus_GraphicsDrawLine($hGraphic, $InternalArea[2][0], 0, $InternalArea[2][0], $g_iDEFAULT_HEIGHT, $hPenDkGreen)
+	_GDIPlus_GraphicsDrawLine($hGraphic, 0, $InternalArea[0][1], $g_iDEFAULT_WIDTH, $InternalArea[0][1], $hPenDkGreen)
+
+	;-- DRAW DIAGONALS LINES
+	_GDIPlus_GraphicsDrawLine($hGraphic, $ExternalArea[4][0], $ExternalArea[4][1], $ExternalArea[7][0], $ExternalArea[7][1], $hPenLtGreen)
+	_GDIPlus_GraphicsDrawLine($hGraphic, $ExternalArea[5][0], $ExternalArea[5][1], $ExternalArea[6][0], $ExternalArea[6][1], $hPenLtGreen)
+
+	Local $Date = @YEAR & "-" & @MON & "-" & @MDAY
+	Local $Time = @HOUR & "." & @MIN & "." & @SEC
+	Local $filename = $g_sProfileTempDebugPath & String("VillageDebug_" & $Date & "_" & $Time) & ".jpg"
+	_GDIPlus_ImageSaveToFile($EditedImage, $filename)
+	If @error Then SetLog("Debug Image save error: " & @extended, $COLOR_ERROR)
+	SetDebugLog("Village image saved: " & $filename)
+
+
+	_GDIPlus_GraphicsDispose($hGraphic)
+	_GDIPlus_BitmapDispose($EditedImage)
+
+	; Clean up resources
+	_GDIPlus_PenDispose($hPenLtGreen)
+	_GDIPlus_PenDispose($hPenDkGreen)
+	_GDIPlus_PenDispose($hPenMdGreen)
+	_GDIPlus_PenDispose($hPenRed)
+	_GDIPlus_PenDispose($hPenDkRed)
+	_GDIPlus_PenDispose($hPenBlue)
+	_GDIPlus_PenDispose($hPenNavyBlue)
+	_GDIPlus_PenDispose($hPenSteelBlue)
+	_GDIPlus_PenDispose($hPenLtBlue)
+	_GDIPlus_PenDispose($hPenPaleBlue)
+	_GDIPlus_PenDispose($hPenCyan)
+	_GDIPlus_PenDispose($hPenYellow)
+	_GDIPlus_PenDispose($hPenLtGrey)
+	_GDIPlus_PenDispose($hPenWhite)
+	_GDIPlus_PenDispose($hPenMagenta)
+	_GDIPlus_BrushDispose($hBrush)
+	
+	; open image
+	If TestCapture() = True Then
+		ShellExecute($filename)
+	EndIf
+
+EndFunc

@@ -2014,3 +2014,13 @@ Global $g_iMinimumLabUpgDarkElixir = 0
 Global $g_iEventTime = -1
 
 Global $g_SimplifiedChinese = False
+
+Global Enum $eTreeSS, $eTreeAS, $eTreeJS, $eTreeCount
+
+; village size, left, right, top, bottom
+Global Const $g_afRefVillage[$eTreeCount][5] = [ _
+	[464.2, 54, 800, 62, 623], _
+	[464.2, 54, 800, 62, 623], _
+	[464.2, 54, 800, 62, 623]]
+
+Global $g_iTree = 0

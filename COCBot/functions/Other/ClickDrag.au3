@@ -107,7 +107,7 @@ Func ClickDrag($X1, $Y1, $X2, $Y2, $Delay = 50, $sMode = 'FAST')
 	If TestCapture() Then Return
 	;Return _PostMessage_ClickDrag($X1, $Y1, $X2, $Y2, "left", $Delay)
 
-   SetLog("Click Drag Mode: " & $sMode)
+   ;SetLog("Click Drag Mode: " & $sMode)
 
    Switch $sMode
 	  Case 'SCID'

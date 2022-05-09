@@ -164,6 +164,7 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 		Return FuncReturn($aResult)
 	EndIf
 
+	; found stone!, now look for tree
 	If $stone[0] Then
 		For $i = 1 To $aTreeFiles[0]
 			$findImage = $aTreeFiles[$i]
@@ -181,6 +182,7 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 				$sArea = Int($x1) & "," & Int($y1) & "|" & Int($right) & "," & Int($y1) & "|" & Int($right) & "," & Int($bottom) & "|" & Int($x1) & "," & Int($bottom)
 				SetDebugLog("GetVillageSize check for image " & $findImage)
 				$a = decodeMultipleCoords(findImage($findImage, $sDirectory & $findImage, $sArea, 2, True), Default, Default, 0) ; sort by x because there can be a 2nd at the right that should not be used
+				If $DebugLog Then SaveDebugRectImage("GetVillageSize", $x1 & "," & $y1 & "," & $right & "," & $bottom)
 				If UBound($a) > 0 Then
 					$a = $a[0]
 					$x = Int($a[0])
@@ -205,16 +207,57 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 		;SetLog("Found Trees (in " & Round(TimerDiff($hTimer) / 1000, 2) & " seconds)", $COLOR_INFO)
 		;$hTimer = TimerInit()
 
-		;If $g_bUpdateSharedPrefs And Not $bOnBuilderBase And $tree[0] = 0 And $fixed[0] = 0 Then
-		If Not $bOnBuilderBase And $tree[0] = 0 And $fixed[0] = 0 Then
+		If $g_bUpdateSharedPrefs And Not $bOnBuilderBase And $tree[0] = 0 And $fixed[0] = 0 Then
+		;If Not $bOnBuilderBase And $tree[0] = 0 And $fixed[0] = 0 Then
 			; On main village use stone as fixed point
 			$fixed = $stone
 		EndIf
 
 		If $tree[0] = 0 And $fixed[0] = 0 And Not $g_bRestart Then
-			SetDebugLog("GetVillageSize cannot find tree", $COLOR_WARNING)
+			;SetDebugLog("GetVillageSize cannot find tree", $COLOR_WARNING)
+			SetLog("GetVillageSize cannot find tree", $COLOR_WARNING)
+			SetLog("$g_aiSearchZoomOutCounter[0] : " & $g_aiSearchZoomOutCounter[0])
+			; The 'zoom' has changed in the Spring 2022 update.  In the past the game screen at maxed zoom has no 'up down' movement and only a small amount of sideways movement but it is now possible
+			; to move the screen to covered both the 'tree' fixed points.
+			
+			If $g_aiSearchZoomOutCounter[0] > 2 Then
+				; zoomout script has been executed 3 times, assumed at maxed zoom, force ZoomOut to center on the Stone.
+				; an alternative would be to measure the distance between 2 stones but this will still be needed if that fails
+				Local $stone_x_exp = $stone[2]
+				Local $stone_y_exp = $stone[3]
+				ConvertVillagePos($stone_x_exp, $stone_y_exp, 1.0) ; expected x, y position of stone
+				$x = $stone[0] - $stone_x_exp
+				$y = $stone[1] - $stone_y_exp
+				
+				Dim $aResult[10]
+				$aResult[0] = 0
+				$aResult[1] = 1
+				$aResult[2] = $x ; offset x
+				$aResult[3] = $y ; offset y
+				$aResult[4] = $stone[0] ; x center of stone found
+				$aResult[5] = $stone[1] ; y center of stone found
+				$aResult[6] = $stone[5] ; stone image file name
+				$aResult[7] = $tree[0] ; x center of tree found
+				$aResult[8] = $tree[1] ; y center of tree found
+				$aResult[9] = $tree[5] ; tree image file name
+
+				#cs
+				$g_aVillageSize[0] = $aResult[0]
+				$g_aVillageSize[1] = $aResult[1]
+				$g_aVillageSize[2] = $aResult[2]
+				$g_aVillageSize[3] = $aResult[3]
+				$g_aVillageSize[4] = $aResult[4]
+				$g_aVillageSize[5] = $aResult[5]
+				$g_aVillageSize[6] = $aResult[6]
+				$g_aVillageSize[7] = $aResult[7]
+				$g_aVillageSize[8] = $aResult[8]
+				$g_aVillageSize[9] = $aResult[9]			
+				#ce
+			EndIf
+			
 			Return FuncReturn($aResult)
 		EndIf
+
 	EndIf
 
 	; calculate village size, see https://en.wikipedia.org/wiki/Pythagorean_theorem
@@ -235,7 +278,9 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 
 	; initial reference village had a width of 473.60282919315 (and not 440) and stone located at 226, 567, so center on that reference and used zoom factor on that size
 	;Local $z = $c / 473.60282919315 ; don't use size of 440, as beta already using reference village
-	Local $iRefSize = 445; 458 ; 2019-01-02 Update village measuring as outer edges didn't align anymore 445
+	;Local $iRefSize = 464.2; 445; 458 ; 2019-01-02 Update village measuring as outer edges didn't align anymore 445
+	Local $iRefSize = $g_afRefVillage[$g_iTree][0]
+	
 	Local $iDefSize = 450 ; 2019-04-01 New default size using shared_prefs zoom level 444
 	Local $z = $c / $iRefSize
 
@@ -255,16 +300,16 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 		If $DebugLog Then SetDebugLog("GetVillageSize measured: " & $c & ", Zoom factor: " & $z & ", Offset: " & $x & ", " & $y, $COLOR_INFO)
 
 		Dim $aResult[10]
-		$aResult[0] = $c
-		$aResult[1] = $z
-		$aResult[2] = $x
-		$aResult[3] = $y
-		$aResult[4] = $stone[0]
-		$aResult[5] = $stone[1]
-		$aResult[6] = $stone[5]
-		$aResult[7] = $tree[0]
-		$aResult[8] = $tree[1]
-		$aResult[9] = $tree[5]
+		$aResult[0] = $c ; village size
+		$aResult[1] = $z ; zoom
+		$aResult[2] = $x ; offset x
+		$aResult[3] = $y ; offset y
+		$aResult[4] = $stone[0] ; x center of stone found
+		$aResult[5] = $stone[1] ; y center of stone found
+		$aResult[6] = $stone[5] ; stone image file name
+		$aResult[7] = $tree[0] ; x center of tree found
+		$aResult[8] = $tree[1] ; y center of tree found
+		$aResult[9] = $tree[5] ; tree image file name
 
 		$g_aVillageSize[0] = $aResult[0]
 		$g_aVillageSize[1] = $aResult[1]
@@ -288,6 +333,12 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 			If $bReset Then SetDebugLog("GetVillageSize resets village size from " & $c & " to " & $iDefSize, $COLOR_WARNING)
 			$c = $iDefSize
 			$z = $iDefSize / $iRefSize
+		EndIf
+
+		; found stone but not tree keeping zooming out and centering
+		If $stone[0] <> 0 And $tree[0] = 0 Then
+			SetLog("Missing trees")
+			;$c = 530
 		EndIf
 
 		$x = $fixed[0] - $fixed[2]

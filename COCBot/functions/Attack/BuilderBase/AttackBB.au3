@@ -96,6 +96,8 @@ Func AttackBB($iNumberOfAttacks = 0)
 		While Not CheckBattleStarted()
 			local $iTime = Int(__TimerDiff($timer)/ 60000)
 
+			If ConnectionLost(False) Then Return False
+
 			If $iTime > $iPrevTime Then ; if we have increased by a minute
 				SetLog("Clouds: " & $iTime & "-Minute(s)")
 				$iPrevTime = $iTime

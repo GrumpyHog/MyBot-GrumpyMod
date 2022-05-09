@@ -380,13 +380,13 @@ Func AndroidOnlyZoomOut() ;Zooms out
 		Else
 			SetLog("Zooming Out", $COLOR_INFO)
 		EndIf
-		AndroidZoomOut(0, Default, ($g_iAndroidZoomoutMode <> 2)) ; use new ADB zoom-out
+		AndroidZoomOut(0, Default, ($g_iAndroidZoomoutMode <> 2)) ; use new ADB zoom-out - call minitouch zoomout script
 		ForceCaptureRegion()
 		$aPicture = SearchZoomOut($aCenterHomeVillageClickDrag, True, "", True)
 		While StringInStr($aPicture[0], "zoomout") = 0
 
 			AndroidShield("AndroidOnlyZoomOut") ; Update shield status
-			AndroidZoomOut($i, Default, ($g_iAndroidZoomoutMode <> 2)) ; use new ADB zoom-out
+			AndroidZoomOut($i, Default, ($g_iAndroidZoomoutMode <> 2)) ; use new ADB zoom-out- call minitouch zoomout script
 			If $i > $exitCount Then Return
 			If Not $g_bRunState Then ExitLoop
 			If IsProblemAffect(True) Then  ; added to catch errors during Zoomout
@@ -445,8 +445,6 @@ Func SearchZoomOut($CenterVillageBoolOrScrollPos = $aCenterHomeVillageClickDrag,
 	;GetVillageSize(True, "stoneBlueStacks2A")
 	;GetVillageSize(True, "stoneiTools")
 
-	;$village = GetVillageSize($DebugLog, "stone", "tree", Default, $bOnBuilderBase)
-
 	Static $iCallCount = 0
 	If $g_aiSearchZoomOutCounter[0] > 0 Then
 		If _Sleep(1000) Then
@@ -455,6 +453,20 @@ Func SearchZoomOut($CenterVillageBoolOrScrollPos = $aCenterHomeVillageClickDrag,
 		EndIf
 	EndIf
 
+#cs
+		$aResult[0] = $c ; village size
+		$aResult[1] = $z ; zoom
+		$aResult[2] = $x ; offset x
+		$aResult[3] = $y ; offset y
+		$aResult[4] = $stone[0] ; x center of stone found
+		$aResult[5] = $stone[1] ; y center of stone found
+		$aResult[6] = $stone[5] ; stone image file name
+		$aResult[7] = $tree[0] ; x center of tree found
+		$aResult[8] = $tree[1] ; y center of tree found
+		$aResult[9] = $tree[5] ; tree image file name
+#ce
+
+	; found village
 	If IsArray($village) = 1 Then
 		$villageSize = $village[0]
 		If $villageSize < 525 Or $g_bDebugDisableZoomout Then
@@ -470,6 +482,7 @@ Func SearchZoomOut($CenterVillageBoolOrScrollPos = $aCenterHomeVillageClickDrag,
 
 			If $bCenterVillage And ($bOnBuilderBase Or Not $bUpdateSharedPrefs) And ($x <> 0 Or $y <> 0) And ($UpdateMyVillage = False Or $x <> $g_iVILLAGE_OFFSET[0] Or $y <> $g_iVILLAGE_OFFSET[1]) Then
 				If $DebugLog Then SetDebugLog("Center Village" & $sSource & " by: " & $x & ", " & $y)
+				SetLog("Center Village" & $sSource & " by: " & $x & ", " & $y)
 				If $aScrollPos[0] = 0 And $aScrollPos[1] = 0 Then
 					;$aScrollPos[0] = $stone[0]
 					;$aScrollPos[1] = $stone[1]
@@ -488,6 +501,7 @@ Func SearchZoomOut($CenterVillageBoolOrScrollPos = $aCenterHomeVillageClickDrag,
 				$aResult2[3] = $aResult2[1] - $aResult[1]
 				$aResult2[4] = $aResult2[2] - $aResult[2]
 				If $DebugLog Then SetDebugLog("Centered Village Offset" & $sSource & ": " & $aResult2[1] & ", " & $aResult2[2] & ", change: " & $aResult2[3] & ", " & $aResult2[4])
+				SetLog("Centered Village Offset" & $sSource & ": " & $aResult2[1] & ", " & $aResult2[2] & ", change: " & $aResult2[3] & ", " & $aResult2[4])
 				$iCallCount = 0
 				Return FuncReturn($aResult2)
 			EndIf
@@ -495,6 +509,7 @@ Func SearchZoomOut($CenterVillageBoolOrScrollPos = $aCenterHomeVillageClickDrag,
 			If $UpdateMyVillage Then
 				If $x <> $g_iVILLAGE_OFFSET[0] Or $y <> $g_iVILLAGE_OFFSET[1] Or $z <> $g_iVILLAGE_OFFSET[2] Then
 					If $DebugLog Then SetDebugLog("Village Offset" & $sSource & " updated to " & $x & ", " & $y & ", " & $z)
+					SetLog("Village Offset" & $sSource & " updated to " & $x & ", " & $y & ", " & $z)
 				EndIf
 				setVillageOffset($x, $y, $z)
 				ConvertInternalExternArea() ; generate correct internal/external diamond measures
