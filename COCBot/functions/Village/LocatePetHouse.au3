@@ -167,7 +167,7 @@ Func LocatePetHouse()
 
 		Local $aResult = BuildingInfo() ; Get building name and level with OCR
 		If $aResult[0] = 2 Then ; We found a valid building name
-			If StringInStr($aResult[1], "Pet") = True Then ; we found the Pet House
+			If StringInStr($aResult[1], "House") = True Then ; we found the Pet House
 				SetLog("Pet House located.", $COLOR_INFO)
 				SetLog("It reads as Level " & $aResult[2] & ".", $COLOR_INFO)
 				Return True
@@ -259,7 +259,7 @@ Func LocatePetHouse()
 
 		Local $aResult = BuildingInfo() ; Get building name and level with OCR
 		If $aResult[0] = 2 Then ; We found a valid building name
-			If StringInStr($aResult[1], "Pet") = True Then ; we found the Pet House
+			If StringInStr($aResult[1], "House") = True Then ; we found the Pet House
 				SetLog("Pet House located.", $COLOR_INFO)
 				SetLog("It reads as Level " & $aResult[2] & ".", $COLOR_INFO)
 				Return True

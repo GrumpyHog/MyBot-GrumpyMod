@@ -88,7 +88,7 @@ Func _LocateClanCastle($bCollect = True)
 		EndIf
 		$sInfo = BuildingInfo() ; 860x780
 		If IsArray($sInfo) and ($sInfo[0] > 1 Or $sInfo[0] = "") Then
-			If StringInStr($sInfo[1], "clan") = 0 Then
+			If StringInStr($sInfo[1], "Clan") = 0 Then
 				Local $sLocMsg = ($sInfo[0] = "" ? "Nothing" : $sInfo[1])
 
 			    $iSilly += 1
@@ -142,7 +142,7 @@ Func LocateClanCastle()
 
 		Local $aResult = BuildingInfo() ; Get building name and level with OCR
 		If $aResult[0] = 2 Then ; We found a valid building name
-			If StringInStr($aResult[1], "clan") = True Then ; we found the Clan Castle
+			If StringInStr($aResult[1], "Clan") = True Then ; we found the Clan Castle
 				SetLog("Clan Castle located.", $COLOR_INFO)
 				SetLog("It reads as Level " & $aResult[2] & ".", $COLOR_INFO)
 				Return True
@@ -245,7 +245,7 @@ Func LocateClanCastle()
 
 		Local $aResult = BuildingInfo() ; Get building name and level with OCR
 		If $aResult[0] = 2 Then ; We found a valid building name
-			If StringInStr($aResult[1], "clan") = True Then ; we found the Clan Castle
+			If StringInStr($aResult[1], "Clan") = True Then ; we found the Clan Castle
 				SetLog("Clan Castle located.", $COLOR_INFO)
 				SetLog("It reads as Level " & $aResult[2] & ".", $COLOR_INFO)
 				Return True

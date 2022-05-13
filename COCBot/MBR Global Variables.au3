@@ -2021,6 +2021,6 @@ Global Enum $eTreeSS, $eTreeAS, $eTreeJS, $eTreeCount
 Global Const $g_afRefVillage[$eTreeCount][5] = [ _
 	[464.2, 54, 800, 62, 623], _
 	[464.2, 54, 800, 62, 623], _
-	[464.2, 54, 800, 62, 623]]
+	[470.4, 45, 802, 65, 629]]
 
 Global $g_iTree = 0

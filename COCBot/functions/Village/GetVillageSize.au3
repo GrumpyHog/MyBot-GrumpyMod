@@ -195,6 +195,11 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 					$tree[3] = $y0 ; y ref. center of tree
 					$tree[4] = $d0 ; distance to village map in pixel
 					$tree[5] = $findImage
+					
+					Local $asTreeName = StringSplit($findImage,"-") ; get filename only
+					Local $sTreeName = StringReplace($asTreeName[1], "2", "") ; remove 2 in 2tree
+					$g_iTree = Int(Eval("e" & $sTreeName))
+					SetLog($sTreeName & " " & $g_iTree, $COLOR_INFO)
 					ExitLoop
 				EndIf
 
@@ -333,12 +338,6 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 			If $bReset Then SetDebugLog("GetVillageSize resets village size from " & $c & " to " & $iDefSize, $COLOR_WARNING)
 			$c = $iDefSize
 			$z = $iDefSize / $iRefSize
-		EndIf
-
-		; found stone but not tree keeping zooming out and centering
-		If $stone[0] <> 0 And $tree[0] = 0 Then
-			SetLog("Missing trees")
-			;$c = 530
 		EndIf
 
 		$x = $fixed[0] - $fixed[2]

@@ -85,13 +85,13 @@ Func PetHouse($test = False)
 			If _Sleep($DELAYLABORATORY2) Then Return
 
 			; Level gets detected as 0 - OCR problem?
-			If $iPetLevel > 0 Then  
+			If $iPetLevel > 0 And $iPetLevel < $g_ePetLevels Then  
 
 				; pet level is Max, disable upgrade
-				If $iPetLevel = $g_ePetLevels Then
-					$g_bUpgradePetsEnable[$i] = False
-					ContinueLoop
-				EndIf
+				;If $iPetLevel = $g_ePetLevels Then
+				;	$g_bUpgradePetsEnable[$i] = False
+				;	ContinueLoop
+				;EndIf
 					
 				; get DE requirement to upgrade Pet
 				Local $iDarkElixirReq = 1000 * number($g_aiPetUpgradeCostPerLevel[$i][$iPetLevel])
@@ -392,6 +392,7 @@ Func GetMinDark4PetUpgrade()
 	Local $iPetUnlockedxCoord[4] = [190, 345, 500, 655]
 	Local $iPetLevelxCoord[4] = [130, 285, 440, 595]
 	Local $iMinDark4PetUpgrade = 999999
+	Local $bSave = False
 
 	For $i = 0 to $ePetCount - 1
 		; check if pet upgrade enabled and unlocked ; c3b6a5 nox c1b7a5 memu?
@@ -400,29 +401,30 @@ Func GetMinDark4PetUpgrade()
 			; get the Pet Level
 			Local $iPetLevel = getPetLevel($iPetLevelxCoord[$i], 528)
 			SetLog($g_asPetNames[$i] & " is at level " & $iPetLevel)
+
+			If _Sleep($DELAYLABORATORY2) Then Return
 			
 			If $iPetLevel > 0 Then
-
 				; pet level is Max, disable upgrade
 				If $iPetLevel = $g_ePetLevels Then
+					SetLog("Pet at Maxed level disabling future upgrading!", $COLOR_INFO)
 					$g_bUpgradePetsEnable[$i] = False
+					GUICtrlSetState($g_hChkUpgradePets[$i], $g_bUpgradePetsEnable[$i] ? $GUI_CHECKED : $GUI_UNCHECKED)
 					ContinueLoop
-				EndIf
+				Else
+					; get DE requirement to upgrade Pet
+					Local $iDarkElixirReq = 1000 * number($g_aiPetUpgradeCostPerLevel[$i][$iPetLevel])
 
-				If _Sleep($DELAYLABORATORY2) Then Return
+					SetLog("DE Requirement: " & $iDarkElixirReq)
 
-				; get DE requirement to upgrade Pet
-				Local $iDarkElixirReq = 1000 * number($g_aiPetUpgradeCostPerLevel[$i][$iPetLevel])
-
-				SetLog("DE Requirement: " & $iDarkElixirReq)
-
-				If $iDarkElixirReq < $iMinDark4PetUpgrade Then
-					$iMinDark4PetUpgrade = $iDarkElixirReq
-					SetLog("New Min Dark: " & $iMinDark4PetUpgrade)
+					If $iDarkElixirReq < $iMinDark4PetUpgrade Then
+						$iMinDark4PetUpgrade = $iDarkElixirReq
+						SetLog("New Min Dark: " & $iMinDark4PetUpgrade)
+					EndIf
 				EndIf
 			EndIf
 		EndIf
 	Next
-					
+				
 	Return $iMinDark4PetUpgrade
 EndFunc	
