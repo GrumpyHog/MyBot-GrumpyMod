@@ -123,7 +123,7 @@ Func getTroopCountBig($x_start, $y_start, $bNeedNewCapture = Default) ;  -> Gets
 EndFunc   ;==>getTroopCountBig
 
 Func getTroopsSpellsLevel($x_start, $y_start) ;  -> Gets spell level on Attack Screen for selected spell kind (could be used for troops too)
-	Return getOcrAndCapture("coc-spellslevel", $x_start, $y_start, 20, 14, True)
+	Return getOcrAndCapture("coc-spellslevel", $x_start, $y_start, 16, 14, True)
 EndFunc   ;==>getTroopsSpellsLevel
 
 Func getPetLevel($x_start, $y_start) ;  -> Gets spell level on Attack Screen for selected spell kind (could be used for troops too)

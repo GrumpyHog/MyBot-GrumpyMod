@@ -17,6 +17,7 @@ Func AutoUpgrade($bTest = False)
 	$g_bRunState = True
 	Local $Result = _AutoUpgrade()
 	$g_bRunState = $bWasRunState
+	ZoomOut() ; re-center village
 	Return $Result
 EndFunc
 

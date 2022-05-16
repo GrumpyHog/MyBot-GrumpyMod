@@ -96,6 +96,8 @@ Func GetAttackBar($bRemaining = False, $pMatchMode = $DB, $bDebug = False)
 
 	EndIf
 
+	;DebugAttackBarImage($aAttackBar)
+
 	#comments-start
 		$aAttackBar[n][8]
 		[n][0] = Name of the found Troop/Spell/Hero/Siege
@@ -161,9 +163,17 @@ Func GetAttackBar($bRemaining = False, $pMatchMode = $DB, $bDebug = False)
 					If $aAttackBar[$i][4] = 0 Then $aAttackBar[$i][4] = Number(getTroopCountBig(Number($aAttackBar[$i][5]), Number($aAttackBar[$i][6] - 2)))
 				EndIf
 				If StringRegExp($aAttackBar[$i][0], "(LSpell)|(ESpell)", 0) And $g_bSmartZapEnable Then
-					Local $iSpellLevel = Number(getTroopsSpellsLevel(Number($aAttackBar[$i][5]) - 20, 704))
-					If StringInStr($aAttackBar[$i][0], "LSpell") <> 0 And $iSpellLevel > 0 Then $g_iLSpellLevel = $iSpellLevel
-					If StringInStr($aAttackBar[$i][0], "ESpell") <> 0 And $iSpellLevel > 0 Then $g_iESpellLevel = $iSpellLevel
+					If StringInStr($aAttackBar[$i][0], "LSpell") <> 0 Then
+						Local $iSpellLevel = Number(getTroopsSpellsLevel(Number($aAttackBar[$i][1]) - 18, 702)) ; use image location as 'x' changes with quantity
+						If $iSpellLevel > 0 Then $g_iLSpellLevel = $iSpellLevel
+						SetLog("Lightning Spell Level : " & $iSpellLevel, $COLOR_INFO)
+					EndIf
+					
+					If StringInStr($aAttackBar[$i][0], "ESpell") <> 0 Then
+						Local $iSpellLevel = Number(getTroopsSpellsLevel(Number($aAttackBar[$i][1]) - 25, 702)) ; use image location as 'x' changes with quantity
+						If $iSpellLevel > 0 Then $g_iESpellLevel = $iSpellLevel
+						SetLog("Earth Quake Spell Level : " & $iSpellLevel, $COLOR_INFO)
+					EndIf
 				EndIf
 			EndIf
 			; 0: Index, 1: Slot, 2: Amount, 3: X-Coord, 4: Y-Coord, 5: OCR X-Coord, 6: OCR Y-Coord
@@ -337,9 +347,17 @@ Func ExtendedAttackBarCheck($aAttackBarFirstSearch, $bRemaining, $sSearchDiamond
 					If $aAttackBar[$i][4] = 0 Then $aAttackBar[$i][4] = Number(getTroopCountBig(Number($aAttackBar[$i][5]), Number($aAttackBar[$i][6] - 2)))
 				EndIf
 				If StringRegExp($aAttackBar[$i][0], "(LSpell)|(ESpell)", 0) And $g_bSmartZapEnable Then
-					Local $iSpellLevel = Number(getTroopsSpellsLevel(Number($aAttackBar[$i][5]) - 20, 704))
-					If StringInStr($aAttackBar[$i][0], "LSpell") <> 0 And $iSpellLevel > 0 Then $g_iLSpellLevel = $iSpellLevel
-					If StringInStr($aAttackBar[$i][0], "ESpell") <> 0 And $iSpellLevel > 0 Then $g_iESpellLevel = $iSpellLevel
+					If StringInStr($aAttackBar[$i][0], "LSpell") <> 0 Then
+						Local $iSpellLevel = Number(getTroopsSpellsLevel(Number($aAttackBar[$i][1]) - 18, 702)) ; use image location as 'x' changes with quantity
+						If $iSpellLevel > 0 Then $g_iLSpellLevel = $iSpellLevel
+						SetLog("Lightning Spell Level : " & $iSpellLevel, $COLOR_INFO)
+					EndIf
+					
+					If StringInStr($aAttackBar[$i][0], "ESpell") <> 0 Then
+						Local $iSpellLevel = Number(getTroopsSpellsLevel(Number($aAttackBar[$i][1]) - 25, 702)) ; use image location as 'x' changes with quantity
+						If $iSpellLevel > 0 Then $g_iESpellLevel = $iSpellLevel
+						SetLog("Earth Quake Spell Level : " & $iSpellLevel, $COLOR_INFO)
+					EndIf
 				EndIf
 			EndIf
 			; 0: Index, 1: Slot, 2: Amount, 3: X-Coord, 4: Y-Coord, 5: OCR X-Coord, 6: OCR Y-Coord
@@ -433,11 +451,13 @@ Func AttackSlot($iPosX, $iRow, $aSlots)
 	Return $aTempSlot
 EndFunc   ;==>AttackSlot
 
-Func DebugAttackBarImage($aAttackBarResult)
-	#comments-start
-		If $g_bDebugSetlog Then SetDebugLog("Attackbar OCR completed in " & StringFormat("%.2f", __TimerDiff($iAttackbarStart)) & " ms")
+;Func DebugAttackBarImage($aAttackBarResult)
+Func DebugAttackBarImage($aResult)
+		;If $g_bDebugSetlog Then SetDebugLog("Attackbar OCR completed in " & StringFormat("%.2f", __TimerDiff($iAttackbarStart)) & " ms")
 
-		If $bDebug Then
+		SetLog("Debug AttackBar Image!")
+
+		;If $bDebug Then
 		Local $iX1 = 0, $iY1 = 635, $iX2 = 853, $iY2 = 698
 		_CaptureRegion2($iX1, $iY1, $iX2, $iY2)
 
@@ -459,9 +479,7 @@ Func DebugAttackBarImage($aAttackBarResult)
 		_GDIPlus_PenDispose($hPenRED)
 		_GDIPlus_GraphicsDispose($hGraphic)
 		_GDIPlus_BitmapDispose($hEditedImage)
-		EndIf
-
-	#comments-end
+		;EndIf
 EndFunc   ;==>DebugAttackBarImage
 
 

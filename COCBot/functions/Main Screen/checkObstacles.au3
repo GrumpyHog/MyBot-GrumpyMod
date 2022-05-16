@@ -37,6 +37,7 @@ EndFunc   ;==>checkObstacles
 
 Func _checkObstacles($bBuilderBase = False, $bRecursive = False) ;Checks if something is in the way for mainscreen
 	Local $msg, $x, $y, $Result
+	Local $aMessage
 	$g_bMinorObstacle = False
 
 	_CaptureRegions()

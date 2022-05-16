@@ -811,7 +811,7 @@ Func ApplyConfig_600_15($TypeReadSave)
 				GUICtrlSetState($g_hChkUpgradePets[$i], $g_bUpgradePetsEnable[$i] ? $GUI_CHECKED : $GUI_UNCHECKED)
 			Next
 			
-			;chkUpgradePets()
+			chkUpgradePets()
 			
 		Case "Save"
 			$g_bUpgradeKingEnable = (GUICtrlRead($g_hChkUpgradeKing) = $GUI_CHECKED)

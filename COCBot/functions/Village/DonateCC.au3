@@ -407,8 +407,6 @@ Func DonateCC($bCheckForNewMsg = False)
 				$g_bSkipDonSpells = True
 			EndIf
 
-			DebugSieges()
-
 			If Not $bDonateSiege And Not $bDonateAllSiege Then
 				SetLog("Siege donation is not enabled, skip siege donation", $COLOR_ACTION)
 				$g_bSkipDonSiege = True

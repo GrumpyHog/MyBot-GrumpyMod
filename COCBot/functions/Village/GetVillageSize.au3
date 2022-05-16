@@ -2,6 +2,11 @@
 ; Name ..........: GetVillageSize
 ; Description ...: Measures the size of village. After CoC October 2016 update, max'ed zoomed out village is 440 (reference!)
 ;                  But usually sizes around 470 - 490 pixels are measured due to lock on max zoom out.
+;                  The 'zoom' has changed in the Spring 2022 update.  Prior to the update, the game screen at max'ed zoom has no 'up down'
+;                  movement and only a little sideways movement.  This meant the fixed points used to 'center and measure' the village
+;                  was always visible.  After the update, at max'ed zoom out, it is now possible to move both the 'tree' fixed points
+;                  out of view or move the 'main' stone fixed point out of view.  The top and bottom black bars that sometimes appear
+;                  at max'ed zoom are no longer present.
 ; Syntax ........: GetVillageSize()
 ; Parameters ....:
 ; Return values .: 0 if not identified or Array with index
@@ -16,8 +21,8 @@
 ;                      8 = Y coordinate of tree
 ;                      9 = tree image file name
 ; Author ........: Cosote (Oct 17th 2016)
-; Modified ......:
-; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015-2019
+; Modified ......: GrumpyHog (05-2022)
+; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015-2022
 ;                  MyBot is distributed under the terms of the GNU GPL
 ; Related .......:
 ; Link ..........: https://github.com/MyBotRun/MyBot/wiki
@@ -28,7 +33,7 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 	FuncEnter(GetVillageSize)
 	;Local $hTimer = TimerInit()
 
-		; reset debug parameters
+	; reset debug parameters
 	If $DebugLog = Default Then $DebugLog = False
 	If $sStonePrefix = Default Then $sStonePrefix = "stone"
 	If $sTreePrefix = Default Then $sTreePrefix = "tree"
@@ -97,7 +102,7 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 				If UBound($a) = 2 Then
 					$x = Int($a[0])
 					$y = Int($a[1])
-					;SetDebugLog("Found fixed image at " & $x & ", " & $y & ": " & $findImage)
+					SetDebugLog("Found fixed image at " & $x & ", " & $y & ": " & $findImage)
 					SetLog("Found fixed image at " & $x & ", " & $y & ": " & $findImage)
 					$fixed[0] = $x ; x center of fixed found
 					$fixed[1] = $y ; y center of fixed found
@@ -110,7 +115,7 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 
 			Else
 				SetDebugLog("GetVillageSize ignore image " & $findImage & ", reason: " & UBound($a), $COLOR_WARNING)
-				SetLog("GetVillageSize ignore image " & $findImage & ", reason: " & UBound($a), $COLOR_WARNING)
+				If $DebugLog Then SetLog("GetVillageSize ignore image " & $findImage & ", reason: " & UBound($a), $COLOR_WARNING)
 			EndIf
 		Next
 	EndIf
@@ -138,8 +143,8 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 			If UBound($a) = 2 Then
 				$x = Int($a[0])
 				$y = Int($a[1])
-				;SetDebugLog("Found stone image at " & $x & ", " & $y & ": " & $findImage)
-				SetLog("Found stone image at " & $x & ", " & $y & ": " & $findImage)
+				SetDebugLog("Found stone image at " & $x & ", " & $y & ": " & $findImage)
+				If $DebugLog Then SetLog("Found stone image at " & $x & ", " & $y & ": " & $findImage)
 				$stone[0] = $x ; x center of stone found
 				$stone[1] = $y ; y center of stone found
 				$stone[2] = $x0 ; x ref. center of stone
@@ -160,7 +165,7 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 
 	If $stone[0] = 0 And $fixed[0] = 0 Then
 		SetDebugLog("GetVillageSize cannot find stone", $COLOR_WARNING)
-		SetLog("GetVillageSize cannot find stone", $COLOR_WARNING)
+		If $DebugLog Then SetLog("GetVillageSize cannot find stone", $COLOR_WARNING)
 		Return FuncReturn($aResult)
 	EndIf
 
@@ -188,7 +193,7 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 					$x = Int($a[0])
 					$y = Int($a[1])
 					;SetDebugLog("Found tree image at " & $x & ", " & $y & ": " & $findImage)
-					SetLog("Found tree image at " & $x & ", " & $y & ": " & $findImage)
+					If $DebugLog Then SetLog("Found tree image at " & $x & ", " & $y & ": " & $findImage)
 					$tree[0] = $x ; x center of tree found
 					$tree[1] = $y ; y center of tree found
 					$tree[2] = $x0 ; x ref. center of tree
@@ -199,7 +204,7 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 					Local $asTreeName = StringSplit($findImage,"-") ; get filename only
 					Local $sTreeName = StringReplace($asTreeName[1], "2", "") ; remove 2 in 2tree
 					$g_iTree = Int(Eval("e" & $sTreeName))
-					SetLog($sTreeName & " " & $g_iTree, $COLOR_INFO)
+					If $DebugLog Then SetLog($sTreeName & " " & $g_iTree, $COLOR_INFO)
 					ExitLoop
 				EndIf
 
@@ -213,20 +218,19 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 		;$hTimer = TimerInit()
 
 		If $g_bUpdateSharedPrefs And Not $bOnBuilderBase And $tree[0] = 0 And $fixed[0] = 0 Then
-		;If Not $bOnBuilderBase And $tree[0] = 0 And $fixed[0] = 0 Then
 			; On main village use stone as fixed point
 			$fixed = $stone
 		EndIf
 
 		If $tree[0] = 0 And $fixed[0] = 0 And Not $g_bRestart Then
-			;SetDebugLog("GetVillageSize cannot find tree", $COLOR_WARNING)
-			SetLog("GetVillageSize cannot find tree", $COLOR_WARNING)
-			SetLog("$g_aiSearchZoomOutCounter[0] : " & $g_aiSearchZoomOutCounter[0])
-			; The 'zoom' has changed in the Spring 2022 update.  In the past the game screen at maxed zoom has no 'up down' movement and only a small amount of sideways movement but it is now possible
-			; to move the screen to covered both the 'tree' fixed points.
+			SetDebugLog("GetVillageSize cannot find tree", $COLOR_WARNING)
+			If $DebugLog Then SetLog("GetVillageSize cannot find tree", $COLOR_WARNING)
+			If $DebugLog Then SetLog("$g_aiSearchZoomOutCounter[0] : " & $g_aiSearchZoomOutCounter[0])
+			
 			
 			If $g_aiSearchZoomOutCounter[0] > 2 Then
-				; zoomout script has been executed 3 times, assumed at maxed zoom, force ZoomOut to center on the Stone.
+				; zoomout script has been executed 3 times and still can't find the tree, assumed at max'ed zoom, 
+				; and force ZoomOut to center on the Stone.
 				; an alternative would be to measure the distance between 2 stones but this will still be needed if that fails
 				Local $stone_x_exp = $stone[2]
 				Local $stone_y_exp = $stone[3]
@@ -245,19 +249,6 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 				$aResult[7] = $tree[0] ; x center of tree found
 				$aResult[8] = $tree[1] ; y center of tree found
 				$aResult[9] = $tree[5] ; tree image file name
-
-				#cs
-				$g_aVillageSize[0] = $aResult[0]
-				$g_aVillageSize[1] = $aResult[1]
-				$g_aVillageSize[2] = $aResult[2]
-				$g_aVillageSize[3] = $aResult[3]
-				$g_aVillageSize[4] = $aResult[4]
-				$g_aVillageSize[5] = $aResult[5]
-				$g_aVillageSize[6] = $aResult[6]
-				$g_aVillageSize[7] = $aResult[7]
-				$g_aVillageSize[8] = $aResult[8]
-				$g_aVillageSize[9] = $aResult[9]			
-				#ce
 			EndIf
 			
 			Return FuncReturn($aResult)
@@ -270,12 +261,6 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 	Local $b = $stone[1] - $tree[1]
 	Local $c = Sqrt($a * $a + $b * $b) - $stone[4] - $tree[4]
 
-	;Local $haha = Sqrt($a * $a + $b * $b)
-
-	;SetLog("Distance from stone to tree : " & $haha)
-	;SetLog("stone offset : " & $stone[4])
-	;SetLog("tree offset : " & $tree[4])
-
 	If $g_bUpdateSharedPrefs And Not $bOnBuilderBase And $fixed[0] = 0 And $c >= 500 Then
 		; On main village use stone as fixed point when village size is too large, as that might cause an infinite loop when obstacle blocked (and another tree found)
 		$fixed = $stone
@@ -287,6 +272,7 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 	Local $iRefSize = $g_afRefVillage[$g_iTree][0]
 	
 	Local $iDefSize = 450 ; 2019-04-01 New default size using shared_prefs zoom level 444
+
 	Local $z = $c / $iRefSize
 
 	Local $stone_x_exp = $stone[2]
@@ -296,9 +282,9 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 	$y = $stone[1] - $stone_y_exp
 
 	;SetLog("Scenery: " & DetectScenery($stone[5]), $COLOR_INFO)
-	SetLog("Size: " & $c, $COLOR_INFO)
-	SetLog("ZF: " & $z, $COLOR_INFO)
-	SetLog("Offset: " & $x & ", " & $y, $COLOR_INFO)
+	If $DebugLog Then SetLog("Size: " & $c, $COLOR_INFO)
+	If $DebugLog Then SetLog("ZF: " & $z, $COLOR_INFO)
+	If $DebugLog Then SetLog("Offset: " & $x & ", " & $y, $COLOR_INFO)
 
 	If $fixed[0] = 0 And Not $g_bRestart Then
 
@@ -333,6 +319,7 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 
 		; used fixed tile position for village offset
 		Local $bReset = $g_bUpdateSharedPrefs And $c >= 500
+
 		If $tree[0] = 0 Or $stone[0] = 0 Or $bReset Then
 			; missing a tile or reset required
 			If $bReset Then SetDebugLog("GetVillageSize resets village size from " & $c & " to " & $iDefSize, $COLOR_WARNING)
