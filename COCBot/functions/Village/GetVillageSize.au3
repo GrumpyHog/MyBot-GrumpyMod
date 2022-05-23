@@ -268,8 +268,13 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 
 	; initial reference village had a width of 473.60282919315 (and not 440) and stone located at 226, 567, so center on that reference and used zoom factor on that size
 	;Local $z = $c / 473.60282919315 ; don't use size of 440, as beta already using reference village
-	;Local $iRefSize = 464.2; 445; 458 ; 2019-01-02 Update village measuring as outer edges didn't align anymore 445
-	Local $iRefSize = $g_afRefVillage[$g_iTree][0]
+	;Local $iRefSize = 445; 458 ; 2019-01-02 Update village measuring as outer edges didn't align anymore 445
+
+	If $bOnBuilderBase Then
+		Local $iRefSize = 445; 458 ; 2019-01-02 Update village measuring as outer edges didn't align anymore 445
+	Else
+		Local $iRefSize = $g_afRefVillage[$g_iTree][0]
+	EndIf
 	
 	Local $iDefSize = 450 ; 2019-04-01 New default size using shared_prefs zoom level 444
 
@@ -282,9 +287,12 @@ Func GetVillageSize($DebugLog = Default, $sStonePrefix = Default, $sTreePrefix =
 	$y = $stone[1] - $stone_y_exp
 
 	;SetLog("Scenery: " & DetectScenery($stone[5]), $COLOR_INFO)
-	If $DebugLog Then SetLog("Size: " & $c, $COLOR_INFO)
-	If $DebugLog Then SetLog("ZF: " & $z, $COLOR_INFO)
-	If $DebugLog Then SetLog("Offset: " & $x & ", " & $y, $COLOR_INFO)
+	;If $DebugLog Then 
+	SetLog("Size: " & $c, $COLOR_INFO)
+	;If $DebugLog Then 
+	SetLog("ZF: " & $z, $COLOR_INFO)
+	;If $DebugLog Then 
+	SetLog("Offset: " & $x & ", " & $y, $COLOR_INFO)
 
 	If $fixed[0] = 0 And Not $g_bRestart Then
 

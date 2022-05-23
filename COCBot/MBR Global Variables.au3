@@ -1947,6 +1947,9 @@ Global $g_bChkCollectRewards = True
 Global $g_bChkSellRewards = True  ; Sell "storage full" extra magic items for gems
 Global $g_iBuilderBoostDiscount = 0 ; in percent
 
+; Collect Forge
+Global $g_bChkCollectForge = True
+
 ; SC_ID without shared_prefs
 Global $g_bOnlySCIDAccounts = False
 Global $g_iWhatSCIDAccount2Use = 0
@@ -2041,12 +2044,28 @@ Global $g_iEventTime = -1
 
 Global $g_SimplifiedChinese = False
 
-Global Enum $eTreeSS, $eTreeAS, $eTreeJS, $eTreeCount
-
+; Spring, Autumn, Clashy, Pirate, Epic Winter, Hog Mountain, Jungle, Epic Jungle, 9th Clash, PumpKin GraveYard, Snow Day, Tiger Mountain, Primal(PR), Shadow(SH), Royale
+Global Enum $eTreeSS, $eTreeAS, $eTreeCC, $eTreePS, $eTreeEW, $eTreeHM, $eTreeJS, $eTreeEJ, $eTree9C, $eTreePG, $eTreeSD, $eTreeTM, $eTreePR, $eTreeSH, $eTreeRS, $eTreeCS, $eTreeIT, $eTreeCount
+ 
 ; village size, left, right, top, bottom
 Global Const $g_afRefVillage[$eTreeCount][5] = [ _
-	[464.2, 54, 800, 62, 623], _
-	[464.2, 54, 800, 62, 623], _
-	[470.4, 45, 802, 65, 629]]
+	[481.536485225372, 35, 809, 57, 632], _		; SS
+	[480, 35, 809, 57, 632], _				; AS
+	[481.359352186882, 35, 809, 57, 632], _		; CC
+	[487.190577721375, 35, 809, 57, 632], _				; PS
+	[485.292934467294, 35, 809, 57, 632], _		; EW
+	[479.574528317581, 35, 809, 57, 632], _		; HM
+	[480.758630217939, 35, 809, 57, 632], _		; JS
+	[481.531257240053, 35, 809, 57, 632], _		; EJ
+	[481.956344570969, 35, 809, 57, 632], _		; 9C
+	[480, 35, 809, 57, 632], _				; PG
+	[480, 35, 809, 57, 632], _				; SD
+	[480, 35, 809, 57, 632], _				; TM
+	[480, 35, 809, 57, 632], _				; PR
+	[480, 35, 809, 57, 632], _				; SH
+	[480, 35, 809, 57, 632], _				; RS
+	[480, 35, 809, 57, 632], _				; CS
+	[480, 35, 809, 57, 632]]					; IT
+	
 
-Global $g_iTree = 0
+Global $g_iTree = $eTreeSS						; default to classic

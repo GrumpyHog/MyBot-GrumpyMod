@@ -482,16 +482,25 @@ Func SearchZoomOut($CenterVillageBoolOrScrollPos = $aCenterHomeVillageClickDrag,
 
 			If $bCenterVillage And ($bOnBuilderBase Or Not $bUpdateSharedPrefs) And ($x <> 0 Or $y <> 0) And ($UpdateMyVillage = False Or $x <> $g_iVILLAGE_OFFSET[0] Or $y <> $g_iVILLAGE_OFFSET[1]) Then
 				If $DebugLog Then SetDebugLog("Center Village" & $sSource & " by: " & $x & ", " & $y)
-				SetLog("Center Village" & $sSource & " by: " & $x & ", " & $y)
-				If $aScrollPos[0] = 0 And $aScrollPos[1] = 0 Then
-					;$aScrollPos[0] = $stone[0]
-					;$aScrollPos[1] = $stone[1]
+				;SetLog("Center Village" & $sSource & " by: " & $x & ", " & $y)
+				;If $aScrollPos[0] = 0 And $aScrollPos[1] = 0 Then
+					$aScrollPos[0] = $stone[0]
+					$aScrollPos[1] = $stone[1] ;- 20 - ABS(y) ; move away from boat
 					; use fixed position now to prevent boat activation
-					$aScrollPos[0] = $aCenterHomeVillageClickDrag[0]
-					$aScrollPos[1] = $aCenterHomeVillageClickDrag[1]
-				EndIf
+					;$aScrollPos[0] = $aCenterHomeVillageClickDrag[0]
+					;$aScrollPos[1] = $aCenterHomeVillageClickDrag[1]
+					SetLog("Centering using Stone at " & $aScrollPos[0] & ", " & $aScrollPos[1])
+				;ELse
+				;	SetLog("Centering at " & $aScrollPos[0] & ", " & $aScrollPos[1])
+				;EndIf
+				
+				SaveDebugPointImage("SearchZoomOut", $aScrollPos) 
+				
 				ClickAway()
 				ClickDrag($aScrollPos[0], $aScrollPos[1], $aScrollPos[0] - $x, $aScrollPos[1] - $y)
+				
+				
+				
 				If _Sleep(250) Then
 					$iCallCount = 0
 					Return FuncReturn($aResult)
@@ -501,7 +510,7 @@ Func SearchZoomOut($CenterVillageBoolOrScrollPos = $aCenterHomeVillageClickDrag,
 				$aResult2[3] = $aResult2[1] - $aResult[1]
 				$aResult2[4] = $aResult2[2] - $aResult[2]
 				If $DebugLog Then SetDebugLog("Centered Village Offset" & $sSource & ": " & $aResult2[1] & ", " & $aResult2[2] & ", change: " & $aResult2[3] & ", " & $aResult2[4])
-				SetLog("Centered Village Offset" & $sSource & ": " & $aResult2[1] & ", " & $aResult2[2] & ", change: " & $aResult2[3] & ", " & $aResult2[4])
+				;SetLog("Centered Village Offset" & $sSource & ": " & $aResult2[1] & ", " & $aResult2[2] & ", change: " & $aResult2[3] & ", " & $aResult2[4])
 				$iCallCount = 0
 				Return FuncReturn($aResult2)
 			EndIf
@@ -509,7 +518,7 @@ Func SearchZoomOut($CenterVillageBoolOrScrollPos = $aCenterHomeVillageClickDrag,
 			If $UpdateMyVillage Then
 				If $x <> $g_iVILLAGE_OFFSET[0] Or $y <> $g_iVILLAGE_OFFSET[1] Or $z <> $g_iVILLAGE_OFFSET[2] Then
 					If $DebugLog Then SetDebugLog("Village Offset" & $sSource & " updated to " & $x & ", " & $y & ", " & $z)
-					SetLog("Village Offset" & $sSource & " updated to " & $x & ", " & $y & ", " & $z)
+					;SetLog("Village Offset" & $sSource & " updated to " & $x & ", " & $y & ", " & $z)
 				EndIf
 				setVillageOffset($x, $y, $z)
 				ConvertInternalExternArea() ; generate correct internal/external diamond measures

@@ -241,7 +241,7 @@ Func SetLabUpgradeTime($sTrooopName)
 	If $g_SimplifiedChinese Then
 		Local $Result = getLabUpgradeTime(578, 495) ; Try to read white text showing time for upgrade
 	Else
-		Local $Result = getLabUpgradeTime(581, 495) ; Try to read white text showing time for upgrade
+		Local $Result = getLabUpgradeTime(580, 495) ; Try to read white text showing time for upgrade
 	EndIf
 	
 	Local $iLabFinishTime = ConvertOCRTime("Lab Time", $Result, False)
