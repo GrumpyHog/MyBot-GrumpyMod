@@ -38,7 +38,7 @@ Func _AutoUpgrade()
 		VillageReport(True, True)
 
 		;Check if there is a free builder for Auto Upgrade
-		If ($g_iFreeBuilderCount - ($g_bAutoUpgradeWallsEnable And $g_bUpgradeWallSaveBuilder ? 1 : 0) - ReservedBuildersForHeroes()) <= 0 Then
+		If ($g_iFreeBuilderCount - ($g_bAutoUpgradeWallsEnable And $g_bUpgradeWallSaveBuilder ? 1 : 0) - ReservedBuildersForHeroes() - ReservedBuildersForForge()) <= 0 Then
 			SetLog("No builder available. Skipping Auto Upgrade!", $COLOR_WARNING)
 			ExitLoop
 		EndIf

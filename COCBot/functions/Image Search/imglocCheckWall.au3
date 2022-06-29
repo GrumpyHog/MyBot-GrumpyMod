@@ -51,7 +51,7 @@ Func imglocCheckWall()
 		SetLog("No wall(s) next to previously upgraded found.", $COLOR_ERROR)
 		SetLog("Looking further away.", $COLOR_SUCCESS)
 		_CaptureRegion2()
-		$FoundWalls = imglocFindWalls($levelWall, "ECD", "ECD", 10) ; lets get 10 points just to make sure we discard false positives
+		$FoundWalls = imglocFindWalls($levelWall, $CocDiamondECD, $CocDiamondECD, 10) ; lets get 10 points just to make sure we discard false positives
 		SetDebugLog("$FoundWalls = " & $FoundWalls)
 	EndIf
 

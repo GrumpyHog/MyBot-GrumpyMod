@@ -869,3 +869,149 @@ Func CloseCustomBBDropOrder()
 	GUICtrlSetState($g_hBtnBBDropOrder, $GUI_ENABLE)
 	GUICtrlSetState( $g_hChkEnableBBAttack, $GUI_ENABLE )
 EndFunc
+
+Func GUIReadCraftData($bDebug = False)
+	For $i = 0 to $eCraftCount - 1
+		$g_iSetCraftMinimum[$i] = GUICtrlRead($g_ahTxtSetCraftMinimum[$i])
+	Next
+
+	;If $bDebug Then
+	;	For $i = 0 to $eCraftCount - 1
+	;		SetLog("Reading " & $g_asCraftResName[$i] & " - " & $g_iSetCraftMinimum[$i] & " from UI", $COLOR_DEBUG)
+	;	Next
+	;EndIf
+
+EndFunc
+
+Func GUISetCraftData($bDebug = False)
+	For $i = 0 to $eCraftCount - 1
+		GUICtrlSetData($g_ahTxtSetCraftMinimum[$i],$g_iSetCraftMinimum[$i]) 
+	Next
+
+	;If $bDebug Then
+	;	For $i = 0 to $eCraftCount - 1
+	;		SetLog("Setting " & $g_asCraftResName[$i] & " - " & $g_iSetCraftMinimum[$i] & " to UI", $COLOR_DEBUG)
+	;	Next
+	;Endif
+
+EndFunc
+
+Func ChkCraftCapitalGold()
+	If $g_iTownHallLevel < 9 Then Return
+	
+	; enable txt boxes and Combo box
+	If GUICtrlRead($g_hChkCraftCapitalGold) = $GUI_CHECKED Then
+		;For $i = 0 to $eCraftCount - 1
+		;	GUICtrlSetState($g_ahTxtSetCraftMinimum[$i], $GUI_ENABLE)
+		;	GUICtrlSetState($g_ahLblCraftResCost[$i], $GUI_ENABLE)
+		;Next
+		If $g_iTownHallLevel >= 9 Then
+			GUICtrlSetState($g_ahTxtSetCraftMinimum[$eCraftGold], $GUI_ENABLE)
+			GUICtrlSetState($g_ahLblCraftResCost[$eCraftGold], $GUI_ENABLE)
+			GUICtrlSetState($g_ahTxtSetCraftMinimum[$eCraftElixir], $GUI_ENABLE)
+			GUICtrlSetState($g_ahLblCraftResCost[$eCraftElixir], $GUI_ENABLE)
+		EndIf
+		
+		If $g_iTownHallLevel >= 12 Then
+			GUICtrlSetState($g_ahTxtSetCraftMinimum[$eCraftDarkElixir], $GUI_ENABLE)
+			GUICtrlSetState($g_ahLblCraftResCost[$eCraftDarkElixir], $GUI_ENABLE)
+		EndIf
+		
+		If $g_iBuilderHallLevel >= 8 Then
+			GUICtrlSetState($g_ahTxtSetCraftMinimum[$eCraftBuilderGold], $GUI_ENABLE)
+			GUICtrlSetState($g_ahLblCraftResCost[$eCraftBuilderGold], $GUI_ENABLE)
+			GUICtrlSetState($g_ahTxtSetCraftMinimum[$eCraftBuilderElixir], $GUI_ENABLE)
+			GUICtrlSetState($g_ahLblCraftResCost[$eCraftBuilderElixir], $GUI_ENABLE)
+		EndIf
+		
+		GUICtrlSetState($g_hCmbReserveCraftBuilder, $GUI_ENABLE)
+	Else
+		For $i = 0 to $eCraftCount - 1
+			GUICtrlSetState($g_ahTxtSetCraftMinimum[$i], $GUI_DISABLE)
+			GUICtrlSetState($g_ahLblCraftResCost[$i], $GUI_DISABLE)
+		Next
+		
+		GUICtrlSetState($g_hCmbReserveCraftBuilder, $GUI_DISABLE)
+	EndIf
+	
+	updCapitalResourcesCost()
+EndFunc
+
+Func cmbReserveCraftBuilder()
+	If $g_iTownHallLevel < 9 Then Return
+
+	Local $iReserveCraftBuilder  = _GUICtrlComboBox_GetCurSel($g_hCmbReserveCraftBuilder) + 1
+	
+	Switch $g_iTownHallLevel
+		case 9
+			If $iReserveCraftBuilder > 1 Then 
+				SetLog("Max 1 builder at Townhall 9", $COLOR_ERROR)
+				$iReserveCraftBuilder = 1
+				_GUICtrlComboBox_SetCurSel($g_hCmbReserveCraftBuilder, $g_iReserveCraftBuilder - 1)
+			EndIf
+		case 10
+			If $iReserveCraftBuilder > 1 Then 
+				SetLog("Max 1 builder at Townhall 10", $COLOR_ERROR)
+				$iReserveCraftBuilder = 1
+				_GUICtrlComboBox_SetCurSel($g_hCmbReserveCraftBuilder, $g_iReserveCraftBuilder - 1)
+			EndIf
+		case 11
+			If $iReserveCraftBuilder > 2 Then 
+				SetLog("Max 1 builder at Townhall 11", $COLOR_ERROR)
+				$iReserveCraftBuilder = 2
+				_GUICtrlComboBox_SetCurSel($g_hCmbReserveCraftBuilder, $g_iReserveCraftBuilder - 1)
+			EndIf
+		case 12
+			If $iReserveCraftBuilder > 3 Then 
+				SetLog("Max 1 builder at Townhall 12", $COLOR_ERROR)
+				$iReserveCraftBuilder = 3
+				_GUICtrlComboBox_SetCurSel($g_hCmbReserveCraftBuilder, $g_iReserveCraftBuilder - 1)
+			EndIf
+		case 13
+			If $iReserveCraftBuilder > 3 Then 
+				SetLog("Max 1 builder at Townhall 13", $COLOR_ERROR)
+				$iReserveCraftBuilder = 3
+				_GUICtrlComboBox_SetCurSel($g_hCmbReserveCraftBuilder, $g_iReserveCraftBuilder - 1)
+			EndIf
+		case 14
+			If $iReserveCraftBuilder > 4 Then 
+				SetLog("Max 1 builder at Townhall 14", $COLOR_ERROR)
+				$iReserveCraftBuilder = 4
+				_GUICtrlComboBox_SetCurSel($g_hCmbReserveCraftBuilder, $g_iReserveCraftBuilder - 1)
+			EndIf
+		case else
+	EndSwitch
+	
+	$g_iReserveCraftBuilder = $iReserveCraftBuilder
+	SetLog("$g_iReserveCraftBuilder : " & $g_iReserveCraftBuilder, $COLOR_INFO)
+	
+EndFunc
+
+Func updCapitalResourcesCost()
+
+	GUICtrlSetData($g_hLblTownHallLevel, $g_iTownHallLevel)
+	GUICtrlSetData($g_hLblBuilderHallLevel, $g_iBuilderHallLevel)
+
+	If $g_iTownHallLevel >= 9 Then
+		GUICtrlSetData($g_ahLblCraftResCost[$eCraftGold], $g_iCraftElixirGoldCost[$g_iTownHallLevel - 9])
+		GUICtrlSetData($g_ahLblCraftResCost[$eCraftElixir], $g_iCraftElixirGoldCost[$g_iTownHallLevel - 9])
+	Else
+		GUICtrlSetData($g_ahLblCraftResCost[$eCraftGold], "N/A")
+		GUICtrlSetData($g_ahLblCraftResCost[$eCraftElixir], "N/A")
+	EndIf
+
+	If $g_iTownHallLevel >= 13 Then
+		GUICtrlSetData($g_ahLblCraftResCost[$eCraftDarkElixir], $g_iCraftDarkElixirCost[$g_iTownHallLevel - 13])
+		
+	Else
+		GUICtrlSetData($g_ahLblCraftResCost[$eCraftDarkElixir], "N/A")
+	EndIf
+
+	If $g_iBuilderHallLevel >= 8 Then
+		GUICtrlSetData($g_ahLblCraftResCost[$eCraftBuilderGold], $g_iCraftBuilderElixirGoldCost[$g_iBuilderHallLevel - 8])
+		GUICtrlSetData($g_ahLblCraftResCost[$eCraftBuilderElixir], $g_iCraftBuilderElixirGoldCost[$g_iBuilderHallLevel - 8])
+	Else
+		GUICtrlSetData($g_ahLblCraftResCost[$eCraftBuilderGold], "N/A")
+		GUICtrlSetData($g_ahLblCraftResCost[$eCraftBuilderElixir], "N/A")
+	EndIf
+EndFunc

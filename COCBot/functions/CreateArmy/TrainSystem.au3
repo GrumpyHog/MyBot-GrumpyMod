@@ -1480,6 +1480,7 @@ Func ValidateSearchArmyResult($aSearchResult, $iIndex = 0)
 EndFunc   ;==>ValidateSearchArmyResult
 
 Func CheckValuesCost($Troop = "Arch", $troopQuantity = 1, $DebugLogs = 1)
+	Return True
 	; Local Variables
 	Local $TempColorToCheck = ""
 	Local $nElixirCurrent = 0, $nDarkCurrent = 0, $bLocalDebugOCR = 0

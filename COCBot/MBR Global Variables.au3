@@ -402,7 +402,8 @@ Global Const $g_iAndroidRebootAdbCommandErrorCount = 10 ; Reboots Android automa
 Global Const $g_iAndroidRebootPageErrorPerMinutes = 10 ; Reboot Android if $AndroidPageError[0] errors occurred in $g_iAndroidRebootPageErrorPerMinutes Minutes
 Global $g_hProcShieldInput[5] = [0, 0, False, False, 0] ; Stores Android Shield variables and states
 
-Global $g_bSkipFirstZoomout = False ; Zoomout sets to True, CoC start/Start/Resume/Return from battle to False
+;Global $g_bSkipFirstZoomout = False ; Zoomout sets to True, CoC start/Start/Resume/Return from battle to False
+Global $g_bSkipFirstZoomout = True ; Zoomout sets to True, CoC start/Start/Resume/Return from battle to False
 
 Global $g_bForceCapture = False ; Force android ADB screencap to run and not provide last screenshot if available
 
@@ -561,7 +562,7 @@ Global Enum $eIcnArcher = 1, $eIcnDonArcher, $eIcnBalloon, $eIcnDonBalloon, $eIc
 		$eIcnHeadhunter, $eIcnCollectAchievements, $eIcnInvisibilitySpell, $eIcnLogL, _
 		$eIcnSuperBarbarian, $eIcnSuperArcher, $eIcnSuperGiant, $eIcnSneakyGoblin, $eIcnSuperWallBreaker, $eIcnSuperWizard, $eIcnInfernoDragon, $eIcnSuperMinion, $eIcnSuperValkyrie, $eIcnSuperWitch, $eIcnIceHound, _
 		$eIcnPetLassi, $eIcnPetElectroOwl, $eIcnPetMightyYak, $eIcnPetUnicorn, $eIcnTH14, $eWall15, $eIcnPetHouse, $eIcnRocketBalloon, $eIcnDragonRider, _
-		$eHdV14, $eIcnSuperBowler, $eIcnSuperDragon, $eIcnFlameF
+		$eHdV14, $eIcnSuperBowler, $eIcnSuperDragon, $eIcnFlameF, $eIcnCapitalGold, $eIcnForge
 
 Global $eIcnDonBlank = $eIcnDonBlacklist
 Global $eIcnOptions = $eIcnDonBlacklist
@@ -1426,10 +1427,12 @@ Global $g_abNotNeedAllTime[2] = [True, True] ; Collect LootCart, CheckTombs
 Global $g_aiPetHousePos[2] = [-1, -1] ; Position of Pet House
 
 
-;Builder Base
+; Builder Base
 Global $g_aiCurrentLootBB[$eLootCountBB] = [0, 0, 0] ; current stats on builders base
 Global $g_aiStarLaboratoryPos[2] = [-1, -1] ; Position of Starlaboratory
 Global $g_aiBattleMachinePos[2] = [-1, -1] ; Position of Battle Machine
+Global $g_aiBuilderHallPos[2] = [-1, -1] ; Position of BuilderHall
+Global $g_iBuilderHallLevel = 0 ;
 
 ; Army camps
 Global $g_iArmyCapacity = 0 ; Calculated percentage of troops currently in camp / total camp space, expressed as an integer from 0 to 100
@@ -1947,8 +1950,7 @@ Global $g_bChkCollectRewards = True
 Global $g_bChkSellRewards = True  ; Sell "storage full" extra magic items for gems
 Global $g_iBuilderBoostDiscount = 0 ; in percent
 
-; Collect Forge
-Global $g_bChkCollectForge = True
+
 
 ; SC_ID without shared_prefs
 Global $g_bOnlySCIDAccounts = False
@@ -2044,28 +2046,68 @@ Global $g_iEventTime = -1
 
 Global $g_SimplifiedChinese = False
 
-; Spring, Autumn, Clashy, Pirate, Epic Winter, Hog Mountain, Jungle, Epic Jungle, 9th Clash, PumpKin GraveYard, Snow Day, Tiger Mountain, Primal(PR), Shadow(SH), Royale
-Global Enum $eTreeSS, $eTreeAS, $eTreeCC, $eTreePS, $eTreeEW, $eTreeHM, $eTreeJS, $eTreeEJ, $eTree9C, $eTreePG, $eTreeSD, $eTreeTM, $eTreePR, $eTreeSH, $eTreeRS, $eTreeCS, $eTreeIT, $eTreeCount
+; Spring, Autumn, Clashy, Pirate, Epic Winter, Hog Mountain, Jungle, Epic Jungle, 9th Clash, PumpKin GraveYard, 
+; Snow Day, Tiger Mountain, Primal(PR), Shadow(SH), Royale Scenery, Summer Scenery 
+; Classic War Base, Inferno Tower, 
+; Builder Base,
+; Capital Peak, Barbarian Camp 
+Global Enum $eTreeSS, $eTreeAS, $eTreeCC, $eTreePS, $eTreeEW, $eTreeHM, $eTreeJS, $eTreeEJ, $eTree9C, $eTreePG, _
+			$eTreeSD, $eTreeTM, $eTreePR, $eTreeSH, $eTreeRS, $eTreeSM, $eTreeCS, $eTreeIT, _
+			$eTreeBB, _
+			$eTreeCP, $eTreeBC, $eTreeCount
  
-; village size, left, right, top, bottom
-Global Const $g_afRefVillage[$eTreeCount][5] = [ _
-	[481.536485225372, 35, 809, 57, 632], _		; SS
-	[480, 35, 809, 57, 632], _				; AS
-	[481.359352186882, 35, 809, 57, 632], _		; CC
-	[487.190577721375, 35, 809, 57, 632], _				; PS
-	[485.292934467294, 35, 809, 57, 632], _		; EW
-	[479.574528317581, 35, 809, 57, 632], _		; HM
-	[480.758630217939, 35, 809, 57, 632], _		; JS
-	[481.531257240053, 35, 809, 57, 632], _		; EJ
-	[481.956344570969, 35, 809, 57, 632], _		; 9C
-	[480, 35, 809, 57, 632], _				; PG
-	[480, 35, 809, 57, 632], _				; SD
-	[480, 35, 809, 57, 632], _				; TM
-	[480, 35, 809, 57, 632], _				; PR
-	[480, 35, 809, 57, 632], _				; SH
-	[480, 35, 809, 57, 632], _				; RS
-	[480, 35, 809, 57, 632], _				; CS
-	[480, 35, 809, 57, 632]]					; IT
+Global $g_asSceneryNames[$eTreeCount] = [ _
+	"Classic Spring", "Classic Autumn", "Clashy Construct", "Pirate Scenery", "Epic Winter", "Hog Mountain", "Jungle Scenery", "Epic Jungle", "9th Clashiversary", _
+	"Pumpkin Graveyard", "Snowy Day", "Tiger Mountain", "Primal Scenery", "Shadow Scenery", "Royale Scenery", "Summer Scenery", _ 
+	"Classic Scenery", "Inferno Town", "Builder Base", _
+	"Capital Peak", "Barbarian Camp"]
+ 
+; village size, left, right, top, bottom, dragOffsetX, dragOffSetY, village size 2, AdjLeft, AdjRight, AdjTop, AdjBottom
+Global Const $g_afRefVillage[$eTreeCount][10] = [ _
+	[470.847607649426, 45, 800, 66, 630, 470.847607649426, 50, 50, 42, 42], _		; SS complete
+	[480, 35, 809, 57, 632, 480], _				; AS
+	[463.064874687304, 56, 800, 68, 622, 473.183193210402, 50, 50, 42, 42], _		; CC complete
+	[487.190577721375, 35, 809, 57, 632, 487.190577721375, 50, 50, 42, 42], _		; PS
+	[485.292934467294, 35, 809, 57, 632, 485.292934467294, 50, 50, 42, 42], _		; EW
+	[471.591177471711, 40, 795, 62, 626, 471.591177471711, 50, 50, 42, 42], _		; HM partial
+	[469.503669847663, 46, 801, 65, 627, 469.503669847663, 50, 50, 42, 42], _		; JS complete
+	[481.531257240053, 35, 809, 57, 632, 481.531257240053, 50, 50, 42, 42], _		; EJ
+	[481.956344570969, 35, 809, 57, 632, 481.956344570969, 50, 50, 42, 42], _		; 9C
+	[481.447425356988, 35, 809, 57, 632, 481.447425356988, 50, 50, 42, 42], _		; PG
+	[482.492164166387, 35, 809, 57, 632, 482.492164166387, 50, 50, 42, 42], _		; SD
+	[503.29315963308, 35, 809, 57, 632, 503.29315963308, 50, 50, 42, 42], _		; TM
+	[481.049618717487, 35, 809, 57, 632, 481.049618717487, 50, 50, 42, 42], _		; PR
+	[486.827142073514, 35, 809, 57, 632, 486.827142073514, 50, 50, 42, 42], _		; SH partial
+	[474.160808435852, 46, 802, 61, 632, 474.160808435852, 50, 50, 42, 42], _		; RS partial
+	[462.772740076871, 55, 795, 65, 619, 462.772740076871, 50, 50, 42, 42], _		; SM partial
+	[480, 35, 809, 57, 632, 480, 50, 50, 42, 42], _				; CS
+	[480, 35, 809, 57, 632, 480, 50, 50, 42, 42], _				; IT
+	[414.473696779371, 123, 786, 148, 643, 414.205410325898, 50, 46, 38, 42], _ ; BB partial
+	[461.860421647731, 73, 814, 85, 637, 461.860421647731, 10, 10, 10, 10], _   ; CP partial
+	[427.945118331064, 97, 785, 91, 604, 427.945118331064, 10, 10, 10, 10]] 	; BC partial
 	
-
 Global $g_iTree = $eTreeSS						; default to classic
+
+Global $g_bOnBuilderBaseEnemyVillage = False
+
+; Collect Forge
+Global Enum $eCraftGold, $eCraftElixir, $eCraftDarkElixir, $eCraftBuilderGold, $eCraftBuilderElixir,  $eCraftCount
+
+Global $g_bChkCollectCapitalGold = True
+
+Global $g_bChkCraftCapitalGold = True
+
+Global $g_iReserveCraftBuilder = 1
+
+Global $g_iSetCraftMinimum[$eCraftCount] = [0, 0, 0, 0, 0]
+
+Global $g_asCraftResName[$eCraftCount] = ["Gold", "Elixir", "DarkElixir", "BuilderGold", "BuilderElixir"]
+
+; start at 9, 10, 11, 12, 13, 14
+Global $g_iCraftElixirGoldCost[6] = [3000000, 3600000, 4200000, 4800000, 6000000, 7200000]
+
+; start at 13, 14
+Global $g_iCraftDarkElixirCost[2] = [60000, 72000]
+
+; start at 8, 9
+Global $g_iCraftBuilderElixirGoldCost[2] = [1800000, 2400000]

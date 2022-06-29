@@ -5,13 +5,15 @@
 ; Parameters ....: None
 ; Return values .: None
 ; Author ........: Chilly-Chill (04-2019)
-; Modified ......:
+; Modified ......: GrumpyHog (06-2022)
 ; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015-2017
 ;                  MyBot is distributed under the terms of the GNU GPL
 ; Related .......:
 ; Link ..........: https://github.com/MyBotRun/MyBot/wiki
 ; Example .......: No
 ; ===============================================================================================================================
+Local $ai_AttackDropPoints
+
 
 ; Only Clan Games requires a preset number of Attacks
 Func AttackBB($iNumberOfAttacks = 0)
@@ -49,7 +51,7 @@ Func AttackBB($iNumberOfAttacks = 0)
 	SetLog("Number of Attacks: " & $iNumberOfAttacks)
 
 	While 1
-		$iSide = Random(0, 1, 1) ; randomly choose top left or top right
+		$iSide = Random(0, 3, 1) ; randomly choose top left or top right
 		$aBMPos = 0
 
 		; check for troops, loot and Batlle Machine
@@ -109,6 +111,32 @@ Func AttackBB($iNumberOfAttacks = 0)
 				Return
 			EndIf
 		WEnd
+
+		ZoomOut()
+	
+		If _Sleep(250) Then Return
+
+		SaveVillageDebugImage()
+		
+		If _Sleep(250) Then Return
+
+		;_GetRedArea()
+		
+		;If _Sleep(250) Then Return
+		
+		;AttackCSVDebugImage()
+
+		;generate attack drop points
+		Switch $iSide
+			Case 0
+				$ai_AttackDropPoints = _GetVectorOutZone($eVectorLeftTop)
+			Case 1
+				$ai_AttackDropPoints = _GetVectorOutZone($eVectorRightTop)
+			Case 2
+				$ai_AttackDropPoints = _GetVectorOutZone($eVectorRightBottom)
+			Case Else
+				$ai_AttackDropPoints = _GetVectorOutZone($eVectorLeftBottom)
+		EndSwitch
 
 		; Get troops on attack bar and their quantities
 		local $aBBAttackBar = GetAttackBarBB()
@@ -172,14 +200,12 @@ Func AttackBB($iNumberOfAttacks = 0)
 		$aBMPos = GetMachinePos()
 		If IsArray($aBMPos) Then
 			PureClickP($aBMPos)
-			local $iPoint = Random(0, 9, 1)
-			local $iX = Random(0, 9, 1)
-			local $iY = Random(0, 9, 1)
-			If $iSide Then
-				PureClick($iX + $g_apTR[$iPoint][0], $iY + $g_apTR[$iPoint][1])
-			Else
-				PureClick($iX + $g_apTL[$iPoint][0], $iY + $g_apTL[$iPoint][1])
-			EndIf
+
+			; get random drop point
+			Local $iPoint = Random(0, UBOUND($ai_AttackDropPoints) - 1, 1)
+			Local $iPixel = $ai_AttackDropPoints[$iPoint]
+			PureClickP($iPixel)
+
 			If _Sleep(500) Then ; wait before clicking ability
 				$g_iAndroidSuspendModeFlags = $iAndroidSuspendModeFlagsLast
 				If $g_bDebugSetlog = True Then SetDebugLog("Android Suspend Mode Enabled")
@@ -298,9 +324,7 @@ Func Okay()
 		; check for advert
 		If $g_sAndroidGameDistributor = "Magic" Then ClashOfMagicAdvert()
 
-		;If IsProblemAffect() Then Return False ; let checkObstacles in main loop sort problem
-
-		 If ConnectionLost(False) Then Return False
+		If ConnectionLost(False) Then Return False
 
 		If __TimerDiff($timer) >= 180000 Then
 			SetLog("Could not find button 'Okay'", $COLOR_ERROR)
@@ -322,14 +346,12 @@ Func DeployBBTroop($sName, $x, $y, $iAmount, $iSide)
 	If _Sleep($g_iBBSameTroopDelay) Then Return ; slow down selecting then dropping troops
 
    For $j=0 To $iAmount - 1
-		local $iPoint = Random(0, 9, 1)
-		local $iX = Random(0, 9, 1)
-		local $iY = Random(0, 9, 1)
-		If $iSide Then ; pick random point on random side
-			PureClick($iX + $g_apTR[$iPoint][0], $iY + $g_apTR[$iPoint][1])
-		Else
-			PureClick($iX + $g_apTL[$iPoint][0], $iY + $g_apTL[$iPoint][1])
-		EndIf
+		; get random drop point
+		Local $iPoint = Random(0, UBOUND($ai_AttackDropPoints) - 1, 1)
+		Local $iPixel = $ai_AttackDropPoints[$iPoint]
+		
+		PureClickP($iPixel)
+		
 		If _Sleep($g_iBBSameTroopDelay) Then Return ; slow down dropping of troops
 	Next
  EndFunc

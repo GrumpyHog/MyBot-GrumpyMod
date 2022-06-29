@@ -768,7 +768,7 @@ Func runBot() ;Bot that runs everything in order
 			If _Sleep($DELAYRUNBOT5) Then Return
 			checkMainScreen(False)
 			If $g_bRestart Then ContinueLoop
-			Local $aRndFuncList = ['LabCheck', 'Collect', 'CheckTombs', 'CleanYard', 'CollectAchievements', 'CollectFreeMagicItems', 'DailyChallenge', 'BoostSuperTroop', 'PetCheck', 'BBClanGames', 'CollectForge']
+			Local $aRndFuncList = ['LabCheck', 'Collect', 'CheckTombs', 'CleanYard', 'CollectAchievements', 'CollectFreeMagicItems', 'DailyChallenge', 'BoostSuperTroop', 'PetCheck', 'BBClanGames']
 			_ArrayShuffle($aRndFuncList)
 			For $Index In $aRndFuncList
 				If Not $g_bRunState Then Return
@@ -837,7 +837,10 @@ Func runBot() ;Bot that runs everything in order
 				If $g_bRestart Then ContinueLoop 2 ; must be level 2 due to loop-in-loop
 				If CheckAndroidReboot() Then ContinueLoop 2 ; must be level 2 due to loop-in-loop
 			Next
-			;_RunFunction('UpgradeWall')
+			
+			If Not $g_bRunState Then Return
+			
+			_RunFunction('Forge') ; Need to be after BuilderBase - need resources data
 			If Not $g_bRunState Then Return
 
 			If $g_bFirstStart Then SetDebugLog("First loop completed!")
@@ -1247,8 +1250,8 @@ Func __RunFunction($action)
 			CollectFreeMagicItems()
 			_Sleep($DELAYRUNBOT3)
 
-		Case "CollectForge"
-			CollectForge()
+		Case "Forge"
+			Forge()
 			_Sleep($DELAYRUNBOT1)
 
 		Case "BBClanGames"
@@ -1358,6 +1361,10 @@ Func BuilderBase($bTest = False)
 		If checkObstacles() Then Return
 
 		CollectBuilderBase()
+		If _Sleep($DELAYRUNBOT3) Then Return
+		If checkObstacles() Then Return
+
+		LocateBuilderHall()
 		If _Sleep($DELAYRUNBOT3) Then Return
 		If checkObstacles() Then Return
 

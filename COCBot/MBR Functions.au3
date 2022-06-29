@@ -278,7 +278,7 @@
 #include "functions\Village\BoostSuperTroop.au3"
 #include "functions\Village\LocatePetHouse.au3"
 #include "functions\Village\PetHouse.au3"
-#include "functions\Village\CollectForge.au3"
+#include "functions\Village\Forge.au3"
 
 #include "functions\Village\BuilderBase\Collect.au3"
 #include "functions\Village\BuilderBase\StartClockTowerBoost.au3"
@@ -287,6 +287,7 @@
 #include "functions\Village\BuilderBase\CleanBBYard.au3"
 #include "functions\Village\BuilderBase\StarLaboratory.au3"
 #include "functions\Village\BuilderBase\UpgradeBattleMachine.au3"
+#include "functions\Village\BuilderBase\LocateBuilderHall.au3"
 
 #include "functions\Other\Api.au3"
 #include "functions\Other\ApiClient.au3"

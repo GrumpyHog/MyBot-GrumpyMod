@@ -54,10 +54,10 @@ Func CollectFreeMagicItems($bTest = False)
 
 	If Not $bTest Then $iLastTimeChecked[$g_iCurAccount] = @MDAY
 
-	Local $aFreeItem[4] = [255, 265, 0xA0A0A0, 10]
+	Local $aSoldOut[4] = [255, 290, 0xAD5C0D, 10]
 	
-	If _CheckPixel($aFreeItem, True, Default, "CollectFreeMagicItems") Then
-		SetLog("Free Item not available!", $COLOR_INFO)
+	If _CheckPixel($aSoldOut, True, Default, "CollectFreeMagicItems") Then
+		SetLog("Free Item Sold Out!", $COLOR_INFO)
 		If _Sleep(100) Then Return
 		Click(755, 160) ; Click Close Window Button
 		If _Sleep(100) Then Return

@@ -249,7 +249,7 @@ Func SmartFarmDetection($txtBuildings = "Mines")
 	EndSwitch
 
 	; Necessary Variables
-	Local $sCocDiamond = "ECD"
+	Local $sCocDiamond = $CocDiamondECD
 	Local $sRedLines = ""
 	Local $iMinLevel = 1
 	Local $sReturnProps = "objectname,objectpoints,nearpoints,redlinedistance"
@@ -484,7 +484,7 @@ Func DebugImageSmartFarm($THdetails, $aIn, $aOut, $sTime, $BestSideToAttack, $re
 	;_GDIPlus_GraphicsDrawString($hGraphic, "Size: " & string($g_fVillageSize), 5, 510, "Arial", 12)
 	;_GDIPlus_GraphicsDrawString($hGraphic, "ZF: " & string($g_fZoomFactor), 5, 530, "Arial", 12)
 	;_GDIPlus_GraphicsDrawString($hGraphic, "Offset: " & string($g_iVillageOffsetX) & ", " & string($g_iVillageOffsetY), 5, 550, "Arial", 12)
-	_GDIPlus_GraphicsDrawString($hGraphic, "S: " & DetectScenery($g_aVillageSize[6]), 5, 490, "Arial", 12)
+	_GDIPlus_GraphicsDrawString($hGraphic, "S: " & $g_asSceneryNames[$g_iTree], 5, 490, "Arial", 12)
 	_GDIPlus_GraphicsDrawString($hGraphic, "Size: " & $g_aVillageSize[0], 5, 510, "Arial", 12)
 	_GDIPlus_GraphicsDrawString($hGraphic, "ZF: " & $g_aVillageSize[1], 5, 530, "Arial", 12)
 	_GDIPlus_GraphicsDrawString($hGraphic, "Offset: " & $g_aVillageSize[2] & ", " & $g_aVillageSize[3], 5, 550, "Arial", 12)

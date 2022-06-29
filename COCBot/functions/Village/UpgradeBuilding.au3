@@ -54,7 +54,7 @@ Func UpgradeBuilding()
 
 	; If save wall builder is enable, make sure to reserve builder if enabled
 	; also reserve builders for hero upgrading
-	$iAvailBldr = $g_iFreeBuilderCount - ($g_bAutoUpgradeWallsEnable And $g_bUpgradeWallSaveBuilder ? 1 : 0) - ReservedBuildersForHeroes()
+	$iAvailBldr = $g_iFreeBuilderCount - ($g_bAutoUpgradeWallsEnable And $g_bUpgradeWallSaveBuilder ? 1 : 0) - ReservedBuildersForHeroes() - ReservedBuildersForForge()
 
 	If $iAvailBldr <= 0 Then
 		SetLog("No builder available for upgrade process")

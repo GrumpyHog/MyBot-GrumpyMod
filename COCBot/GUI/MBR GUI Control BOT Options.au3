@@ -1429,7 +1429,6 @@ Func TestBoarderFolder($directory)
 
 EndFunc
 
-
 Func SaveVillageDebugImage()
 
 	Local $EditedImage = _GDIPlus_BitmapCreateFromHBITMAP($g_hHBitmap2)

@@ -125,6 +125,10 @@ Func ReadBuildingConfig()
 	IniReadS($g_aiBattleMachinePos[0], $g_sProfileBuildingPath, "upgrade", "BattleMachinePosX", -1, "int")
 	IniReadS($g_aiBattleMachinePos[1], $g_sProfileBuildingPath, "upgrade", "BattleMachinePosY", -1, "int")
 
+	IniReadS($g_aiBuilderHallPos[0], $g_sProfileBuildingPath, "other", "BuilderHallPosX", -1, "int")
+	IniReadS($g_aiBuilderHallPos[1], $g_sProfileBuildingPath, "other", "BuilderHallPosY", -1, "int")
+	IniReadS($g_iBuilderHallLevel, $g_sProfileBuildingPath, "other", "LevelBuilderHall", 0, "int")
+
 	IniReadS($g_aiLastGoodWallPos[0], $g_sProfileBuildingPath, "upgrade", "xLastGoodWallPos", -1, "int")
 	IniReadS($g_aiLastGoodWallPos[1], $g_sProfileBuildingPath, "upgrade", "yLastGoodWallPos", -1, "int")
 
@@ -412,11 +416,24 @@ Func ReadConfig_600_6()
 	IniReadS($g_bChkCollectFreeMagicItems, $g_sProfileConfigPath, "other", "ChkCollectFreeMagicItems", False, "Bool")
 	IniReadS($g_bChkCollectRewards, $g_sProfileConfigPath, "other", "ChkCollectRewards", False, "Bool")
 	IniReadS($g_bChkSellRewards, $g_sProfileConfigPath, "other", "ChkSellRewards", False, "Bool")
-	IniReadS($g_bChkCollectForge, $g_sProfileConfigPath, "other", "ChkCollectForge", False, "Bool")
 	IniReadS($g_bChkTreasuryCollect, $g_sProfileConfigPath, "other", "ChkTreasuryCollect", False, "Bool")
 	IniReadS($g_iTxtTreasuryGold, $g_sProfileConfigPath, "other", "minTreasurygold", 0, "int")
 	IniReadS($g_iTxtTreasuryElixir, $g_sProfileConfigPath, "other", "minTreasuryelixir", 0, "int")
 	IniReadS($g_iTxtTreasuryDark, $g_sProfileConfigPath, "other", "minTreasurydark", 0, "int")
+
+	; forge
+	IniReadS($g_bChkCollectCapitalGold, $g_sProfileConfigPath, "other", "ChkCollectCapitalGold", True, "Bool")
+	IniReadS($g_bChkCraftCapitalGold, $g_sProfileConfigPath, "other", "ChkCraftCapitalGold", False, "Bool")
+	IniReadS($g_iReserveCraftBuilder, $g_sProfileConfigPath, "other", "iReserveCraftBuilder", 1, "int")
+	IniReadS($g_iSetCraftMinimum[$eCraftGold], $g_sProfileConfigPath, "other", "CraftGold", 1000000, "int")
+	IniReadS($g_iSetCraftMinimum[$eCraftElixir], $g_sProfileConfigPath, "other", "CraftElixir", 1000000, "int")
+	IniReadS($g_iSetCraftMinimum[$eCraftDarkElixir], $g_sProfileConfigPath, "other", "CraftDarkElixir", 50000, "int")
+	IniReadS($g_iSetCraftMinimum[$eCraftBuilderGold], $g_sProfileConfigPath, "other", "CraftBuilderGold", 1000000, "int")
+	IniReadS($g_iSetCraftMinimum[$eCraftBuilderElixir], $g_sProfileConfigPath, "other", "CraftBuilderElixir", 1000000, "int")
+	;For $i = 0 to $eCraftCount - 1
+	;	SetLog("Reading from File " & $g_asCraftResName[$i] & " - " & $g_iSetCraftMinimum[$i], $COLOR_DEBUG)
+	;Next
+
 
 	IniReadS($g_bChkCollectBuilderBase, $g_sProfileConfigPath, "other", "ChkCollectBuildersBase", False, "Bool")
 	IniReadS($g_bChkCleanBBYard, $g_sProfileConfigPath, "other", "ChkCleanBBYard", False, "Bool")

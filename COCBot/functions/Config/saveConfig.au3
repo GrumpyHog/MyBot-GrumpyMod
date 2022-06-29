@@ -94,6 +94,10 @@ Func SaveBuildingConfig()
 	_Ini_Add("upgrade", "BattleMachinePosX", $g_aiBattleMachinePos[0])
 	_Ini_Add("upgrade", "BattleMachinePosY", $g_aiBattleMachinePos[1])
 
+	_Ini_Add("other", "BuilderHallPosX", $g_aiBuilderHallPos[0])
+	_Ini_Add("other", "BuilderHallPosY", $g_aiBuilderHallPos[1])
+	_Ini_Add("other", "LevelBuilderHall", $g_iBuilderHallLevel)
+
 	_Ini_Add("other", "xTownHall", $g_aiTownHallPos[0])
 	_Ini_Add("other", "yTownHall", $g_aiTownHallPos[1])
 	_Ini_Add("other", "LevelTownHall", $g_iTownHallLevel)
@@ -359,13 +363,26 @@ Func SaveConfig_600_6()
 	_Ini_Add("other", "ChkCollectFreeMagicItems", $g_bChkCollectFreeMagicItems ? 1 : 0)
 	_Ini_Add("other", "ChkCollectRewards", $g_bChkCollectRewards ? 1 : 0)
 	_Ini_Add("other", "ChkSellRewards", $g_bChkSellRewards ? 1 : 0)
-	_Ini_Add("other", "ChkCollectForge", $g_bChkCollectForge ? 1 : 0)
 	_Ini_Add("other", "chkGemsBox", $g_bChkGemsBox ? 1 : 0)
 	_Ini_Add("other", "ChkTreasuryCollect", $g_bChkTreasuryCollect ? 1 : 0)
 	_Ini_Add("other", "minTreasurygold", $g_iTxtTreasuryGold)
 	_Ini_Add("other", "minTreasuryelixir", $g_iTxtTreasuryElixir)
 	_Ini_Add("other", "minTreasurydark", $g_iTxtTreasuryDark)
 
+	; forge
+	_Ini_Add("other", "ChkCollectCapitalGold", $g_bChkCollectCapitalGold ? 1 : 0)
+	_Ini_Add("other", "ChkCraftCapitalGold", $g_bChkCraftCapitalGold ? 1 : 0)
+	_Ini_Add("other", "iReserveCraftBuilder", $g_iReserveCraftBuilder)
+	_Ini_Add("other", "CraftGold", $g_iSetCraftMinimum[$eCraftGold])
+	_Ini_Add("other", "CraftElixir", $g_iSetCraftMinimum[$eCraftElixir])
+	_Ini_Add("other", "CraftDarkElixir", $g_iSetCraftMinimum[$eCraftDarkElixir])
+	_Ini_Add("other", "CraftBuilderGold", $g_iSetCraftMinimum[$eCraftBuilderGold])
+	_Ini_Add("other", "CraftBuilderElixir", $g_iSetCraftMinimum[$eCraftBuilderElixir])
+	;For $i = 0 To $eCraftCount - 1
+	;	_Ini_Add("other", "Craft" & $g_asCraftResName[$i], $g_iSetCraftMinimum[$i])
+	;Next
+	
+	
 	_Ini_Add("other", "ChkCollectBuildersBase", $g_bChkCollectBuilderBase ? 1 : 0)
 	_Ini_Add("other", "ChkCleanBBYard", $g_bChkCleanBBYard ? 1 : 0)
 	_Ini_Add("other", "ChkStartClockTowerBoost", $g_bChkStartClockTowerBoost ? 1 : 0)

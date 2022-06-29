@@ -311,7 +311,6 @@ Func ApplyConfig_600_6($TypeReadSave)
 			GUICtrlSetState($g_hChkTreasuryCollect, $g_bChkTreasuryCollect ? $GUI_CHECKED : $GUI_UNCHECKED)
 			GUICtrlSetState($g_hChkCollectAchievements, $g_bChkCollectAchievements ? $GUI_CHECKED : $GUI_UNCHECKED)
 			GUICtrlSetState($g_hChkFreeMagicItems, $g_bChkCollectFreeMagicItems ? $GUI_CHECKED : $GUI_UNCHECKED)
-			GUICtrlSetState($g_hChkCollectForge, $g_bChkCollectForge ? $GUI_CHECKED : $GUI_UNCHECKED)
 			ChkFreeMagicItems()
 			ChkTreasuryCollect()
 			GUICtrlSetData($g_hTxtTreasuryGold, $g_iTxtTreasuryGold)
@@ -319,6 +318,13 @@ Func ApplyConfig_600_6($TypeReadSave)
 			GUICtrlSetData($g_hTxtTreasuryDark, $g_iTxtTreasuryDark)
 			GUICtrlSetState($g_hChkCollectRewards, $g_bChkCollectRewards ? $GUI_CHECKED : $GUI_UNCHECKED)
 			GUICtrlSetState($g_hChkSellRewards, $g_bChkSellRewards ? $GUI_CHECKED : $GUI_UNCHECKED)
+
+			; forge
+			GUICtrlSetState($g_hChkCollectCapitalGold, $g_bChkCollectCapitalGold ? $GUI_CHECKED : $GUI_UNCHECKED) ; set gui
+			GUICtrlSetState($g_hChkCraftCapitalGold, $g_bChkCraftCapitalGold ? $GUI_CHECKED : $GUI_UNCHECKED)
+			_GUICtrlComboBox_SetCurSel($g_hCmbReserveCraftBuilder, $g_iReserveCraftBuilder - 1)
+			GUISetCraftData()
+			ChkCraftCapitalGold() ; enable/disable txt/cmb boxes
 
 			GUICtrlSetState($g_hChkCollectBuilderBase, $g_bChkCollectBuilderBase ? $GUI_CHECKED : $GUI_UNCHECKED)
 			GUICtrlSetState($g_hChkCleanBBYard, $g_bChkCleanBBYard ? $GUI_CHECKED : $GUI_UNCHECKED)
@@ -439,7 +445,13 @@ Func ApplyConfig_600_6($TypeReadSave)
 			$g_iTxtTreasuryDark = GUICtrlRead($g_hTxtTreasuryDark)
 			$g_bChkCollectRewards = (GUICtrlRead($g_hChkCollectRewards) = $GUI_CHECKED)
 			$g_bChkSellRewards = (GUICtrlRead($g_hChkSellRewards) = $GUI_CHECKED)
-			$g_bChkCollectForge = (GUICtrlRead($g_hChkCollectForge) = $GUI_CHECKED)
+
+			$g_bChkCollectCapitalGold = (GUICtrlRead($g_hChkCollectCapitalGold) = $GUI_CHECKED) ; read state of gui
+			$g_bChkCraftCapitalGold = (GUICtrlRead($g_hChkCraftCapitalGold) = $GUI_CHECKED)
+			
+			;For $i = $eCraftGold to $eCraftBuilderElixir
+			;	$g_iSetCraftMinimum[$i] = $g_ahTxtSetCraftMinimum[$i]
+			;Next
 
 			$g_bChkCollectBuilderBase = (GUICtrlRead($g_hChkCollectBuilderBase) = $GUI_CHECKED)
 			$g_bChkCleanBBYard = (GUICtrlRead($g_hChkCleanBBYard) = $GUI_CHECKED)

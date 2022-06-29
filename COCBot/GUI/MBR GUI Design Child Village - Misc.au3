@@ -13,7 +13,7 @@
 ; Example .......: No
 ; ===============================================================================================================================
 #include-once
-Global $g_hGUI_MISC = 0, $g_hGUI_MISC_TAB = 0, $g_hGUI_MISC_TAB_ITEM1 = 0, $g_hGUI_MISC_TAB_ITEM2 = 0, $g_hGUI_MISC_TAB_ITEM3 = 0
+Global $g_hGUI_MISC = 0, $g_hGUI_MISC_TAB = 0, $g_hGUI_MISC_TAB_ITEM1 = 0, $g_hGUI_MISC_TAB_ITEM2 = 0, $g_hGUI_MISC_TAB_ITEM3 = 0, $g_hGUI_MISC_TAB_ITEM4 = 0
 
 Global $g_hChkBotStop = 0, $g_hCmbBotCommand = 0, $g_hCmbBotCond = 0, $g_hCmbHoursStop = 0, $g_hCmbTimeStop = 0
 Global $g_LblResumeAttack = 0, $g_ahTxtResumeAttackLoot[$eLootCount] = [0, 0, 0, 0], $g_hCmbResumeTime = 0
@@ -24,8 +24,19 @@ Global $g_hChkCollectCartFirst = 0, $g_hTxtCollectGold = 0, $g_hTxtCollectElixir
 Global $g_hBtnLocateSpellfactory = 0, $g_hBtnLocateDarkSpellFactory = 0
 Global $g_hBtnLocateKingAltar = 0, $g_hBtnLocateQueenAltar = 0, $g_hBtnLocateWardenAltar = 0, $g_hBtnLocateChampionAltar = 0, $g_hBtnLocateLaboratory = 0, $g_hBtnLocatePetHouse = 0, $g_hBtnResetBuilding = 0
 Global $g_hChkTreasuryCollect = 0, $g_hTxtTreasuryGold = 0, $g_hTxtTreasuryElixir = 0, $g_hTxtTreasuryDark = 0 , $g_hChkCollectAchievements = 0, $g_hChkFreeMagicItems = 0, $g_hChkCollectRewards = 0, $g_hChkSellRewards = 0
-Global $g_hChkCollectForge = 0
 
+; Forge
+Global $g_hChkCollectCapitalGold = 0
+Global $g_hChkCraftCapitalGold = 0
+Global $g_hLblTownHallLevel = 0
+Global $g_hLblBuilderHallLevel = 0
+Global $g_ahLblCraftResCost[$eCraftCount] = [0, 0, 0, 0, 0]
+Global $g_hCraftEnable[$eCraftCount] = [0, 0, 0, 0, 0]
+Global $g_ahTxtSetCraftMinimum[$eCraftCount] = [0, 0, 0, 0, 0]
+Global $g_hReserveCraftBuilder = 0
+Global $g_hCmbReserveCraftBuilder = 0
+
+; Night Village
 Global $g_alblBldBaseStats[4] = ["", "", ""]
 Global $g_hChkCollectBuilderBase = 0, $g_hChkStartClockTowerBoost = 0, $g_hChkCTBoostBlderBz = 0, $g_hChkCleanBBYard = 0
 Global $g_hChkCollectBldGE = 0, $g_hChkCollectBldGems = 0, $g_hChkActivateClockTower = 0
@@ -33,6 +44,7 @@ Global $g_hChkBattleMachineUpgrade = 0 ; grumpy
 Global $g_hChkBBSuggestedUpgrades = 0, $g_hChkBBSuggestedUpgradesIgnoreGold = 0 , $g_hChkBBSuggestedUpgradesIgnoreElixir , $g_hChkBBSuggestedUpgradesIgnoreHall = 0
 Global $g_hChkPlacingNewBuildings = 0, $g_hChkBBSuggestedUpgradesIgnoreWall = 0
 
+; Clan Games
 Global $g_hChkClanGamesAir = 0, $g_hChkClanGamesGround = 0, $g_hChkClanGamesMisc = 0
 Global $g_hChkClanGamesEnabled = 0 , $g_hChkClanGames60 = 0
 Global $g_hChkClanGamesLoot = 0 , $g_hChkClanGamesBattle =0 , $g_hChkClanGamesDestruction = 0 , $g_hChkClanGamesAirTroop = 0 , $g_hChkClanGamesGroundTroop = 0 , $g_hChkClanGamesMiscellaneous = 0
@@ -59,10 +71,13 @@ Func CreateVillageMisc()
 	$g_hGUI_MISC_TAB = GUICtrlCreateTab(0, 0, $g_iSizeWGrpTab2, $g_iSizeHGrpTab2, BitOR($TCS_MULTILINE, $TCS_RIGHTJUSTIFY))
 	$g_hGUI_MISC_TAB_ITEM1 = GUICtrlCreateTabItem(GetTranslatedFileIni("MBR Main GUI", "MISC_TAB_ITEM1", "Normal Village"))
 		CreateMiscNormalVillageSubTab()
-	$g_hGUI_MISC_TAB_ITEM2 = GUICtrlCreateTabItem(GetTranslatedFileIni("MBR Main GUI", "MISC_TAB_ITEM2", "Builder Base"))
+	$g_hGUI_MISC_TAB_ITEM2 = GUICtrlCreateTabItem(GetTranslatedFileIni("MBR Main GUI", "MISC_TAB_ITEM2", "Forge"))
+		CreateMiscForgeSubTab()
+	$g_hGUI_MISC_TAB_ITEM3 = GUICtrlCreateTabItem(GetTranslatedFileIni("MBR Main GUI", "MISC_TAB_ITEM3", "Builder Base"))
 		CreateMiscBuilderBaseSubTab()
-	$g_hGUI_MISC_TAB_ITEM3 = GUICtrlCreateTabItem(GetTranslatedFileIni("MBR Main GUI", "MISC_TAB_ITEM3", "Clan Games"))
+	$g_hGUI_MISC_TAB_ITEM4 = GUICtrlCreateTabItem(GetTranslatedFileIni("MBR Main GUI", "MISC_TAB_ITEM4", "Clan Games"))
 		CreateMiscClanGamesV3SubTab()
+
 	CreateBBDropOrderGUI()
 	GUICtrlCreateTabItem("")
 
@@ -325,12 +340,6 @@ Func CreateMiscNormalVillageSubTab()
 		$g_hChkCollectRewards = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Village - Misc", "ChkCollectRewards", "Collect Challenge Rewards"), $x + 265, $y + 4, -1, -1)
 
 	$y += 21
-		_GUICtrlCreateIcon($g_sLibIconPath, $eIcnTree, $x + 32, $y, 24, 24)
-		$g_hChkCollectForge = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Village - Misc", "ChkCollectForge", "Collect Forge"), $x + 100, $y + 4, -1, -1)
-			_GUICtrlSetTip(-1, GetTranslatedFileIni("MBR GUI Design Child Village - Misc", "ChkCollectForge_Info", "Check this to automatically collect Capital Gold from the Forge."))
-			;GUICtrlSetOnEvent(-1, "ChkCollectForge")
-			GUICtrlSetColor ( -1, $COLOR_ERROR )
-
 		$g_hChkSellRewards = GUICtrlCreateCheckBox(GetTranslatedFileIni("MBR GUI Design Child Village - Misc", "ChkSellRewards", "Sell Extras"), $x + 295, $y + 4, -1, -1)
 		_GUICtrlSetTip(-1, GetTranslatedFileIni("MBR GUI Design Child Village - Misc", "ChkSellExtra_Info_01", "Check to automatically sell all extra magic item rewards for gems."))
 
@@ -397,6 +406,131 @@ Func CreateMiscNormalVillageSubTab()
 	GUICtrlCreateGroup("", -99, -99, 1, 1)
 
 EndFunc   ;==>CreateMiscNormalVillageSubTab
+
+Func CreateMiscForgeSubTab()
+	Local $x = 15, $y = 45
+	GUICtrlCreateGroup(GetTranslatedFileIni("MBR GUI Design Child Village - Misc", "Group_99", "Capital Gold"), $x - 10, $y - 20, $g_iSizeWGrpTab3, 55)
+
+		_GUICtrlCreateIcon($g_sLibIconPath, $eIcnCapitalGold, $x , $y, 24, 24)
+
+		$g_hChkCollectCapitalGold = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Village - Misc", "ChkCollectCapitalGold", "Enable Collect"), $x + 65, $y + 4, -1, -1)
+			_GUICtrlSetTip(-1, GetTranslatedFileIni("MBR GUI Design Child Village - Misc", "ChkCollectCapitalGold_Info", "Check this to automatically collect Capital Gold from the Forge."))
+			;GUICtrlSetOnEvent(-1, "ChkCollectCapitalGold")
+			GUICtrlSetColor ( -1, $COLOR_ERROR )
+
+		$g_hChkCraftCapitalGold = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Village - Misc", "ChkCraftCapitalGold", "Enable Craft"), $x + 185, $y + 4, -1, -1)
+			_GUICtrlSetTip(-1, GetTranslatedFileIni("MBR GUI Design Child Village - Misc", "ChkCollectCapitalGold_Info", "Check this to enable Crafting Capital Gold from the Forge."))
+			GUICtrlSetOnEvent(-1, "ChkCraftCapitalGold")
+			GUICtrlSetColor ( -1, $COLOR_ERROR )
+
+		$g_hCmbReserveCraftBuilder = GUICtrlCreateCombo( "", $x + 295, $y + 4, 30, -1, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
+			_GUICtrlSetTip(-1, GetTranslatedFileIni("MBR GUI Design Child Village - Misc", "CmbReserveCraftBuilder_Info_01", "Reserve Builders to Craft Capitial Gold"))
+			GUICtrlSetOnEvent(-1, "cmbReserveCraftBuilder")
+			GUICtrlSetData(-1, "1|2|3|4")
+			GUICtrlSetState(-1, $GUI_DISABLE)
+			_GUICtrlComboBox_SetCurSel($g_hCmbReserveCraftBuilder, 1)
+		GUICtrlCreateLabel(GetTranslatedFileIni("MBR GUI Design Child Village - Misc", "LblReserveCraftBuilder", "Reserved Builders"), $x + 330, $y + 8)
+
+	GUICtrlCreateGroup("", -99, -99, 1, 1)
+	
+	$y = 80
+	GUICtrlCreateGroup(GetTranslatedFileIni("MBR GUI Design Child Village - Misc", "Group_14", "Set resources to save after Crafting"), $x - 10,  $y, $g_iSizeWGrpTab3, 100)
+	$y = $y + 30
+		$g_ahTxtSetCraftMinimum[$eCraftGold] = GUICtrlCreateInput("", $x + 55, $y + 2, 75, 18, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_NUMBER))
+			GUICtrlSetFont(-1, 9, $FW_BOLD, Default, "Arial", $CLEARTYPE_QUALITY)
+			GUICtrlSetOnEvent(-1, "GUIReadCraftData")
+			GUICtrlSetState(-1, $GUI_DISABLE)			
+		_GUICtrlCreateIcon($g_sLibIconPath, $eIcnGold, $x + 130, $y - 2, 24, 24)
+	
+		$g_ahTxtSetCraftMinimum[$eCraftElixir] = GUICtrlCreateInput("", $x + 175, $y + 2, 75, 18, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_NUMBER))
+			GUICtrlSetFont(-1, 9, $FW_BOLD, Default, "Arial", $CLEARTYPE_QUALITY)
+			GUICtrlSetOnEvent(-1, "GUIReadCraftData")
+			GUICtrlSetState(-1, $GUI_DISABLE)
+		_GUICtrlCreateIcon($g_sLibIconPath, $eIcnElixir, $x + 250, $y - 2, 24, 24)
+				
+		$g_ahTxtSetCraftMinimum[$eCraftDarkElixir] = GUICtrlCreateInput("", $x + 295, $y + 2, 75, 18, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_NUMBER))
+			GUICtrlSetFont(-1, 9, $FW_BOLD, Default, "Arial", $CLEARTYPE_QUALITY)
+			GUICtrlSetOnEvent(-1, "GUIReadCraftData")
+			GUICtrlSetState(-1, $GUI_DISABLE)
+		_GUICtrlCreateIcon($g_sLibIconPath, $eIcnDark, $x + 370, $y - 2, 24, 24)
+	
+	$y = $y + 30
+		$g_ahTxtSetCraftMinimum[$eCraftBuilderGold] = GUICtrlCreateInput("", $x + 55, $y + 2, 75, 18, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_NUMBER))
+			GUICtrlSetFont(-1, 9, $FW_BOLD, Default, "Arial", $CLEARTYPE_QUALITY)
+			GUICtrlSetOnEvent(-1, "GUIReadCraftData")
+			GUICtrlSetState(-1, $GUI_DISABLE)
+		_GUICtrlCreatePic($g_sIcnBldGold, $x + 130, $y - 2, 24, 24)
+		
+		$g_ahTxtSetCraftMinimum[$eCraftBuilderElixir] = GUICtrlCreateInput("", $x + 175, $y + 2, 75, 18, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_NUMBER))
+			GUICtrlSetFont(-1, 9, $FW_BOLD, Default, "Arial", $CLEARTYPE_QUALITY)
+			GUICtrlSetOnEvent(-1, "GUIReadCraftData")
+			GUICtrlSetState(-1, $GUI_DISABLE)
+		_GUICtrlCreatePic($g_sIcnBldElixir, $x + 250, $y - 2, 24, 24)
+	
+	GUICtrlCreateGroup("", -99, -99, 1, 1)
+
+	$y = 180
+	GUICtrlCreateGroup(GetTranslatedFileIni("MBR GUI Design Child Village - Misc", "Group_13", "Craft Resources Cost"), $x - 10,  $y, $g_iSizeWGrpTab3, 100)
+		$y = $y + 30
+
+		; Townhall Gold Elixir DE
+		Switch $g_iTownHallLevel
+			Case 9
+				_GUICtrlCreateIcon($g_sLibIconPath, $eHdV09, $x, $y - 2, 24, 24)
+			Case 10
+				_GUICtrlCreateIcon($g_sLibIconPath, $eHdV10, $x, $y - 2, 24, 24)
+			Case 11
+				_GUICtrlCreateIcon($g_sLibIconPath, $eHdV11, $x, $y - 2, 24, 24)
+			Case 12
+				_GUICtrlCreateIcon($g_sLibIconPath, $eHdV12, $x, $y - 2, 24, 24)
+			Case 13
+				_GUICtrlCreateIcon($g_sLibIconPath, $eHdV13, $x, $y - 2, 24, 24)
+			Case 14
+				_GUICtrlCreateIcon($g_sLibIconPath, $eHdV14, $x, $y - 2, 24, 24)
+					
+			Case Else
+				Case 9
+				_GUICtrlCreateIcon($g_sLibIconPath, $eHdV04, $x, $y - 2, 24, 24)
+		EndSwitch			
+		$g_hLblTownHallLevel = GUICtrlCreateLabel("---", $x + 35, $y + 2, 100, -1)
+			GUICtrlSetFont(-1, 9, $FW_BOLD, Default, "Arial", $CLEARTYPE_QUALITY)
+
+		
+		$g_ahLblCraftResCost[$eCraftGold] = GUICtrlCreateLabel("N/A", $x + 65, $y + 2, 75, -1)
+			GUICtrlSetFont(-1, 9, $FW_BOLD, Default, "Arial", $CLEARTYPE_QUALITY)
+			GUICtrlSetState(-1, $GUI_DISABLE)
+		_GUICtrlCreateIcon($g_sLibIconPath, $eIcnGold, $x + 130, $y - 2, 24, 24)
+		
+		$g_ahLblCraftResCost[$eCraftElixir] = GUICtrlCreateLabel("N/A", $x + 185, $y + 2, 75, -1)
+			GUICtrlSetFont(-1, 9, $FW_BOLD, Default, "Arial", $CLEARTYPE_QUALITY)
+			GUICtrlSetState(-1, $GUI_DISABLE)
+		_GUICtrlCreateIcon($g_sLibIconPath, $eIcnElixir, $x + 250, $y - 2, 24, 24)
+		
+		$g_ahLblCraftResCost[$eCraftDarkElixir] = GUICtrlCreateLabel("N/A", $x + 305, $y + 2, 75, -1)
+			GUICtrlSetFont(-1, 9, $FW_BOLD, Default, "Arial", $CLEARTYPE_QUALITY)
+			GUICtrlSetState(-1, $GUI_DISABLE)
+		_GUICtrlCreateIcon($g_sLibIconPath, $eIcnDark, $x + 370, $y - 2, 24, 24)
+		
+		$y = $y + 30
+	
+		; BuilderHall BuilderGold BuilderElixir
+		_GUICtrlCreateIcon($g_sLibIconPath, $eIcnBuilderHall, $x, $y - 2, 24, 24)
+		$g_hLblBuilderHallLevel = GUICtrlCreateLabel("---", $x + 35, $y + 2, 100, -1)
+			GUICtrlSetFont(-1, 9, $FW_BOLD, Default, "Arial", $CLEARTYPE_QUALITY)
+	
+		$g_ahLblCraftResCost[$eCraftBuilderGold] = GUICtrlCreateLabel("N/A", $x + 65, $y + 2, 100, -1)
+			GUICtrlSetFont(-1, 9, $FW_BOLD, Default, "Arial", $CLEARTYPE_QUALITY)
+			GUICtrlSetState(-1, $GUI_DISABLE)
+		_GUICtrlCreatePic($g_sIcnBldGold, $x + 130, $y - 2, 24, 24)
+		
+		
+		$g_ahLblCraftResCost[$eCraftBuilderElixir] = GUICtrlCreateLabel("N/A", $x + 185, $y + 2, 100, -1)
+			GUICtrlSetFont(-1, 9, $FW_BOLD, Default, "Arial", $CLEARTYPE_QUALITY)
+			GUICtrlSetState(-1, $GUI_DISABLE)
+		_GUICtrlCreatePic($g_sIcnBldElixir, $x + 250, $y - 2, 24, 24)
+		
+	GUICtrlCreateGroup("", -99, -99, 1, 1)
+EndFunc   ;==>CreateMiscForgeSubTab
 
 Func CreateMiscBuilderBaseSubTab()
 	Local $x = 15, $y = 45
