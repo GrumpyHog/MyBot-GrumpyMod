@@ -495,11 +495,11 @@ Func SearchZoomOut($CenterVillageBoolOrScrollPos = $aCenterHomeVillageClickDrag,
 				SetLog("Builder Base Enemy Village First Zoom - no centering")
 			Else
 				If $stone[0] = 0 And $tree[0] > 0 Then
-					If $DebugLog Then SetLog("Centering using tree", $COLOR_INFO) 
-					CenterVillage($tree[0], $tree[1], $x, $y)
+					If $DebugLog Then SetLog("Centering using tree", $COLOR_INFO)
+					CenterVillage($tree[0], $tree[1], $x, $y, True)
 				ElseIf $tree[0] = 0 And $stone[0] > 0 Then
 					If $DebugLog Then SetLog("Centering using stone", $COLOR_INFO)
-					CenterVillage($stone[0], $stone[1], $x, $y)
+					CenterVillage($stone[0], $stone[1], $x, $y, False)
 				EndIf
 			EndIf
 		EndIf
