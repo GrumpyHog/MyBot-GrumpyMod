@@ -315,22 +315,29 @@ Func UpdateGlobalVillageOffset($x, $y)
 
 EndFunc   ;==>UpdateGlobalVillageOffset
 
-Func CenterVillage($iX, $iY, $iOffsetX, $iOffsetY)
+; Based on grumpy mod
+Func CenterVillage($iX, $iY, $iOffsetX, $iOffsetY, $bLayOut = False)
 	Local $aScrollPos[2] = [0, 0]
 
-	If IsCoordSafe($iX, $iY) Then
-		$aScrollPos[0] = $iX
-		$aScrollPos[1] = $iY
-	Else
+	; If IsCoordSafe($iX, $iY) Then
+		; $aScrollPos[0] = $iX
+		; $aScrollPos[1] = $iY
+	; Else
 		$aScrollPos[0] = $aCenterHomeVillageClickDrag[0]
 		$aScrollPos[1] = $aCenterHomeVillageClickDrag[1]
-	EndIf
+	; EndIf
 
 	If $g_bDebugSetlog Then SetDebugLog("CenterVillage at point : " & $aScrollPos[0] & ", " & $aScrollPos[1] & " Offset : " & $iOffsetX & ", " & $iOffsetY, $COLOR_INFO)
-	If $g_bDebugImageSave Then SaveDebugPointImage("CenterVillage", $aScrollPos) 
+ 	If $g_bDebugImageSave Then SaveDebugPointImage("CenterVillage", $aScrollPos)
 	ClickAway()
-	ClickDrag($aScrollPos[0], $aScrollPos[1], $aScrollPos[0] - $iOffsetX, $aScrollPos[1] - $iOffsetY)			
-	
+	Local $iOffsetXFixed = _Max($iOffsetX, Random(95, 100, 1))
+	If $bLayOut = True Then
+		; It is like grumpy mod but the X offset is inverted in tree case
+		ClickDrag($aScrollPos[0], $aScrollPos[1], $aScrollPos[0] + $iOffsetXFixed, $aScrollPos[1] - $iOffsetY)
+	Else
+		; 57, -75
+		ClickDrag($aScrollPos[0], $aScrollPos[1], $aScrollPos[0] - $iOffsetXFixed, $aScrollPos[1] - $iOffsetY)
+	EndIf
 	If _Sleep(1000) Then Return
 EndFunc
 
